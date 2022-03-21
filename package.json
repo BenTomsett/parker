@@ -1,0 +1,19 @@
+{
+  "name": "parker-uea-se",
+  "version": "1.0.0",
+  "description": "UEA Software Engineering CW1 Parker. A parking system designed for the UEA.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/5012B/PARKER-UEA-SE.git"
+  },
+  "author": "Group 12",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/5012B/PARKER-UEA-SE/issues"
+  },
+  "homepage": "https://github.com/5012B/PARKER-UEA-SE#readme"
+}
