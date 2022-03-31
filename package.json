@@ -4,7 +4,14 @@
   "description": "UEA Software Engineering CW1 Parker. A parking system designed for the UEA.",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "repository": {
     "type": "git",
@@ -22,5 +29,10 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^27.5.1",
+    "supertest": "^6.2.2"
   }
 }
