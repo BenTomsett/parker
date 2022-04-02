@@ -1,7 +1,11 @@
 const express = require('express');
 
 const User = require('../models/user.model');
-const { emailRegex, strongPassRegex } = require('../utils/auth');
+const {
+  emailRegex,
+  strongPassRegex,
+  generateAccessToken,
+} = require('../utils/auth');
 
 const router = express.Router();
 
@@ -47,17 +51,27 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.post('/login', (req, res) => {
-  // const { email, password } = req.body;
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
 
-  // TODO: data validation
-  // - Check user exists (email is in database)
-  // - Check password is valid
+  // TODO: Store password securely
 
-  // for now, simulate delay and return appropriate API response
-  setTimeout(() => {
-    res.status(200).json({ status: 200, token: 'jwtgoeshere' });
-  }, 2000);
+  const users = await User.findAll({
+    where: { email },
+    attributes: ['forename', 'surname', 'email', 'password'],
+  });
+
+  if (users.length < 1) {
+    res.status(401).send('ERR_INVALID_CREDENTIALS');
+  } else if (users.length > 1) {
+    res.status(500).send('ERR_MULTIPLE_USERS');
+  } else if (users[0].password !== password) {
+    res.status(401).send('ERR_INVALID_CREDENTIALS');
+  } else {
+    const user = users[0];
+    const token = generateAccessToken(user);
+    res.status(200).send(token);
+  }
 });
 
 module.exports = router;

@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 
-const generateAccessToken = (sub, forename, surname) => {
+const generateAccessToken = (user) => {
+  const { email, forename, surname } = user;
+
   const iat = Math.floor(Date.now() / 1000); // time in seconds since unix epoch
   const exp = iat + 86400; // token expires after 24 hours
 
@@ -10,7 +12,7 @@ const generateAccessToken = (sub, forename, surname) => {
   };
 
   const payload = {
-    sub,
+    sub: email,
     forename,
     surname,
     iat,
