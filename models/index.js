@@ -16,11 +16,12 @@ const { Sequelize } = require('sequelize');
 
 const pg = require('pg');
 
-const sequelize = new Sequelize('CMP5012B-G12-DB', 'webClient', 'password', {
+const sequelize = new Sequelize('parker-dev-1', 'postgres', 'UPVT4RbgQ#', {
   port: 5432,
-  host: 'localhost',
+  host: 'parker-dev-1.c3b0deayn6ei.eu-west-2.rds.amazonaws.com',
   dialect: 'postgres',
   dialectModule: pg,
+  logging: false,
   pool: {
     max: 5,
     min: 1,
