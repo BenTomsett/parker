@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 
 const User = require('../models/user.model');
 const {
@@ -10,51 +11,56 @@ const {
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
-  const dobParsed = Date.parse(req.body.dob);
+  const user = req.body;
 
-  if (!emailRegex.test(req.body.email)) {
+  const dobParsed = Date.parse(user.dob);
+
+  if (!emailRegex.test(user.email)) {
     res.status(400).send('ERR_EMAIL_INVALID');
-  } else if (!strongPassRegex.test(req.body.password)) {
+  } else if (!strongPassRegex.test(user.password)) {
     res.status(400).send('ERR_PASSWORD_WEAK');
   } else if (!dobParsed) {
     res.status(400).send('ERR_INVALID_DATE');
   } else {
-    // TODO: Store password securely
-
-    User.create(req.body, {
-      fields: [
-        'forename',
-        'surname',
-        'dob',
-        'email',
-        'password',
-        'addressLine1',
-        'addressLine2',
-        'city',
-        'postcode',
-        'country',
-      ],
-    })
-      .then(async (obj) => {
-        await obj.reload();
-        res.status(201).json(obj);
-      })
-      .catch((err) => {
-        if (err.name === 'SequelizeUniqueConstraintError') {
-          res.status(409).send('ERR_USER_EXISTS');
-        } else if (err.name === 'SequelizeValidationError') {
-          res.status(400).send('ERR_DATA_MISSING');
-        } else {
-          res.status(500).send(err);
-        }
-      });
+    bcrypt.hash(user.password, 10, (hashErr, hash) => {
+      if (hashErr) {
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      } else {
+        user.password = hash;
+        User.create(user, {
+          fields: [
+            'forename',
+            'surname',
+            'dob',
+            'email',
+            'password',
+            'addressLine1',
+            'addressLine2',
+            'city',
+            'postcode',
+            'country',
+          ],
+        })
+          .then(async (obj) => {
+            await obj.reload();
+            res.status(201).json(obj);
+          })
+          .catch((err) => {
+            if (err.name === 'SequelizeUniqueConstraintError') {
+              res.status(409).send('ERR_USER_EXISTS');
+            } else if (err.name === 'SequelizeValidationError') {
+              res.status(400).send('ERR_DATA_MISSING');
+            } else {
+              res.status(500).send(err);
+            }
+          });
+      }
+    });
   }
 });
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-
-  // TODO: Store password securely
 
   const users = await User.findAll({
     where: { email },
@@ -65,12 +71,19 @@ router.post('/login', async (req, res) => {
     res.status(401).send('ERR_INVALID_CREDENTIALS');
   } else if (users.length > 1) {
     res.status(500).send('ERR_MULTIPLE_USERS');
-  } else if (users[0].password !== password) {
-    res.status(401).send('ERR_INVALID_CREDENTIALS');
   } else {
     const user = users[0];
-    const token = generateAccessToken(user);
-    res.status(200).send(token);
+
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (err) {
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      } else if (result) {
+        const token = generateAccessToken(user);
+        res.status(200).send(token);
+      } else {
+        res.status(401).send('ERR_INVALID_CREDENTIALS');
+      }
+    });
   }
 });
 

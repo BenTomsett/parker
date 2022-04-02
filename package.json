@@ -23,6 +23,7 @@
     "url": "https://github.com/5012B/PARKER-UEA-SE/issues"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.0.0",
