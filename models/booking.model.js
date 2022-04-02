@@ -13,62 +13,69 @@ structures for our postgres database through sequelize.
 
 */
 
-import { DataTypes, Model, Deferrable } from 'sequelize';
-import { sequelize } from '.';
+const { DataTypes, Model, Deferrable } = require('sequelize');
+const sequelize = require('./index');
 
-import User from './user.model'
-import CarPark from './carpark.model'
+const User = require('./user.model');
+const CarPark = require('./carpark.model');
 
 class Booking extends Model {}
 
-Booking.init({
+Booking.init(
+  {
     bookingId: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-        unique: true,
-        // comment: 'This is a column name that has a comment'
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      unique: true,
+      // comment: 'This is a column name that has a comment'
+    },
+    carParkId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      references: {
+        model: CarPark,
+        key: 'carParkId',
+        deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
-      carParkId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-            model: CarPark,
-            key: 'carParkId',
-            deferrable: Deferrable.INITIALLY_IMMEDIATE
-          }
+    },
+    spaceNumber: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    bookingType: {
+      allowNull: false,
+      type: DataTypes.ENUM({
+        values: ['USER', 'EVENT', 'RESTRICTION'],
+      }),
+    },
+    userId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      references: {
+        model: User,
+        key: 'userId',
+        deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
-      spaceNumber: {
-          allowNull: false,
-          type: DataTypes.INTEGER
-      },
-      bookingType: {
-          allowNull: false,
-          type: DataTypes.ENUM({
-            values: ['USER', 'EVENT', 'RESTRICTION']})
-      },
-      userId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-            model: User,
-            key: 'userId',
-            deferrable: Deferrable.INITIALLY_IMMEDIATE
-          }
-      },
-      startDate: {
-          allowNull: false,
-          type: DataTypes.DATEONLY
-      },
-      duration: {
-          allowNull: false,
-          type: DataTypes.TIME
-      },
-    }, {
-        tableName: 'Bookings',
-        indexes: [{ unique: true, fields: ['bookingType', 'startDate', 'duration'] }]
-        // timestamps: false
-}, { sequelize });
+    },
+    startDate: {
+      allowNull: false,
+      type: DataTypes.DATEONLY,
+    },
+    duration: {
+      allowNull: false,
+      type: DataTypes.TIME,
+    },
+  },
+  {
+    tableName: 'Bookings',
+    indexes: [
+      { unique: true, fields: ['bookingType', 'startDate', 'duration'] },
+    ],
+    // timestamps: false
+  },
+  { sequelize }
+);
 
-export default Booking;
+module.exports = Booking;

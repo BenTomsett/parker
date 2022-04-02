@@ -12,20 +12,20 @@ This is our Postgres (sequelize) initisialisation file, this allows us to connec
 We use the sequelize ORM to manage the connection and function calls to the DB.
 */
 
-import { Sequelize } from 'sequelize';
+const { Sequelize } = require('sequelize');
 
 const pg = require('pg');
 
-const sequelize = new Sequelize("CMP5012B-G12-DB", "webClient", "password", {
+const sequelize = new Sequelize('CMP5012B-G12-DB', 'webClient', 'password', {
   port: 5432,
   host: 'localhost',
   dialect: 'postgres',
   dialectModule: pg,
   pool: {
-      max: 5,
-      min: 1,
-      acquire: 30000,
-      idle: 10000
+    max: 5,
+    min: 1,
+    acquire: 30000,
+    idle: 10000,
   },
 });
 
@@ -36,12 +36,11 @@ sequelize
   .authenticate()
   .then(() => {
     // eslint-disable-next-line no-console
-    console.log("Connection has been established successfully.");
+    console.log('Connection has been established successfully.');
   })
-  .catch(err => {
+  .catch((err) => {
     // eslint-disable-next-line no-console
-    console.error("Unable to connect to the database:", err);
+    console.error('Unable to connect to the database:', err);
   });
 
-export { Sequelize, sequelize };
-
+module.exports = sequelize;

@@ -13,43 +13,49 @@ structures for our postgres database through sequelize.
 
 */
 
-import { DataTypes, Model, Deferrable } from 'sequelize';
-import { sequelize } from '.';
+const { DataTypes, Model, Deferrable } = require('sequelize');
+const sequelize = require('./index');
 
-import CarPark from './carpark.model'
+const CarPark = require('./carpark.model');
 
 class Zone extends Model {}
 
-Zone.init({
+Zone.init(
+  {
     zoneId: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-        unique: true,
-        // comment: 'This is a column name that has a comment'
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      unique: true,
+      // comment: 'This is a column name that has a comment'
+    },
+    carParkId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      references: {
+        model: CarPark,
+        key: 'carParkId',
+        deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
-      carParkId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-            model: CarPark,
-            key: 'carParkId',
-            deferrable: Deferrable.INITIALLY_IMMEDIATE
-          }
-      },
-      name: {
-          allowNull: false,
-          type: DataTypes.INTEGER
-      },
-      spaces: {
-          allowNull: false,
-          type: DataTypes.INTEGER
-      }
-    }, {
-        tableName: 'Bookings',
-        indexes: [{ unique: true, fields: ['bookingType', 'startDate', 'duration'] }]
-        // timestamps: false
-}, { sequelize });
+    },
+    name: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    spaces: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+  },
+  {
+    tableName: 'Bookings',
+    indexes: [
+      { unique: true, fields: ['bookingType', 'startDate', 'duration'] },
+    ],
+    // timestamps: false
+  },
+  { sequelize }
+);
 
-export default Zone;
+module.exports = Zone;

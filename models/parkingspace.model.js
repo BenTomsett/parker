@@ -13,53 +13,61 @@ structures for our postgres database through sequelize.
 
 */
 
-import { DataTypes, Model, Deferrable } from 'sequelize';
-import { sequelize } from '.';
+const { DataTypes, Model, Deferrable } = require('sequelize');
+const sequelize = require('./index');
 
-import CarPark from './carpark.model'
+const CarPark = require('./carpark.model');
 
 class ParkingSpace extends Model {}
 
-ParkingSpace.init({
+ParkingSpace.init(
+  {
     spaceId: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-        unique: true,
-        // comment: 'This is a column name that has a comment'
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      unique: true,
+      // comment: 'This is a column name that has a comment'
+    },
+    zoneId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      references: {
+        model: CarPark,
+        key: 'zones',
+        deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
-      zoneId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-            model: CarPark,
-            key: 'zones',
-            deferrable: Deferrable.INITIALLY_IMMEDIATE
-          }
-      },
-      status: {
-          allowNull: false,
-          type: DataTypes.ENUM({
-            values: ['OCCUPIED', 'AVAILABLE', 'RESERVED']})
-      },
-      bookingType: {
-          allowNull: false,
-          type: DataTypes.ENUM({
-            values: [1, 2, 3]})
-      },
-      gpsLat: {
-        allowNull: false,
-        type: DataTypes.DOUBLE
-      },
-      gpsLong: {
-        allowNull: false,
-        type: DataTypes.DOUBLE
-      },
-    }, {
-        tableName: 'Parking Spaces',
-        indexes: [{ unique: true, fields: ['status', 'bookingType', 'gpslat', 'gpsLong'] }]
-        // timestamps: false
-}, { sequelize });
+    },
+    status: {
+      allowNull: false,
+      type: DataTypes.ENUM({
+        values: ['OCCUPIED', 'AVAILABLE', 'RESERVED'],
+      }),
+    },
+    bookingType: {
+      allowNull: false,
+      type: DataTypes.ENUM({
+        values: [1, 2, 3],
+      }),
+    },
+    gpsLat: {
+      allowNull: false,
+      type: DataTypes.DOUBLE,
+    },
+    gpsLong: {
+      allowNull: false,
+      type: DataTypes.DOUBLE,
+    },
+  },
+  {
+    tableName: 'Parking Spaces',
+    indexes: [
+      { unique: true, fields: ['status', 'bookingType', 'gpslat', 'gpsLong'] },
+    ],
+    // timestamps: false
+  },
+  { sequelize }
+);
 
-export default ParkingSpace;
+module.exports = ParkingSpace;

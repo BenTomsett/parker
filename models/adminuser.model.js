@@ -13,15 +13,18 @@ structures for our postgres database through sequelize.
 
 */
 
-import { sequelize } from '.';
-import User from './user.model';
+const sequelize = require('./index');
+const User = require('./user.model');
 
 class AdminUser extends User {}
 
-AdminUser.init({
-    }, {
-        tableName: 'AdminUsers',
-        // timestamps: false
-}, { sequelize });
+AdminUser.init(
+  {},
+  {
+    tableName: 'AdminUsers',
+    // timestamps: false
+  },
+  { sequelize }
+);
 
-export default AdminUser;
+module.exports = AdminUser;

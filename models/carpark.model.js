@@ -13,32 +13,36 @@ structures for our postgres database through sequelize.
 
 */
 
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '.';
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('./index');
 
 class CarPark extends Model {}
 
-CarPark.init({
+CarPark.init(
+  {
     carParkId: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-        unique: true,
-        // comment: 'This is a column name that has a comment'
-      },
-      name: {
-        allowNull: false,
-        type: DataTypes.STRING
-      },
-      zones: {
-          allowNull: false,
-          type: DataTypes.ARRAY(DataTypes.INTEGER)
-      }
-    }, {
-        tableName: 'Users',
-        indexes: [{ unique: true, fields: ['email'] }]
-        // timestamps: false
-}, { sequelize });
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      unique: true,
+      // comment: 'This is a column name that has a comment'
+    },
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    zones: {
+      allowNull: false,
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+    },
+  },
+  {
+    tableName: 'Users',
+    indexes: [{ unique: true, fields: ['email'] }],
+    // timestamps: false
+  },
+  { sequelize }
+);
 
-export default CarPark;
+module.exports = CarPark;
