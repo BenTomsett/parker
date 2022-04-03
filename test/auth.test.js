@@ -66,7 +66,6 @@ describe('Parker User Registration', () => {
       .post('/auth/register')
       .send(testUser)
       .then((response) => {
-        console.log(response.body);
         expect(response.statusCode).toBe(201);
 
         // verify user was created
@@ -84,7 +83,6 @@ describe('Parker User Registration', () => {
       .post('/auth/register')
       .send({ ...testUser, password: 'tooweak' })
       .then((response) => {
-        console.log({ password: 'tooweak', ...testUser });
         expect(response.statusCode).toBe(400);
 
         // verify user was created
@@ -102,7 +100,6 @@ describe('Parker User Registration', () => {
       .post('/auth/register')
       .send({ ...testUser, dob: '2007/01/01' })
       .then((response) => {
-        console.log({ password: 'tooweak', ...testUser });
         expect(response.statusCode).toBe(400);
 
         // verify user was created

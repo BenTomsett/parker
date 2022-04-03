@@ -54,7 +54,7 @@ router.post('/register', async (req, res) => {
             } else if (err.name === 'SequelizeValidationError') {
               res.status(400).send('ERR_DATA_MISSING');
             } else {
-              console.log(err);
+              console.err(err);
               res.status(500).send('ERR_INTERNAL_EXCEPTION');
             }
           });
