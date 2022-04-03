@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 
-const generateAccessToken = (sub, forename, surname) => {
+const generateToken = (user) => {
+  const { email, forename, surname } = user;
+
   const iat = Math.floor(Date.now() / 1000); // time in seconds since unix epoch
   const exp = iat + 86400; // token expires after 24 hours
 
@@ -10,7 +12,7 @@ const generateAccessToken = (sub, forename, surname) => {
   };
 
   const payload = {
-    sub,
+    sub: email,
     forename,
     surname,
     iat,
@@ -32,13 +34,13 @@ const generateAccessToken = (sub, forename, surname) => {
   return `${headerEncoded}.${payloadEncoded}.${digest}`;
 };
 
-const verifyAccessToken = (token) => {
+const verifyToken = (token) => {
   // Check that the JWT is well-formed
   // 1. Verify that the JWT contains three segments, separated by two period
   // characters
   const split = token.split('.');
   if (split.length !== 3) {
-    console.error("Not three segments");
+    console.error('Not three segments');
     return false;
   }
   // 2. Parse the JWT to extract its three components. The first segment is the
@@ -55,7 +57,7 @@ const verifyAccessToken = (token) => {
   try {
     header = JSON.parse(headerDecoded);
   } catch (e) {
-    console.error("Not valid JSON: header");
+    console.error('Not valid JSON: header');
     return false;
   }
   // 3. Base64url-decode the Payload, ensuring that no line breaks, whitespace,
@@ -66,14 +68,14 @@ const verifyAccessToken = (token) => {
   try {
     payload = JSON.parse(payloadDecode);
   } catch (e) {
-    console.error("Not valid JSON: payload");
+    console.error('Not valid JSON: payload');
     return false;
   }
 
   // Check signature
   // 1. Check the signing algorithm.
   if (header.alg !== 'HS256') {
-    console.error("Wrong algorithm");
+    console.error('Wrong algorithm');
     return false;
   }
 
@@ -83,22 +85,49 @@ const verifyAccessToken = (token) => {
     .update(`${headerEncoded}.${payloadEncoded}`)
     .digest('base64url');
 
-  if(digest !== signatureEncoded){
-    console.error("Invalid signature");
+  if (digest !== signatureEncoded) {
+    console.error('Invalid signature');
     return false;
   }
 
   // Check standard claims
   const currentTime = Math.floor(Date.now() / 1000);
-  if(currentTime > payload.exp){
-    console.error("Expired");
+  if (currentTime > payload.exp) {
+    console.error('Expired');
     return false;
   }
 
-  return true;
+  return payload;
+};
+
+const emailRegex =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const strongPassRegex =
+  /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
+
+const getAge = (dob) => {
+  const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const now = new Date();
+
+  let date = dob;
+
+  if (date > now) {
+    date = now + daysInMonth[dob.getMonth()];
+    now.setMonth(now.getMonth() - 1);
+  }
+
+  if (date.getMonth() > now.getMonth()) {
+    now.setFullYear(now.getFullYear() - 1);
+    now.setMonth(now.getMonth + 12);
+  }
+
+  return now.getFullYear() - date.getFullYear();
 };
 
 module.exports = {
-  generateAccessToken,
-  verifyAccessToken,
+  generateToken,
+  verifyToken,
+  emailRegex,
+  strongPassRegex,
+  getAge,
 };

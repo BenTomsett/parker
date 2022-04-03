@@ -73,6 +73,9 @@ User.init(
     sequelize,
     tableName: 'Users',
     indexes: [{ unique: true, fields: ['email'] }],
+    defaultScope: {
+      attributes: { exclude: ['password'] },
+    },
     // timestamps: false
   }
 );
