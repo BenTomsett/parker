@@ -6,6 +6,7 @@ const {
   emailRegex,
   strongPassRegex,
   generateAccessToken,
+  getAge,
 } = require('../utils/auth');
 
 const router = express.Router();
@@ -13,7 +14,7 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   const user = req.body;
 
-  const dobParsed = Date.parse(user.dob);
+  const dobParsed = new Date(Date.parse(user.dob));
 
   if (!emailRegex.test(user.email)) {
     res.status(400).send('ERR_EMAIL_INVALID');
@@ -21,6 +22,8 @@ router.post('/register', async (req, res) => {
     res.status(400).send('ERR_PASSWORD_WEAK');
   } else if (!dobParsed) {
     res.status(400).send('ERR_INVALID_DATE');
+  } else if (getAge(dobParsed) < 16) {
+    res.status(400).send('ERR_TOO_YOUNG');
   } else {
     bcrypt.hash(user.password, 10, (hashErr, hash) => {
       if (hashErr) {
@@ -51,7 +54,8 @@ router.post('/register', async (req, res) => {
             } else if (err.name === 'SequelizeValidationError') {
               res.status(400).send('ERR_DATA_MISSING');
             } else {
-              res.status(500).send(err);
+              console.log(err);
+              res.status(500).send('ERR_INTERNAL_EXCEPTION');
             }
           });
       }

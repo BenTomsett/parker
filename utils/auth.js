@@ -105,9 +105,29 @@ const emailRegex =
 const strongPassRegex =
   /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
 
+const getAge = (dob) => {
+  const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const now = new Date();
+
+  let date = dob;
+
+  if (date > now) {
+    date = now + daysInMonth[dob.getMonth()];
+    now.setMonth(now.getMonth() - 1);
+  }
+
+  if (date.getMonth() > now.getMonth()) {
+    now.setFullYear(now.getFullYear() - 1);
+    now.setMonth(now.getMonth + 12);
+  }
+
+  return now.getFullYear() - date.getFullYear();
+};
+
 module.exports = {
   generateAccessToken,
   verifyAccessToken,
   emailRegex,
   strongPassRegex,
+  getAge,
 };
