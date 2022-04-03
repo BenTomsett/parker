@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-const generateAccessToken = (user) => {
+const generateToken = (user) => {
   const { email, forename, surname } = user;
 
   const iat = Math.floor(Date.now() / 1000); // time in seconds since unix epoch
@@ -34,7 +34,7 @@ const generateAccessToken = (user) => {
   return `${headerEncoded}.${payloadEncoded}.${digest}`;
 };
 
-const verifyAccessToken = (token) => {
+const verifyToken = (token) => {
   // Check that the JWT is well-formed
   // 1. Verify that the JWT contains three segments, separated by two period
   // characters
@@ -97,7 +97,7 @@ const verifyAccessToken = (token) => {
     return false;
   }
 
-  return true;
+  return payload;
 };
 
 const emailRegex =
@@ -125,8 +125,8 @@ const getAge = (dob) => {
 };
 
 module.exports = {
-  generateAccessToken,
-  verifyAccessToken,
+  generateToken,
+  verifyToken,
   emailRegex,
   strongPassRegex,
   getAge,

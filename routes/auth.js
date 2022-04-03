@@ -5,7 +5,7 @@ const User = require('../models/user.model');
 const {
   emailRegex,
   strongPassRegex,
-  generateAccessToken,
+  generateToken,
   getAge,
 } = require('../utils/auth');
 
@@ -82,7 +82,7 @@ router.post('/login', async (req, res) => {
       if (err) {
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       } else if (result) {
-        const token = generateAccessToken(user);
+        const token = generateToken(user);
         res.status(200).send(token);
       } else {
         res.status(401).send('ERR_INVALID_CREDENTIALS');
