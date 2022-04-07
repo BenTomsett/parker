@@ -13,29 +13,37 @@ These are our booking routes which handle all of our http requests.
 */
 
 const express = require('express');
+
 const BookingController = require('../controllers/bookings.controller');
+const { authenticateUser } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Create a new booking
-router.post('/', BookingController.createBooking);
+router.post('/', authenticateUser, BookingController.createBooking);
 
 // Retrieve all bookings
-router.get('/', BookingController.findAllBookings);
+router.get('/', authenticateUser, BookingController.findAllBookings);
 
 // Retrieve a single booking for a user
-router.get('/:userId/:bookingId', BookingController.findBooking);
+router.get('/:userId/:bookingId', authenticateUser, BookingController.findBooking);
 
 // Retrieve all bookings for a user
-router.get('/:userId/bookings', BookingController.findUserBookings);
+router.get('/:userId/bookings', authenticateUser,  BookingController.findUserBookings);
+
+// Retrieve all bookings for a car park
+router.get('/:carparkId/bookings', authenticateUser, BookingController.findCarParkBookings);
+
+// Retrieve all bookings for 24h for a car park
+router.get('/:carparkId/status', authenticateUser, BookingController.findCarPark24HBookings);
 
 // Update a booking with the bookingId
-router.put('/:userId/:bookingId', BookingController.updateBooking);
+router.put('/:userId/:bookingId', authenticateUser, BookingController.updateBooking);
 
 // Delete a product with the bookingId
-router.delete('/:userId/:bookingId', BookingController.deleteBooking);
+router.delete('/:userId/:bookingId', authenticateUser, BookingController.deleteBooking);
 
 // Delete all bookings
-router.delete('/', BookingController.deleteAllBookings);
+router.delete('/', authenticateUser, BookingController.deleteAllBookings);
 
 module.exports = router;

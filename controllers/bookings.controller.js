@@ -13,6 +13,7 @@ It involves all database interactions and has all the CRUD functions that are ac
 the bookings routes.
 
 */
+const { Op } = require("sequelize");
 
 const Booking = require('../models/booking.model');
 
@@ -85,6 +86,40 @@ const findUserBookings = async (req, res) => {
     });
 };
 
+// Find bookings for a specific car park
+const findCarParkBookings = async (req, res) => {
+  const { carParkId } = req.params;
+
+  Booking.findAll({ where: { carParkId } })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.err(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
+};
+
+// Find bookings for a specific car park
+const findCarPark24HBookings = async (req, res) => {
+    const { carParkId } = req.params;
+  
+    Booking.findAll({ where: {
+        carParkId,
+        startDate: {
+          [Op.lt]: new Date(Date.now() + (24 * 60 * 60 * 1000))
+        },
+      }
+      .then((data) => {
+        res.status(200).send(data);
+      })
+      .catch((err) => {
+        console.err(err);
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      }),
+  });
+};
+
 // Update a booking by the id in the request
 const updateBooking = async (req, res) => {
   const { bookingId } = req.params;
@@ -139,6 +174,8 @@ module.exports = {
   findAllBookings,
   findBooking,
   findUserBookings,
+  findCarParkBookings,
+  findCarPark24HBookings,
   updateBooking,
   deleteBooking,
   deleteAllBookings,
