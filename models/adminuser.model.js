@@ -8,23 +8,76 @@
 
  -------DESCRIPTION-------
 
-This is the administrator user model and is the foundation of a administrator user 'object' this is where we define all data types and needed
+This is the administrator AdminUser model and is the foundation of a administrator AdminUser 'object' this is where we define all data types and needed
 structures for our postgres database through sequelize.
 
 */
 
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('./index');
-const User = require('./user.model');
 
-class AdminUser extends User {}
+class AdminUser extends Model {}
 
 AdminUser.init(
-  {},
   {
-    tableName: 'AdminUsers',
-    // timestamps: false
+    adminUserId: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      unique: true,
+      // comment: 'This is a column name that has a comment'
+    },
+    forename: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    surname: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    dob: {
+      allowNull: false,
+      type: DataTypes.DATEONLY,
+    },
+    email: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    password: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    addressLine1: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    addressLine2: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    city: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    postcode: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    country: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
   },
-  { sequelize }
+  {
+    sequelize,
+    tableName: 'AdminUsers',
+    indexes: [{ unique: true, fields: ['email'] }],
+    defaultScope: {
+      attributes: { exclude: ['password'] },
+    },
+    // timestamps: false
+  }
 );
 
 module.exports = AdminUser;
