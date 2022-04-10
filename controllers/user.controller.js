@@ -13,45 +13,9 @@ It does this mainly through database interactions and has all CRUD functions whi
 accessed via the accounts routes.
 
 */
-const { Op } = require("sequelize");
 
 const User = require('../models/user.model');
 const AdminUser = require('../models/adminuser.model');
-
-// Create and Save a new user account to the database
-const createUser = async (req, res) => {
-  const user = req.body;
-
-  User.create(user, {
-    fields: [
-      'userId',
-      'forename',
-      'surname',
-      'dob',
-      'email',
-      'password',
-      'userId',
-      'addressLine1',
-      'addressLine2',
-      'city',
-      'postcode',
-      'country',
-    ],
-  })
-    .then((data) => {
-      res.status(200).send(data);
-    })
-    .catch((err) => {
-      if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_USER_EXISTS');
-      } else if (err.name === 'SequelizeValidationError') {
-        res.status(400).send('ERR_DATA_MISSING');
-      } else {
-        console.err(err);
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      }
-    });
-};
 
 // Create and save a new admin user to the database
 const createAdminUser = async (req, res) => {
@@ -78,7 +42,7 @@ const createAdminUser = async (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_USER_EXISTS');
+        res.status(409).send('ERR_ADMIN_USER_EXISTS');
       } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {
@@ -87,7 +51,6 @@ const createAdminUser = async (req, res) => {
       }
     });
 };
-
 
 
 // Retrieve all users from the database
@@ -118,7 +81,7 @@ const findAllAdminUsers = async (req, res) => {
 const findUser = async (req, res) => {
   const userID = req.params.userId;
 
-  userID.findByPk(userID)
+  User.findByPk(userID)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -178,7 +141,6 @@ const deleteAllUsers = async (req, res) => {
 };
 
 module.exports = {
-  createUser,
   createAdminUser,
   findAllUsers,
   findAllAdminUsers,
