@@ -69,13 +69,13 @@ Booking.init(
     },
   },
   {
+    sequelize,
     tableName: 'Bookings',
     indexes: [
       { unique: true, fields: ['bookingType', 'startDate', 'duration'] },
     ],
     // timestamps: false
-  },
-  { sequelize }
+  }
 );
 
 module.exports = Booking;

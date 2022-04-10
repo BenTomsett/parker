@@ -38,11 +38,11 @@ CarPark.init(
     },
   },
   {
+    sequelize,
     tableName: 'Users',
     indexes: [{ unique: true, fields: ['email'] }],
     // timestamps: false
-  },
-  { sequelize }
+  }
 );
 
 module.exports = CarPark;

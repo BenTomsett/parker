@@ -61,13 +61,13 @@ ParkingSpace.init(
     },
   },
   {
+    sequelize,
     tableName: 'Parking Spaces',
     indexes: [
       { unique: true, fields: ['status', 'bookingType', 'gpslat', 'gpsLong'] },
     ],
     // timestamps: false
-  },
-  { sequelize }
+  }
 );
 
 module.exports = ParkingSpace;
