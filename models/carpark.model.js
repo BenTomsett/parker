@@ -39,8 +39,8 @@ CarPark.init(
   },
   {
     sequelize,
-    tableName: 'Users',
-    indexes: [{ unique: true, fields: ['email'] }],
+    tableName: 'CarParks',
+    indexes: [{ unique: true, fields: ['name'] }],
     // timestamps: false
   }
 );

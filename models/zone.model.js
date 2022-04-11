@@ -50,10 +50,7 @@ Zone.init(
   },
   {
     sequelize,
-    tableName: 'Bookings',
-    indexes: [
-      { unique: true, fields: ['bookingType', 'startDate', 'duration'] },
-    ],
+    tableName: 'Zones'
     // timestamps: false
   }
 );

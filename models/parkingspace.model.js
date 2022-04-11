@@ -62,9 +62,9 @@ ParkingSpace.init(
   },
   {
     sequelize,
-    tableName: 'Parking Spaces',
+    tableName: 'ParkingSpaces',
     indexes: [
-      { unique: true, fields: ['status', 'bookingType', 'gpslat', 'gpsLong'] },
+      { unique: 'parking_space_idx', fields: ['status', 'bookingType', 'gpslat', 'gpsLong'] },
     ],
     // timestamps: false
   }
