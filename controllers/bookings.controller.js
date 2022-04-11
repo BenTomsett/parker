@@ -16,6 +16,8 @@ the bookings routes.
 const { Op } = require("sequelize");
 
 const Booking = require('../models/booking.model');
+const ParkingSpace = require('../models/parkingspace.model');
+const { checkParkedLocation } = require('../utils/checkLocation');
 
 // Create and Save a new Booking
 const createBooking = async (req, res) => {
@@ -140,6 +142,55 @@ const updateBooking = async (req, res) => {
     });
 };
 
+// Checkin a booking by the id in the request
+const checkInBooking = async (req, res) => {
+    const { bookingId } = req.params;
+    const { userGpsLong, userGpsLat } = req.body;
+
+    let booking = null;
+    let parkingSpace = null;
+    const location = { userGpsLong, userGpsLat }
+
+    await Booking.findByPk(bookingId)
+    .then((data) => {
+      booking = data;
+      ParkingSpace.findByPk(booking.spaceId)
+      .then((parkingData) =>
+      {
+          parkingSpace = parkingData;
+      })  
+      .catch((err) => {
+        console.err(err);
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      });
+    })
+    .catch((err) => {
+      console.err(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
+    
+    const correctLocation = checkParkedLocation(location, parkingSpace);
+    
+    if(correctLocation) {
+        Booking.update( {checkedIn: true}, { where: { bookingId } })
+        .then((data) => {
+            res.status(200).send(data);
+        })
+        .catch((err) => {
+            if (err.name === 'SequelizeValidationError') {
+            res.status(400).send('ERR_DATA_MISSING');
+            } else {
+            console.err(err);
+            res.status(500).send('ERR_INTERNAL_EXCEPTION');
+            }
+        });
+    }
+    else {
+        res.status(401).send('ERR_INCORRECT_LOCATION');
+    }
+  };
+
+
 // Delete a Booking with the specified id in the request
 const deleteBooking = async (req, res) => {
   const { bookingId } = req.params;
@@ -177,6 +228,7 @@ module.exports = {
   findCarParkBookings,
   findCarPark24HBookings,
   updateBooking,
+  checkInBooking,
   deleteBooking,
   deleteAllBookings,
 };

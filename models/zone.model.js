@@ -49,13 +49,10 @@ Zone.init(
     },
   },
   {
-    tableName: 'Bookings',
-    indexes: [
-      { unique: true, fields: ['bookingType', 'startDate', 'duration'] },
-    ],
+    sequelize,
+    tableName: 'Zones'
     // timestamps: false
-  },
-  { sequelize }
+  }
 );
 
 module.exports = Zone;
