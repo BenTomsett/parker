@@ -40,7 +40,7 @@ Booking.init(
         deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
     },
-    spaceNumber: {
+    spaceId: {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
@@ -67,12 +67,20 @@ Booking.init(
       allowNull: false,
       type: DataTypes.TIME,
     },
+    checkedIn: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+    },
+    checkedOut: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+    },
   },
   {
     sequelize,
     tableName: 'Bookings',
     indexes: [
-      { unique: 'booking_idx', fields: ['bookingType', 'startDate', 'duration'] },
+      { unique: 'booking_idx', fields: ['bookingType', 'spaceid', 'startDate', 'duration'] },
     ],
     // timestamps: false
   }

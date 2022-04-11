@@ -40,6 +40,9 @@ router.get('/:carparkId/status', authenticateUser, BookingController.findCarPark
 // Update a booking with the bookingId
 router.put('/:userId/:bookingId', authenticateUser, BookingController.updateBooking);
 
+// Check in user to their booking
+router.put('/:userId/:bookingId/checkin', authenticateUser, BookingController.updateBooking);
+
 // Delete a product with the bookingId
 router.delete('/:userId/:bookingId', authenticateUser, BookingController.deleteBooking);
 
