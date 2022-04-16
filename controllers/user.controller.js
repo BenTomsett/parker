@@ -46,7 +46,7 @@ const createAdminUser = async (req, res) => {
       } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {
-        console.err(err);
+        console.error(err);
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       }
     });
@@ -60,7 +60,7 @@ const findAllUsers = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -72,7 +72,7 @@ const findAllAdminUsers = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -86,7 +86,7 @@ const findUser = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -105,7 +105,7 @@ const updateUser = async (req, res) => {
       } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {
-        console.err(err);
+        console.error(err);
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       }
     });
@@ -120,7 +120,7 @@ const deleteUser = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -135,7 +135,7 @@ const deleteAllUsers = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
