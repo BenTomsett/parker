@@ -80,7 +80,7 @@ Booking.init(
     sequelize,
     tableName: 'Bookings',
     indexes: [
-      { unique: 'booking_idx', fields: ['bookingType', 'spaceid', 'startDate', 'duration'] },
+      { unique: 'booking_idx', fields: ['bookingType', 'startDate', 'duration'] },
     ],
     // timestamps: false
   }

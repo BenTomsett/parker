@@ -42,7 +42,7 @@ const createBooking = async (req, res) => {
       } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {
-        console.err(err);
+        console.error(err);
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       }
     });
@@ -55,7 +55,7 @@ const findAllBookings = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -69,7 +69,7 @@ const findBooking = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -83,7 +83,7 @@ const findUserBookings = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -97,7 +97,7 @@ const findCarParkBookings = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -116,7 +116,7 @@ const findCarPark24HBookings = async (req, res) => {
         res.status(200).send(data);
       })
       .catch((err) => {
-        console.err(err);
+        console.error(err);
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       }),
   });
@@ -136,7 +136,7 @@ const updateBooking = async (req, res) => {
       } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {
-        console.err(err);
+        console.error(err);
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       }
     });
@@ -160,12 +160,12 @@ const checkInBooking = async (req, res) => {
           parkingSpace = parkingData;
       })  
       .catch((err) => {
-        console.err(err);
+        console.error(err);
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       });
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
     
@@ -180,7 +180,7 @@ const checkInBooking = async (req, res) => {
             if (err.name === 'SequelizeValidationError') {
             res.status(400).send('ERR_DATA_MISSING');
             } else {
-            console.err(err);
+            console.error(err);
             res.status(500).send('ERR_INTERNAL_EXCEPTION');
             }
         });
@@ -200,7 +200,7 @@ const deleteBooking = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -215,7 +215,7 @@ const deleteAllBookings = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };

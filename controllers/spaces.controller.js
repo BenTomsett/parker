@@ -52,7 +52,7 @@ const findAllParkingSpaces = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -66,7 +66,7 @@ const findParkingSpace = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -80,7 +80,7 @@ const findCarParkParkingSpaces = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -128,7 +128,7 @@ const updateParkingSpace = async (req, res) => {
       } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {
-        console.err(err);
+        console.error(err);
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       }
     });
@@ -143,7 +143,7 @@ const deleteParkingSpace = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
@@ -158,7 +158,7 @@ const deleteAllParkingSpaces = async (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.err(err);
+      console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };

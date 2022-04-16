@@ -16,7 +16,7 @@ structures for our postgres database through sequelize.
 const { DataTypes, Model, Deferrable } = require('sequelize');
 const sequelize = require('./index');
 
-const CarPark = require('./carpark.model');
+const Zone = require('./zone.model');
 
 class ParkingSpace extends Model {}
 
@@ -34,8 +34,8 @@ ParkingSpace.init(
       allowNull: false,
       type: DataTypes.INTEGER,
       references: {
-        model: CarPark,
-        key: 'zones',
+        model: Zone,
+        key: 'zoneId',
         deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
     },
@@ -43,12 +43,6 @@ ParkingSpace.init(
       allowNull: false,
       type: DataTypes.ENUM({
         values: ['OCCUPIED', 'AVAILABLE', 'RESERVED'],
-      }),
-    },
-    bookingType: {
-      allowNull: false,
-      type: DataTypes.ENUM({
-        values: [1, 2, 3],
       }),
     },
     gpsLat: {
@@ -64,7 +58,7 @@ ParkingSpace.init(
     sequelize,
     tableName: 'ParkingSpaces',
     indexes: [
-      { unique: 'parking_space_idx', fields: ['status', 'bookingType', 'gpslat', 'gpsLong'] },
+      { unique: 'parking_space_idx', fields: ['status', 'gpsLat', 'gpsLong'] },
     ],
     // timestamps: false
   }
