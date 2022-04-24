@@ -19,10 +19,13 @@ const { authenticateUser } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Register a new user
+router.get('/register', authenticateUser, UserController.createUser);
+
 // Retrieve all Users
 router.get('/', authenticateUser, UserController.findAllUsers);
 
-// Retrieve all Users
+// Retrieve all admin Users
 router.get('/admins', authenticateUser, UserController.findAllAdminUsers);
 
 // Retrieve a single User for a user
