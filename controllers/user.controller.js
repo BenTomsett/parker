@@ -1,5 +1,5 @@
 /*  CMP5012B - Software Engineering - Coursework 2 -  Parker
-    Author: Bradley Crisp - Group 12
+    Author: James Kerrison - Group 12
     IDE Version: Jetbrains Webstorm
     Current Version: Managed by GitHub
     Date Created: 09/04/2022
@@ -22,7 +22,6 @@ const createUser = async (req, res) => {
 
   User.create(user, {
     fields: [
-      'userId',
       'forename',
       'surname',
       'dob',
@@ -65,7 +64,11 @@ const findAllUsers = async (req, res) => {
 
 // Retrieve all admin users from the database
 const findAllAdminUsers = async (req, res) => {
-  AdminUser.findAll()
+  User.findAll({
+    where: {
+      isAdmin: true,
+    },
+  })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -93,7 +96,11 @@ const findUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const { userId } = req.params;
 
-  User.update(req.body, { where: { userId } })
+  User.update(req.body, {
+    where: {
+      userId,
+    },
+  })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -113,7 +120,11 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { userId } = req.params;
 
-  User.destroy({ where: { userId } })
+  User.destroy({
+    where: {
+      userId,
+    },
+  })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -139,7 +150,7 @@ const deleteAllUsers = async (req, res) => {
 };
 
 module.exports = {
-  createAdminUser,
+  createUser,
   findAllUsers,
   findAllAdminUsers,
   findUser,
