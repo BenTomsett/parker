@@ -52,7 +52,6 @@ const createAdminUser = async (req, res) => {
     });
 };
 
-
 // Retrieve all users from the database
 const findAllUsers = async (req, res) => {
   User.findAll()

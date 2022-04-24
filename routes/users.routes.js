@@ -38,4 +38,3 @@ router.delete('/:userId', authenticateUser, UserController.deleteUser);
 router.delete('/', authenticateUser, UserController.deleteAllUsers);
 
 module.exports = router;
-
