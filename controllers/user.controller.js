@@ -15,13 +15,12 @@ accessed via the accounts routes.
 */
 
 const User = require('../models/user.model');
-const AdminUser = require('../models/adminuser.model');
 
-// Create and save a new admin user to the database
-const createAdminUser = async (req, res) => {
-  const adminUser = req.body;
+// Create and save a new user to the database
+const createUser = async (req, res) => {
+  const user = req.body;
 
-  AdminUser.create(adminUser, {
+  User.create(user, {
     fields: [
       'userId',
       'forename',
@@ -42,11 +41,11 @@ const createAdminUser = async (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_ADMIN_USER_EXISTS');
+        res.status(409).send('ERR_USER_EXISTS');
       } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {
-        console.error(err);
+        console.err(err);
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       }
     });
