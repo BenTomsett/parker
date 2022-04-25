@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
 const { generateToken } = require('../utils/auth');
 
-const getTokenFromCredentials = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
 
   const users = await User.findAll({
@@ -31,5 +31,5 @@ const getTokenFromCredentials = async (req, res) => {
 };
 
 module.exports = {
-  getTokenFromCredentials,
+  login,
 };
