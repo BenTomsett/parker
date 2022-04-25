@@ -1,5 +1,5 @@
 /*  CMP5012B - Software Engineering - Coursework 2 -  Parker
-    Author: Bradley Crisp - Group 12
+    Author: James Kerrison - Group 12
     IDE Version: Jetbrains Webstorm
     Current Version: Managed by GitHub
     Date Created: 09/04/2022
@@ -15,43 +15,60 @@ accessed via the accounts routes.
 */
 
 const User = require('../models/user.model');
-const AdminUser = require('../models/adminuser.model');
 
-// Create and save a new admin user to the database
-const createAdminUser = async (req, res) => {
-  const adminUser = req.body;
+const {
+  emailRegex,
+  strongPassRegex,
+  getAge,
+  hashPassword,
+} = require('../utils/auth');
 
-  AdminUser.create(adminUser, {
-    fields: [
-      'userId',
-      'forename',
-      'surname',
-      'dob',
-      'email',
-      'password',
-      'userId',
-      'addressLine1',
-      'addressLine2',
-      'city',
-      'postcode',
-      'country',
-    ],
-  })
-    .then((data) => {
-      res.status(200).send(data);
+// Create and save a new user to the database
+const createUser = async (req, res) => {
+  const user = req.body;
+
+  const dobParsed = new Date(Date.parse(user.dob));
+
+  if (!emailRegex.test(user.email)) {
+    res.status(400).send('ERR_EMAIL_INVALID');
+  } else if (!strongPassRegex.test(user.password)) {
+    res.status(400).send('ERR_PASSWORD_WEAK');
+  } else if (!dobParsed) {
+    res.status(400).send('ERR_INVALID_DATE');
+  } else if (getAge(dobParsed) < 16) {
+    res.status(400).send('ERR_TOO_YOUNG');
+  } else {
+    user.password = await hashPassword(user.password);
+    User.create(user, {
+      fields: [
+        'forename',
+        'surname',
+        'dob',
+        'email',
+        'password',
+        'addressLine1',
+        'addressLine2',
+        'city',
+        'postcode',
+        'country',
+      ],
     })
-    .catch((err) => {
-      if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_ADMIN_USER_EXISTS');
-      } else if (err.name === 'SequelizeValidationError') {
-        res.status(400).send('ERR_DATA_MISSING');
-      } else {
-        console.error(err);
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      }
-    });
+      .then(async (obj) => {
+        await obj.reload();
+        res.status(201).json(obj);
+      })
+      .catch((err) => {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+          res.status(409).send('ERR_USER_EXISTS');
+        } else if (err.name === 'SequelizeValidationError') {
+          res.status(400).send('ERR_DATA_MISSING');
+        } else {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        }
+      });
+  }
 };
-
 
 // Retrieve all users from the database
 const findAllUsers = async (req, res) => {
@@ -67,7 +84,11 @@ const findAllUsers = async (req, res) => {
 
 // Retrieve all admin users from the database
 const findAllAdminUsers = async (req, res) => {
-  AdminUser.findAll()
+  User.findAll({
+    where: {
+      isAdmin: true,
+    },
+  })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -95,7 +116,11 @@ const findUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const { userId } = req.params;
 
-  User.update(req.body, { where: { userId } })
+  User.update(req.body, {
+    where: {
+      userId,
+    },
+  })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -115,7 +140,11 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { userId } = req.params;
 
-  User.destroy({ where: { userId } })
+  User.destroy({
+    where: {
+      userId,
+    },
+  })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -141,7 +170,7 @@ const deleteAllUsers = async (req, res) => {
 };
 
 module.exports = {
-  createAdminUser,
+  createUser,
   findAllUsers,
   findAllAdminUsers,
   findUser,

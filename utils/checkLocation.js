@@ -12,38 +12,33 @@
 */
 
 const checkParkedLocation = (location, parkingSpace) => {
-        // The math module contains a function
-        // named toRadians which converts from
-        // degrees to radians.
-        const lon1 = location.userGpsLong * Math.PI / 180;
-        const lon2 = parkingSpace.gpsLong * Math.PI / 180;
-        const lat1 = location.userGpsLat * Math.PI / 180;
-        const lat2 = parkingSpace.gpsLat * Math.PI / 180;
-   
-        // Haversine formula
-        const dlon = lon2 - lon1;
-        const dlat = lat2 - lat1;
-        const a = (Math.sin(dlat / 2)**2)
-                 + Math.cos(lat1) * Math.cos(lat2)
-                 * (Math.sin(dlon / 2)**2);
-               
-        const c = 2 * Math.asin(Math.sqrt(a));
-   
-        // Radius of earth in kilometers. Use 3956
-        // for miles
-        const r = 6371;
+  // The math module contains a function
+  // named toRadians which converts from
+  // degrees to radians.
+  const lon1 = (location.userGpsLong * Math.PI) / 180;
+  const lon2 = (parkingSpace.gpsLong * Math.PI) / 180;
+  const lat1 = (location.userGpsLat * Math.PI) / 180;
+  const lat2 = (parkingSpace.gpsLat * Math.PI) / 180;
 
-        // calculate the result
-        const result = c*r;
+  // Haversine formula
+  const dlon = lon2 - lon1;
+  const dlat = lat2 - lat1;
+  const a =
+    Math.sin(dlat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) ** 2;
 
-        if (result < 0.001) {
-            return(true);
-        }
+  const c = 2 * Math.asin(Math.sqrt(a));
 
-        return(false);   
-}
+  // Radius of earth in kilometers. Use 3956
+  // for miles
+  const r = 6371;
 
-module.exports = 
-{
-    checkParkedLocation
-}
+  // calculate the result
+  const result = c * r;
+
+  return result < 0.001;
+};
+
+module.exports = {
+  checkParkedLocation,
+};
