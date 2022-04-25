@@ -1,4 +1,7 @@
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+
+const hashPassword = async (password) => bcrypt.hash(password, 10);
 
 const generateToken = (user) => {
   const { email, forename, surname } = user;
@@ -125,6 +128,7 @@ const getAge = (dob) => {
 };
 
 module.exports = {
+  hashPassword,
   generateToken,
   verifyToken,
   emailRegex,

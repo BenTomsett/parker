@@ -14,10 +14,14 @@ accessed via the accounts routes.
 
 */
 
-const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
 
-const { emailRegex, strongPassRegex, getAge } = require('../utils/auth');
+const {
+  emailRegex,
+  strongPassRegex,
+  getAge,
+  hashPassword,
+} = require('../utils/auth');
 
 // Create and save a new user to the database
 const createUser = async (req, res) => {
@@ -34,41 +38,35 @@ const createUser = async (req, res) => {
   } else if (getAge(dobParsed) < 16) {
     res.status(400).send('ERR_TOO_YOUNG');
   } else {
-    bcrypt.hash(user.password, 10, (hashErr, hash) => {
-      if (hashErr) {
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      } else {
-        user.password = hash;
-        User.create(user, {
-          fields: [
-            'forename',
-            'surname',
-            'dob',
-            'email',
-            'password',
-            'addressLine1',
-            'addressLine2',
-            'city',
-            'postcode',
-            'country',
-          ],
-        })
-          .then(async (obj) => {
-            await obj.reload();
-            res.status(201).json(obj);
-          })
-          .catch((err) => {
-            if (err.name === 'SequelizeUniqueConstraintError') {
-              res.status(409).send('ERR_USER_EXISTS');
-            } else if (err.name === 'SequelizeValidationError') {
-              res.status(400).send('ERR_DATA_MISSING');
-            } else {
-              console.error(err);
-              res.status(500).send('ERR_INTERNAL_EXCEPTION');
-            }
-          });
-      }
-    });
+    user.password = await hashPassword(user.password);
+    User.create(user, {
+      fields: [
+        'forename',
+        'surname',
+        'dob',
+        'email',
+        'password',
+        'addressLine1',
+        'addressLine2',
+        'city',
+        'postcode',
+        'country',
+      ],
+    })
+      .then(async (obj) => {
+        await obj.reload();
+        res.status(201).json(obj);
+      })
+      .catch((err) => {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+          res.status(409).send('ERR_USER_EXISTS');
+        } else if (err.name === 'SequelizeValidationError') {
+          res.status(400).send('ERR_DATA_MISSING');
+        } else {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        }
+      });
   }
 };
 
