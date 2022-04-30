@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Heading } from '@chakra-ui/react';
 
-import useTitle from '../../hooks/useTitle';
 
 const HomePage = () => {
-  useTitle('Home');
+  useEffect(() => {
+    document.title = "new title"
+  }, []);
 
-  return (
-    <Heading size="xl">Welcome back, User.</Heading>
-  )
+  return <Heading size="xl">Welcome!</Heading>;
 };
 
 export default HomePage;
