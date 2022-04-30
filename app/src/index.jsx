@@ -5,6 +5,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { Scaffold } from './components';
 import HomePage from './pages/home';
+import BookingsPage from './pages/bookings';
+import ParkingPage from './pages/parking';
+import AccountPage from './pages/account';
 
 ReactDOM.render(
   <StrictMode>
@@ -14,6 +17,9 @@ ReactDOM.render(
         <Routes>
           <Route element={<Scaffold />}>
             <Route index element={<HomePage />} />
+            <Route path="/bookings" element={<BookingsPage />} />
+            <Route path="/parking" element={<ParkingPage />} />
+            <Route path="/account" element={<AccountPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
