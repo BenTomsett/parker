@@ -32,8 +32,12 @@ CarPark.init(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    numOfSpaces:{
+        allowNull: false,
+        type: DataTypes.ARRAY(DataTypes.INTEGER)
+    },
     zones: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.ARRAY(DataTypes.INTEGER),
     },
   },
