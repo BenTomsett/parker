@@ -3,6 +3,7 @@
 .vscode/
 .history/
 *.vsix
+*.iml
 
 # Logs
 logs
