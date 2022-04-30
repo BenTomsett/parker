@@ -4,13 +4,16 @@ module.exports = {
     jest: true,
   },
   extends: ['airbnb', 'prettier', 'airbnb/hooks'],
-  plugins: ['jest'],
+  plugins: ['jest', 'unused-imports'],
   parserOptions: {
     ecmaVersion: 'latest',
   },
   rules: {
-    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
     'react/function-component-definition': ['off', 'never'],
-    'react/jsx-props-no-spreading': ['off'],
+    'react/jsx-props-no-spreading': 'off',
+    'import/prefer-default-export': 'off',
+    "no-unused-vars": "off",
+    "unused-imports/no-unused-imports": 'error',
+    "unused-imports/no-unused-vars": 'warn'
   },
 };

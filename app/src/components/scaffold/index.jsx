@@ -1,58 +1,30 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  Box,
-  Drawer,
-  DrawerContent,
-  useColorModeValue,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { FiHome } from 'react-icons/fi';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
+import { Outlet } from 'react-router-dom';
+import NavBar from './NavBar';
 
-import Sidebar from './Sidebar';
-import TopBar from './TopBar';
+/**
+ * Scaffold component, lays out the app with the navigation bar and content below
+ * @returns {JSX.Element}
+ */
+const Scaffold = () => {
+  const [navbarHeight, setNavbarHeight] = useState(0);
+  const navbarRef = useRef(null);
 
-const linkItems = [{ name: 'Dashboard', icon: FiHome, to: '' }];
+  useEffect(() => {
+    if (navbarRef) {
+      setNavbarHeight(navbarRef.current.clientHeight);
+    }
+  }, []);
 
-const Scaffold = ({ children }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue('white', 'gray.900')}>
-      {/* Desktop sidebar */}
-      <Sidebar onClose={onClose} items={linkItems} drawer />
-
-      {/* Mobile sidebar */}
-      <Drawer
-        autoFocus={false}
-        placement="left"
-        returnFocusOnClose={false}
-        size="full"
-        isOpen={isOpen}
-        onClose={onClose}
-        onOverlayClick={onClose}
-      >
-        <DrawerContent>
-          <Sidebar onClose={onClose} items={linkItems} />
-        </DrawerContent>
-      </Drawer>
-
-      {/* Mobile top nav bar */}
-      <TopBar onOpen={onOpen} />
-
-      {/* App content */}
-      <Box ml={{ base: 0, md: 60 }} p={4}>
-        {children}
+    <Flex flexDirection="column" maxH="100vh">
+      <NavBar navbarRef={navbarRef} />
+      <Box p={8} maxH="100vh" mt={`${navbarHeight}px`}>
+        <Outlet />
       </Box>
-    </Box>
+    </Flex>
   );
-};
-
-Scaffold.defaultProps = {
-  children: null,
-};
-
-Scaffold.propTypes = {
-  children: PropTypes.element,
 };
 
 export default Scaffold;
