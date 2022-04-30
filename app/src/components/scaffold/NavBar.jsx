@@ -44,10 +44,10 @@ const NavBar = ({ navbarRef }) => {
       <Flex alignItems="center">
         <Image src={logo} alt="Parker logo" h={35} mr={6} />
         <HStack spacing={2} display={{ base: 'none', md: 'flex' }}>
-          <NavButton label="Home" active />
-          <NavButton label="Bookings" />
-          <NavButton label="Parking" />
-          <NavButton label="Account" />
+          <NavButton label="Home" to="/" />
+          <NavButton label="Bookings" to="/bookings" />
+          <NavButton label="Parking" to="/parking" />
+          <NavButton label="Account" to="/account" />
         </HStack>
       </Flex>
 

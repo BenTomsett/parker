@@ -1,32 +1,44 @@
 import React from 'react';
-import { Button } from '@chakra-ui/react';
 import * as PropTypes from 'prop-types';
+import { Button } from '@chakra-ui/react';
+import { useLocation, useNavigate, useResolvedPath } from 'react-router-dom';
 
 /**
  * Navigation button component
  * @param {string} label The button's label
- * @param {boolean} active If true, the button has a solid background to indicate the user has navigated to (or under) this area of the app
+ * @param {string} to Relative path to navigate
  * @param {boolean} fullWidth If true, the button takes up the full width of its parent
  * @returns {JSX.Element}
  */
-const NavButton = ({ label, active, fullWidth }) => (
-  <Button
-    colorScheme="blue"
-    variant={active ? 'solid' : 'ghost'}
-    w={fullWidth ? 'full' : 'unset'}
-  >
-    {label}
-  </Button>
-);
+const NavButton = ({ label, to, fullWidth }) => {
+  const navigate = useNavigate();
+  const resolved = useResolvedPath(to);
+  const location = useLocation();
+
+  const match = location.pathname.toLowerCase().split('/')[1] === resolved.pathname.toLowerCase().split('/')[1];
+
+  return (
+    <Button
+      colorScheme="blue"
+      variant={match ? 'solid' : 'ghost'}
+      w={fullWidth ? 'full' : 'unset'}
+      onClick={() => {
+        navigate(to);
+      }}
+    >
+      {label}
+    </Button>
+  )
+};
 
 NavButton.defaultProps = {
-  active: false,
+  to: "",
   fullWidth: false,
 }
 
 NavButton.propTypes = {
   label: PropTypes.string.isRequired,
-  active: PropTypes.bool,
+  to: PropTypes.string,
   fullWidth: PropTypes.bool,
 };
 
