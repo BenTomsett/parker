@@ -4,6 +4,7 @@ import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import App from './App';
+import HomePage from './pages/home';
 
 ReactDOM.render(
   <StrictMode>
@@ -11,7 +12,9 @@ ReactDOM.render(
     <ChakraProvider>
       <BrowserRouter>
         <Routes>
-          <Route index element={<App />} />
+          <Route element={<App />}>
+            <Route index element={<HomePage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
