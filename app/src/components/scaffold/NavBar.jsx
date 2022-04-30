@@ -15,6 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { FiMenu, FiX } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import NavButton from './NavButton';
 import NavUser from './NavUser';
 import logo from '../../parker.svg';
@@ -25,8 +26,15 @@ import logo from '../../parker.svg';
  * @returns {JSX.Element}
  */
 const NavBar = ({ navbarRef }) => {
+  const navigate = useNavigate();
+
   const bg = useColorModeValue('white', 'gray.800');
   const { isOpen, onClose, onToggle } = useDisclosure();
+
+  const mobileNavButtonClick = (to) => {
+    navigate(to);
+    onClose();
+  }
 
   return (
     <chakra.nav
@@ -71,10 +79,10 @@ const NavBar = ({ navbarRef }) => {
         <DrawerOverlay />
         <DrawerContent>
           <VStack spacing={2} py={4} px={6}>
-            <NavButton label="Home" active fullWidth />
-            <NavButton label="Bookings" fullWidth />
-            <NavButton label="Parking" fullWidth />
-            <NavButton label="Account" fullWidth />
+            <NavButton label="Home" to="/" onClick={() => mobileNavButtonClick('/')} fullWidth />
+            <NavButton label="Bookings" to="/bookings" onClick={() => mobileNavButtonClick('/bookings')} fullWidth />
+            <NavButton label="Parking" to="/parking" onClick={() => mobileNavButtonClick('/parking')} fullWidth />
+            <NavButton label="Account" to="/account" onClick={() => mobileNavButtonClick('/account')} fullWidth />
 
             <HStack w="full" justifyContent="space-between" pt={4}>
               <NavUser name="Ben Tomsett" email="ben@tomsett.xyz" />

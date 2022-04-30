@@ -7,10 +7,11 @@ import { useLocation, useNavigate, useResolvedPath } from 'react-router-dom';
  * Navigation button component
  * @param {string} label The button's label
  * @param {string} to Relative path to navigate
+ * @param {function} onClick If the `to` prop not specified, this onClick function will be used instead
  * @param {boolean} fullWidth If true, the button takes up the full width of its parent
  * @returns {JSX.Element}
  */
-const NavButton = ({ label, to, fullWidth }) => {
+const NavButton = ({ label, to, onClick, fullWidth }) => {
   const navigate = useNavigate();
   const resolved = useResolvedPath(to);
   const location = useLocation();
@@ -22,9 +23,9 @@ const NavButton = ({ label, to, fullWidth }) => {
       colorScheme="blue"
       variant={match ? 'solid' : 'ghost'}
       w={fullWidth ? 'full' : 'unset'}
-      onClick={() => {
+      onClick={!onClick ? () => {
         navigate(to);
-      }}
+      } : onClick}
     >
       {label}
     </Button>
@@ -33,12 +34,14 @@ const NavButton = ({ label, to, fullWidth }) => {
 
 NavButton.defaultProps = {
   to: "",
+  onClick: undefined,
   fullWidth: false,
 }
 
 NavButton.propTypes = {
   label: PropTypes.string.isRequired,
   to: PropTypes.string,
+  onClick: PropTypes.func,
   fullWidth: PropTypes.bool,
 };
 
