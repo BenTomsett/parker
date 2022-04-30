@@ -50,7 +50,7 @@ Zone.init(
   },
   {
     sequelize,
-    tableName: 'Zones'
+    tableName: 'Zones',
     // timestamps: false
   }
 );

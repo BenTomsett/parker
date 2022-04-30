@@ -68,19 +68,22 @@ Booking.init(
       type: DataTypes.TIME,
     },
     checkedIn: {
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
     },
     checkedOut: {
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
     },
   },
   {
     sequelize,
     tableName: 'Bookings',
     indexes: [
-      { unique: 'booking_idx', fields: ['bookingType', 'startDate', 'duration'] },
+      {
+        unique: 'booking_idx',
+        fields: ['bookingType', 'startDate', 'duration'],
+      },
     ],
     // timestamps: false
   }

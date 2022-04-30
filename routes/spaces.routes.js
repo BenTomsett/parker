@@ -25,17 +25,33 @@ router.post('/', authenticateUser, SpacesController.createParkingSpace);
 // Retrieve all parking spaces
 router.get('/', authenticateUser, SpacesController.findAllParkingSpaces);
 
-// Retrieve a single parking space 
-router.get('/:parkingSpaceId', authenticateUser, SpacesController.findParkingSpace);
+// Retrieve a single parking space
+router.get(
+  '/:parkingSpaceId',
+  authenticateUser,
+  SpacesController.findParkingSpace
+);
 
 // Retrieve all parking spaces for a car park
-router.get('/:carParkId/spaces', authenticateUser, SpacesController.findCarParkParkingSpaces);
+router.get(
+  '/:carParkId/spaces',
+  authenticateUser,
+  SpacesController.findCarParkParkingSpaces
+);
 
 // Update a parking space with the parkingSpaceId
-router.put('/:carParkId/:parkingSpaceId', authenticateUser, SpacesController.updateParkingSpace);
+router.put(
+  '/:carParkId/:parkingSpaceId',
+  authenticateUser,
+  SpacesController.updateParkingSpace
+);
 
 // Delete a car parking space with the parkingSpaceId
-router.delete('/:carParkId/:parkingSpaceId', authenticateUser, SpacesController.deleteParkingSpace);
+router.delete(
+  '/:carParkId/:parkingSpaceId',
+  authenticateUser,
+  SpacesController.deleteParkingSpace
+);
 
 // Delete all car parking spaces
 router.delete('/', authenticateUser, SpacesController.deleteAllParkingSpaces);

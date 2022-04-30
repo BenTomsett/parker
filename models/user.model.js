@@ -68,6 +68,11 @@ User.init(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    isAdmin: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     sequelize,
