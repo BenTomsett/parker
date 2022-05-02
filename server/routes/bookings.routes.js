@@ -19,62 +19,63 @@ const { authenticateUser } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Create a new booking
-router.post('/', authenticateUser, BookingController.createBooking);
-
 // Retrieve all bookings
 router.get('/', authenticateUser, BookingController.findAllBookings);
 
-// Retrieve a single booking for a user
+// Create a new booking
+router.put('/', authenticateUser, BookingController.createBooking);
+
+// Delete all bookings
+router.delete('/', authenticateUser, BookingController.deleteAllBookings);
+
+// Retrieve a single booking
 router.get(
-  '/:userId/:bookingId',
+  '/:bookingId',
   authenticateUser,
   BookingController.findBooking
 );
 
-// Retrieve all bookings for a user
-router.get(
-  '/:userId/bookings',
+// Update a booking with the bookingId
+router.put(
+  '/:bookingId',
   authenticateUser,
-  BookingController.findUserBookings
+  BookingController.updateBooking
+);
+
+// Delete a booking with the bookingId
+router.delete(
+  '/:bookingId',
+  authenticateUser,
+  BookingController.deleteBooking
+);
+
+// Check in user to their booking
+router.put(
+  '/:bookingId/checkin',
+  authenticateUser,
+  BookingController.updateBooking
 );
 
 // Retrieve all bookings for a car park
 router.get(
-  '/:carparkId/bookings',
+  '/carpark/:carparkId',
   authenticateUser,
   BookingController.findCarParkBookings
 );
 
 // Retrieve all bookings for 24h for a car park
 router.get(
-  '/:carparkId/status',
+  '/carpark/:carparkId/status',
   authenticateUser,
   BookingController.findCarPark24HBookings
 );
 
-// Update a booking with the bookingId
-router.put(
-  '/:userId/:bookingId',
+// Retrieve all bookings for a user
+router.get(
+  '/user/:userId',
   authenticateUser,
-  BookingController.updateBooking
+  BookingController.findUserBookings
 );
 
-// Check in user to their booking
-router.put(
-  '/:userId/:bookingId/checkin',
-  authenticateUser,
-  BookingController.updateBooking
-);
-
-// Delete a product with the bookingId
-router.delete(
-  '/:userId/:bookingId',
-  authenticateUser,
-  BookingController.deleteBooking
-);
-
-// Delete all bookings
-router.delete('/', authenticateUser, BookingController.deleteAllBookings);
 
 module.exports = router;
