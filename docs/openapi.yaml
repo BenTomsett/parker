@@ -1,0 +1,728 @@
+openapi: "3.0.3"
+info:
+  title: "Parker API"
+  description: "If using this tool to test the API running on localhost, make sure to click 'Use browser instead' at the bottom - by default requests are routed through a proxy which won't be able to access the server."
+  version: "1.0.0"
+servers:
+  - description: localhost:3000
+    url: http://localhost:3000
+paths:
+  /auth/login:
+    post:
+      summary: "Check credentials and get an authentication token"
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+  /bookings:
+    get:
+      summary: "Retrieves a list of all bookings"
+      description: "Returns an empty array if no bookings are found."
+      tags:
+        - Bookings
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Booking'
+    put:
+      summary: "Creates a new booking"
+      description: |
+        Returns 400 with the message "ERR_DATA_MISSING" if any of the request body fields are missing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequestBody'
+      tags:
+        - Bookings
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+    delete:
+      summary: "Deletes all bookings"
+      description: "Requires authentication as an admin user to perform."
+      tags:
+        - Bookings
+      responses:
+        "200":
+          description: "OK"
+  /bookings/{bookingId}:
+    get:
+      summary: "Retrieves a specific booking"
+      description: "Returns an empty response if no bookings are found."
+      tags:
+        - Bookings
+      parameters:
+        - name: "bookingId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+    put:
+      summary: "Updates a specified booking"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequestBody'
+      tags:
+        - Bookings
+      parameters:
+        - name: "bookingId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+    delete:
+      summary: "Deletes a specified booking"
+      tags:
+        - Bookings
+      parameters:
+        - name: "bookingId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+  /bookings/{bookingId}/checkin:
+    put:
+      summary: "Checks the user into the specified booking"
+      tags:
+        - Bookings
+      parameters:
+        - name: "bookingId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+  /bookings/carpark/{carparkId}:
+    get:
+      summary: "Retrieves a list of all bookings for the specified car park"
+      description: "Returns an empty response if no bookings are found."
+      tags:
+        - Bookings
+      parameters:
+        - name: "carparkId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Booking'
+  /bookings/carpark/{carparkId}/status:
+    get:
+      summary: "Returns bookings in the next 24 hours for the specified car park"
+      description: "Returns an empty response if no bookings are found."
+      tags:
+        - Bookings
+      parameters:
+        - name: "carparkId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Booking'
+  /bookings/user/{userId}:
+    get:
+      summary: "Retrieves a list of all bookings for the specified user"
+      description: "Returns an empty response if no bookings are found."
+      tags:
+        - Bookings
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Booking'
+  /payments/setup:
+    post:
+      summary: "Begins the payment method setup flow"
+      description: "WIP - subject to change"
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        "200":
+          description: "OK"
+  /spaces:
+    get:
+      summary: "Retrieves a list of all spaces"
+      description: "Returns an empty response if no spaces are found."
+      tags:
+        - Spaces
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Space'
+    put:
+      summary: "Creates a new parking space"
+      description: |
+        Returns 400 with the message "ERR_DATA_MISSING" if any of the request body fields are missing
+      tags:
+        - Spaces
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpaceRequestBody'
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Space'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "409":
+          $ref: '#/components/responses/Conflict'
+    delete:
+      summary: "Deletes all parking spaces"
+      tags:
+        - Spaces
+      responses:
+        "200":
+          description: "OK"
+  /spaces/{parkingSpaceId}:
+    get:
+      summary: "Retrieves information about a given parking space"
+      description: "Returns an empty response if no spaces are found."
+      tags:
+        - Spaces
+      parameters:
+        - name: "parkingSpaceId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Space'
+  /spaces/carpark/{carParkId}/{parkingSpaceId}:
+    put:
+      summary: "Updates the specified parking space"
+      tags:
+        - Spaces
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpaceRequestBody'
+      parameters:
+        - name: "carParkId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+        - name: "parkingSpaceId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Space'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "409":
+          $ref: '#/components/responses/Conflict'
+    delete:
+      summary: "Deletes the specified parking space"
+      tags:
+        - Spaces
+      parameters:
+        - name: "carParkId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+        - name: "parkingSpaceId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+  /spaces/carpark/{carParkId}:
+    get:
+      summary: "Retrieves a list of parking spaces in the specified car park"
+      description: "Returns an empty response if no spaces are found."
+      tags:
+        - Spaces
+      parameters:
+        - name: "carParkId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Space'
+  /users:
+    get:
+      summary: "Retrieves a list of all users"
+      description: "Returns an empty response if no users are found."
+      tags:
+        - Users
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/User'
+    put:
+      summary: "Creates a new user"
+      tags:
+        - Users
+      description: |
+        Returns 400 with the message "ERR_DATA_MISSING" if any of the request body fields are missing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestBody'
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "409":
+          $ref: '#/components/responses/Conflict'
+    delete:
+      summary: "Deletes all users"
+      tags:
+        - Users
+      responses:
+        "200":
+          description: "OK"
+  /users/{userId}:
+    get:
+      summary: "Retrieves information about a specified user"
+      description: "Returns an empty response if no users are found."
+      tags:
+        - Users
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: "Updates information about a specific user"
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestBody'
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "409":
+          $ref: '#/components/responses/Conflict'
+    delete:
+      summary: "Deletes the specified user"
+      tags:
+        - Users
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+  /users/admins:
+    get:
+      summary: "Retrieves a list of all admin users"
+      description: "Returns an empty response if no users are found."
+      tags:
+        - Users
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/User'
+components:
+  responses:
+      NotFound:
+        description: The specified resource was not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      BadRequest:
+        description: Data provided is incorrect, missing, or malformed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      Conflict:
+        description: Conflict - the resource already exists
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      Unauthorized:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      InternalException:
+        description: Internal exception occurred
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+        type: object
+        properties:
+          code:
+            type: string
+          message:
+            type: string
+        required:
+          - code
+          - message
+    BookingRequestBody:
+      type: object
+      description: 'Required fields when creating/updating a booking'
+      properties:
+        carParkId:
+          type: integer
+        spaceId:
+          type: integer
+        bookingType:
+          type: string
+          enum:
+            - USER
+            - EVENT
+            - RESTRICTION
+        userId:
+          type: integer
+        startDate:
+          type: string
+          format: date-time
+        duration:
+          type: string
+          format: duration
+      required:
+        - carParkId
+        - spaceId
+        - bookingType
+        - userId
+        - startDate
+        - duration
+    Booking:
+      type: object
+      description: 'A booking object, representing a parking reservation made by a user or an admin'
+      properties:
+        bookingId:
+          type: integer
+        carParkId:
+          type: integer
+        spaceId:
+          type: integer
+        bookingType:
+          type: string
+          enum:
+            - USER
+            - EVENT
+            - RESTRICTION
+        userId:
+          type: integer
+        startDate:
+          type: string
+          format: date-time
+        duration:
+          type: string
+          format: duration
+        checkedIn:
+          type: boolean
+        checkedOut:
+          type: boolean
+    SpaceRequestBody:
+      type: object
+      description: 'Required fields when creating/updating a car parking space'
+      properties:
+        zoneId:
+          type: integer
+        status:
+          type: string
+          enum:
+            - OCCUPIED
+            - AVAILABLE
+            - RESERVED
+        gpsLat:
+          type: number
+          format: double
+        gpsLong:
+          type: number
+          format: double
+      required:
+        - zoneId
+        - status
+        - gpsLat
+        - gpsLong
+    Space:
+      type: object
+      description: 'A car parking space'
+      properties:
+        spaceId:
+          type: integer
+        zoneId:
+          type: integer
+        status:
+          type: string
+          enum:
+            - OCCUPIED
+            - AVAILABLE
+            - RESERVED
+        gpsLat:
+          type: number
+          format: double
+        gpsLong:
+          type: number
+          format: double
+    UserRequestBody:
+      type: object
+      description: 'Required fields when creating/updating a user'
+      properties:
+        forename:
+          type: string
+        surname:
+          type: string
+        dob:
+          type: string
+          format: date
+        email:
+          type: string
+        password:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        postcode:
+          type: string
+        country:
+          type: string
+        isAdmin:
+          type: boolean
+      required:
+        - forename
+        - surname
+        - dob
+        - email
+        - password
+        - addressLine1
+        - addressLine2
+        - city
+        - postcode
+        - country
+        - isAdmin
+    User:
+      type: object
+      description: 'A user within the Parker system'
+      properties:
+        userId:
+          type: integer
+        forename:
+          type: string
+        surname:
+          type: string
+        dob:
+          type: string
+          format: date
+        email:
+          type: string
+        password:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        postcode:
+          type: string
+        country:
+          type: string
+        isAdmin:
+          type: boolean
+      required:
+        - userId
+        - forename
+        - surname
+        - dob
+        - email
+        - password
+        - addressLine1
+        - addressLine2
+        - city
+        - postcode
+        - country
+        - isAdmin
