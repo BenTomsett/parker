@@ -1,3 +1,3 @@
-import Scaffold from './Scaffold';
+import Scaffold from './scaffold';
 
 export {Scaffold};
