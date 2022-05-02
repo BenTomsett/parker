@@ -23,7 +23,7 @@ const router = express.Router();
 router.get('/', authenticateUser, UserController.findAllUsers);
 
 // Register a new user
-router.put('/', authenticateUser, UserController.createUser);
+router.put('/', UserController.createUser);
 
 // Delete all Users
 router.delete('/', authenticateUser, UserController.deleteAllUsers);

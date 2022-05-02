@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -17,19 +18,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Authorization, Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
-});
-
-// sends correct response for CORS preflight
-app.options('/*', (_, res) => {
-  res.sendStatus(200);
-});
+app.use(cors({
+  origin: true,
+}));
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
