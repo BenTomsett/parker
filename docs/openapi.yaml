@@ -41,6 +41,8 @@ paths:
       description: "Returns an empty array if no bookings are found."
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: "OK"
@@ -63,6 +65,8 @@ paths:
               $ref: '#/components/schemas/BookingRequestBody'
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       responses:
         "201":
           description: "Created"
@@ -77,6 +81,8 @@ paths:
       description: "Requires authentication as an admin user to perform."
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: "OK"
@@ -86,6 +92,8 @@ paths:
       description: "Returns an empty response if no bookings are found."
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       parameters:
         - name: "bookingId"
           in: "path"
@@ -111,6 +119,8 @@ paths:
               $ref: '#/components/schemas/BookingRequestBody'
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       parameters:
         - name: "bookingId"
           in: "path"
@@ -128,6 +138,8 @@ paths:
       summary: "Deletes a specified booking"
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       parameters:
         - name: "bookingId"
           in: "path"
@@ -142,6 +154,8 @@ paths:
       summary: "Checks the user into the specified booking"
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       parameters:
         - name: "bookingId"
           in: "path"
@@ -163,6 +177,8 @@ paths:
       description: "Returns an empty response if no bookings are found."
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       parameters:
         - name: "carparkId"
           in: "path"
@@ -185,6 +201,8 @@ paths:
       description: "Returns an empty response if no bookings are found."
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       parameters:
         - name: "carparkId"
           in: "path"
@@ -207,6 +225,8 @@ paths:
       description: "Returns an empty response if no bookings are found."
       tags:
         - Bookings
+      security:
+        - bearerAuth: []
       parameters:
         - name: "userId"
           in: "path"
@@ -229,6 +249,8 @@ paths:
       description: "WIP - subject to change"
       tags:
         - Payments
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -249,6 +271,8 @@ paths:
       description: "Returns an empty response if no spaces are found."
       tags:
         - Spaces
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: "OK"
@@ -265,6 +289,8 @@ paths:
         Returns 400 with the message "ERR_DATA_MISSING" if any of the request body fields are missing
       tags:
         - Spaces
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -286,6 +312,8 @@ paths:
       summary: "Deletes all parking spaces"
       tags:
         - Spaces
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: "OK"
@@ -295,6 +323,8 @@ paths:
       description: "Returns an empty response if no spaces are found."
       tags:
         - Spaces
+      security:
+        - bearerAuth: []
       parameters:
         - name: "parkingSpaceId"
           in: "path"
@@ -313,6 +343,8 @@ paths:
       summary: "Updates the specified parking space"
       tags:
         - Spaces
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -345,6 +377,8 @@ paths:
       summary: "Deletes the specified parking space"
       tags:
         - Spaces
+      security:
+        - bearerAuth: []
       parameters:
         - name: "carParkId"
           in: "path"
@@ -365,6 +399,8 @@ paths:
       description: "Returns an empty response if no spaces are found."
       tags:
         - Spaces
+      security:
+        - bearerAuth: []
       parameters:
         - name: "carParkId"
           in: "path"
@@ -387,6 +423,8 @@ paths:
       description: "Returns an empty response if no users are found."
       tags:
         - Users
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: "OK"
@@ -402,7 +440,9 @@ paths:
       tags:
         - Users
       description: |
-        Returns 400 with the message "ERR_DATA_MISSING" if any of the request body fields are missing
+        Returns 400 with the message "ERR_DATA_MISSING" if any of the request body fields are missing.
+        
+        For now, requires no authentication, however this should have some protections (client secrets etc)
       requestBody:
         required: true
         content:
@@ -424,6 +464,8 @@ paths:
       summary: "Deletes all users"
       tags:
         - Users
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: "OK"
@@ -433,6 +475,8 @@ paths:
       description: "Returns an empty response if no users are found."
       tags:
         - Users
+      security:
+        - bearerAuth: []
       parameters:
         - name: "userId"
           in: "path"
@@ -450,6 +494,8 @@ paths:
       summary: "Updates information about a specific user"
       tags:
         - Users
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -477,6 +523,8 @@ paths:
       summary: "Deletes the specified user"
       tags:
         - Users
+      security:
+        - bearerAuth: []
       parameters:
         - name: "userId"
           in: "path"
@@ -492,6 +540,8 @@ paths:
       description: "Returns an empty response if no users are found."
       tags:
         - Users
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: "OK"
@@ -504,7 +554,7 @@ paths:
                     - $ref: '#/components/schemas/User'
 components:
   securitySchemes:
-    basicAuth:
+    bearerAuth:
       type: http
       scheme: bearer
   responses:
