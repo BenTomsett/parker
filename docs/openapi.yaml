@@ -4,8 +4,8 @@ info:
   description: "If using this tool to test the API running on localhost, make sure to click 'Use browser instead' at the bottom - by default requests are routed through a proxy which won't be able to access the server."
   version: "1.0.0"
 servers:
-  - description: localhost:3000
-    url: http://localhost:3000
+  - description: localhost:5000
+    url: http://localhost:5000
 paths:
   /auth/login:
     post:
@@ -503,6 +503,10 @@ paths:
                   allOf:
                     - $ref: '#/components/schemas/User'
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: bearer
   responses:
       NotFound:
         description: The specified resource was not found
