@@ -45,20 +45,16 @@ ParkingSpace.init(
         values: ['OCCUPIED', 'AVAILABLE', 'RESERVED'],
       }),
     },
-    gpsLat: {
-      allowNull: false,
-      type: DataTypes.DOUBLE,
-    },
-    gpsLong: {
-      allowNull: false,
-      type: DataTypes.DOUBLE,
+    gpsPolygon: {
+        allowNull: false,
+        type: DataTypes.GEOMETRY('Polygon')
     },
   },
   {
     sequelize,
     tableName: 'ParkingSpaces',
     indexes: [
-      { unique: 'parking_space_idx', fields: ['status', 'gpsLat', 'gpsLong'] },
+      { unique: 'parking_space_idx', fields: ['status', 'gpsPolygon'] },
     ],
     // timestamps: false
   }
