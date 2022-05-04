@@ -30,8 +30,8 @@ const sequelize = new Sequelize('parker-dev-1', 'postgres', 'UPVT4RbgQ#', {
   },
 });
 
-// sequelize.sync();
-sequelize.sync({ force: true});
+sequelize.sync();
+// sequelize.sync({ force: true});
 
 sequelize
   .authenticate()
