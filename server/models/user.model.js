@@ -16,6 +16,8 @@ structures for our postgres database through sequelize.
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('./index');
 
+const { hashPassword } = require('../utils/auth');
+
 class User extends Model {}
 
 User.init(
@@ -47,6 +49,9 @@ User.init(
     password: {
       allowNull: false,
       type: DataTypes.STRING,
+      set(value) {
+        this.setDataValue('password', hashPassword(value));
+      }
     },
     addressLine1: {
       allowNull: false,
