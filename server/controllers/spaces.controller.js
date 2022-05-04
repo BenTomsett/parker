@@ -23,7 +23,7 @@ const createParkingSpace = async (req, res) => {
   const booking = req.body;
 
   ParkingSpace.create(booking, {
-    fields: ['zoneId', 'status', 'gpsLat', 'gpsLong'],
+    fields: ['zoneId', 'status', 'gpsPolygon'],
   })
     .then((data) => {
       res.status(200).send(data);
@@ -94,7 +94,7 @@ const findNearestCarParks = async (req, res) => {
         [
           sequelize.fn(
             'ST_Distance_Sphere',
-            sequelize.literal('geolocation'),
+            sequelize.literal('gpsPoint'),
             location
           ),
           'distance',
