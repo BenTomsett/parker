@@ -41,7 +41,7 @@ Zone.init(
     },
     name: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     spaces: {
       allowNull: false,

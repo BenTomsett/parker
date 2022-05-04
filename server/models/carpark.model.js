@@ -34,7 +34,7 @@ CarPark.init(
     },
     numOfSpaces:{
         allowNull: false,
-        type: DataTypes.ARRAY(DataTypes.INTEGER)
+        type: DataTypes.INTEGER,
     },
     zones: {
       allowNull: true,
