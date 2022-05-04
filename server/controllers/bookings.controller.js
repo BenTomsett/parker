@@ -26,7 +26,7 @@ const createBooking = async (req, res) => {
   Booking.create(booking, {
     fields: [
       'carParkId',
-      'spaceNumber',
+      'spaceId',
       'bookingType',
       'userId',
       'startDate',

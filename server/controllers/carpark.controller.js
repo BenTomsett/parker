@@ -15,7 +15,6 @@ functionality.
 */
 
 const CarPark = require('../models/carpark.model');
-const sequelize = require('../models/index');
 
 // Create and Save a new ParkingSpace
 const createCarPark = async (req, res) => {
@@ -76,9 +75,9 @@ const findAllCarParks = async (req, res) => {
 };
 
 const findCarParkByID = async (req, res) => {
-    const carParkId = req.params.carParkId;
+    const { carParkId } = req.params;
 
-    CarPark.findByPk(userID)
+    CarPark.findByPk(carParkId)
         .then((data) => {
             res.status(200).send(data);
         })

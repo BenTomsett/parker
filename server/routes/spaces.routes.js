@@ -19,11 +19,14 @@ const { authenticateUser } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Create a new parking space
-router.post('/', authenticateUser, SpacesController.createParkingSpace);
-
 // Retrieve all parking spaces
 router.get('/', authenticateUser, SpacesController.findAllParkingSpaces);
+
+// Create a new parking space
+router.put('/', authenticateUser, SpacesController.createParkingSpace);
+
+// Delete all car parking spaces
+router.delete('/', authenticateUser, SpacesController.deleteAllParkingSpaces);
 
 // Retrieve a single parking space
 router.get(
@@ -34,26 +37,23 @@ router.get(
 
 // Retrieve all parking spaces for a car park
 router.get(
-  '/:carParkId/spaces',
+  '/carpark/:carParkId',
   authenticateUser,
   SpacesController.findCarParkParkingSpaces
 );
 
 // Update a parking space with the parkingSpaceId
 router.put(
-  '/:carParkId/:parkingSpaceId',
+  '/carpark/:carParkId/:parkingSpaceId',
   authenticateUser,
   SpacesController.updateParkingSpace
 );
 
 // Delete a car parking space with the parkingSpaceId
 router.delete(
-  '/:carParkId/:parkingSpaceId',
+  '/carpark/:carParkId/:parkingSpaceId',
   authenticateUser,
   SpacesController.deleteParkingSpace
 );
-
-// Delete all car parking spaces
-router.delete('/', authenticateUser, SpacesController.deleteAllParkingSpaces);
 
 module.exports = router;
