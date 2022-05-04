@@ -30,7 +30,7 @@ const createParkingSpace = async (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_BOOKING_EXISTS');
+        res.status(409).send('ERR_SPACE_EXISTS');
       } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {

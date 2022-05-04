@@ -19,11 +19,14 @@ const { authenticateUser } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Register a new user
-router.get('/register', authenticateUser, UserController.createUser);
-
 // Retrieve all Users
 router.get('/', authenticateUser, UserController.findAllUsers);
+
+// Register a new user
+router.put('/', UserController.createUser);
+
+// Delete all Users
+router.delete('/', authenticateUser, UserController.deleteAllUsers);
 
 // Retrieve all admin Users
 router.get('/admins', authenticateUser, UserController.findAllAdminUsers);
@@ -36,8 +39,5 @@ router.put('/:userId', authenticateUser, UserController.updateUser);
 
 // Delete a user with the UserId
 router.delete('/:userId', authenticateUser, UserController.deleteUser);
-
-// Delete all Users
-router.delete('/', authenticateUser, UserController.deleteAllUsers);
 
 module.exports = router;
