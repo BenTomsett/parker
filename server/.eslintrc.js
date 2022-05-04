@@ -11,6 +11,6 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   rules: {
-    'no-unused-vars': ['error', { argsIgnorePattern: 'next|Sequelize' }],
+    'no-unused-vars': ['error', { argsIgnorePattern: 'next|Sequelize|sequelize' }],
   },
 };

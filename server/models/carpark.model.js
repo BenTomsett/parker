@@ -40,6 +40,10 @@ CarPark.init(
       allowNull: true,
       type: DataTypes.ARRAY(DataTypes.INTEGER),
     },
+    gpsPoint: {
+        allowNull: false,
+        type: DataTypes.GEOMETRY('Point')
+    },
   },
   {
     sequelize,
