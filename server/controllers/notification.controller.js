@@ -38,7 +38,7 @@ const mailOptionsConfirmation = {
 };
 
 const sendConfirmationEmail = async (req, res) =>{
-    transporter.sendMail(mailOptions, function (err, info) {
+    transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
             res.status(500).send('ERR_INTERNAL_EXCEPTION')
