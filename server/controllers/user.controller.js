@@ -20,7 +20,6 @@ const {
   emailRegex,
   strongPassRegex,
   getAge,
-  hashPassword,
 } = require('../utils/auth');
 
 // Create and save a new user to the database
@@ -38,7 +37,6 @@ const createUser = async (req, res) => {
   } else if (getAge(dobParsed) < 16) {
     res.status(400).send('ERR_TOO_YOUNG');
   } else {
-    user.password = await hashPassword(user.password);
     User.create(user, {
       fields: [
         'forename',
