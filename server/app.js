@@ -11,6 +11,8 @@ const bookingRouter = require('./routes/bookings.routes');
 const paymentsRouter = require('./routes/payments.routes');
 const usersRouter = require('./routes/users.routes');
 const spacesRouter = require('./routes/spaces.routes');
+const zonesRouter = require('./routes/zones.routes');
+const carparkRouter = require('./routes/carparks.routes');
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use('/bookings', bookingRouter);
 app.use('/payments', paymentsRouter);
 app.use('/spaces', spacesRouter);
 app.use('/users', usersRouter);
+app.use('/zones', zonesRouter);
+app.use('/carparks', carparkRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
