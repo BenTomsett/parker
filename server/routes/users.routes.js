@@ -37,6 +37,9 @@ router.get('/:userId', authenticateUser, UserController.findUser);
 // Update a User with the UserId
 router.put('/:userId', authenticateUser, UserController.updateUser);
 
+// Update a User with the UserId
+router.put('/:userId/ban', authenticateUser, UserController.banUser);
+
 // Delete a user with the UserId
 router.delete('/:userId', authenticateUser, UserController.deleteUser);
 

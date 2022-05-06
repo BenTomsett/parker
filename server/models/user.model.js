@@ -75,6 +75,11 @@ User.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    isBanned: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      },
   },
   {
     sequelize,
