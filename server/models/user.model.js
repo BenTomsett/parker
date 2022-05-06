@@ -49,9 +49,6 @@ User.init(
     password: {
       allowNull: false,
       type: DataTypes.STRING,
-      set(value) {
-        this.setDataValue('password', hashPassword(value));
-      }
     },
     addressLine1: {
       allowNull: false,
@@ -89,5 +86,11 @@ User.init(
     // timestamps: false
   }
 );
+
+// Method 3 via the direct method
+User.beforeCreate(async (user, options) => {
+    const hashedPassword = await hashPassword(user.password);
+    user.password = hashedPassword;
+  });
 
 module.exports = User;
