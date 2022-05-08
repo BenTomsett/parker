@@ -27,7 +27,7 @@ const twilio = require('twilio');
 const SMSclient = new twilio(SMSaccountSid,SMSauthToken);
 
 //Nodemailer handles Email
-const Nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -38,7 +38,7 @@ const transporter = nodemailer.createTransport({
 
 
 
-function sendConfirmationEmail(bookingID,firstName,email) {
+const sendBookingConfirmationEmail = async (bookingID,firstName,email) => {
     const mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
         to: email, //users email address
@@ -46,7 +46,24 @@ function sendConfirmationEmail(bookingID,firstName,email) {
         text: 'Hi ' + firstName + ",\n\n" +
             'Thank you for using Parker \n'
     };
-    transporter.sendConfirmationEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
+        if (err) {
+            console.log(err);// If an error is found it will be displayed to console
+        } else {
+            console.log('Email sent: ' + info.response); //If email is successfully sent the console will show a confirmation message
+        }
+    });
+}
+const sendOverstayEmail = async (bookingID,firstName,email,checkOutTime,parkingSpace,vehicleReg) => {
+    const mailOptionsConfirmation = {
+        from: 'NoReply from Parker <parkeruea@gmail.com>',
+        to: email, //users email address
+        subject: 'Parking Overstay Warning - ' + vehicleReg,
+        text: 'Hi ' + firstName + ",\n\n" +
+            'your vehicle has now past its allocated time slot for booking:  \n' +
+            bookingID + ' Please move your vehicle asap or you will be charged'
+    };
+    await transporter.sendOverstayEmail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -65,7 +82,14 @@ const sendSMS = async (bookingID,firstName,telNum,bookingDate,parkingSpace) =>{
         .then((message) => console.log(message.sid));
 }
 
+function checkDuration(checkOutTime){
+    let curDate = new Date();
+    return checkOutTime < curDate.getTime();
+}
+
 module.exports = {
-sendConfirmationEmail,
+sendBookingConfirmationEmail,
 sendSMS,
+sendOverstayEmail,
+checkDuration
 };
