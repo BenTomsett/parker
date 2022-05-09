@@ -24,14 +24,14 @@ app.use(cors({
   origin: true,
 }));
 
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/bookings', bookingRouter);
-app.use('/payments', paymentsRouter);
-app.use('/spaces', spacesRouter);
-app.use('/users', usersRouter);
-app.use('/zones', zonesRouter);
-app.use('/carparks', carparkRouter);
+app.use('/api', indexRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/bookings', bookingRouter);
+app.use('/api/payments', paymentsRouter);
+app.use('/api/spaces', spacesRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/zones', zonesRouter);
+app.use('/api/carparks', carparkRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
