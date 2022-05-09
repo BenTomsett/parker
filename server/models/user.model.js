@@ -16,6 +16,8 @@ structures for our postgres database through sequelize.
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('./index');
 
+const { hashPassword } = require('../utils/auth');
+
 class User extends Model {}
 
 User.init(
@@ -73,6 +75,11 @@ User.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    isBanned: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      },
   },
   {
     sequelize,
@@ -84,5 +91,11 @@ User.init(
     // timestamps: false
   }
 );
+
+// Method 3 via the direct method
+User.beforeCreate(async (user, options) => {
+    const hashedPassword = await hashPassword(user.password);
+    user.password = hashedPassword;
+  });
 
 module.exports = User;

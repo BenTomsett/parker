@@ -23,14 +23,14 @@ const createParkingSpace = async (req, res) => {
   const booking = req.body;
 
   ParkingSpace.create(booking, {
-    fields: ['zoneId', 'status', 'gpsLat', 'gpsLong'],
+    fields: ['zoneId', 'status', 'gpsPolygon'],
   })
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((err) => {
       if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_BOOKING_EXISTS');
+        res.status(409).send('ERR_SPACE_EXISTS');
       } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {
@@ -94,7 +94,7 @@ const findNearestCarParks = async (req, res) => {
         [
           sequelize.fn(
             'ST_Distance_Sphere',
-            sequelize.literal('geolocation'),
+            sequelize.literal('gpsPoint'),
             location
           ),
           'distance',

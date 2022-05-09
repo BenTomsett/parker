@@ -76,7 +76,7 @@ const findAllZones = async (req, res) => {
 };
 
 const findZoneById = async (req, res) => {
-    const zoneId = req.params.zoneId;
+    const { zoneId } = req.params;
 
     Zone.findByPk(zoneId)
         .then((data) => {
@@ -87,6 +87,23 @@ const findZoneById = async (req, res) => {
             res.status(500).send('ERR_INTERNAL_EXCEPTION');
         });
 };
+
+
+// Find parking spaces for a specific car park
+const findAllCarParkZones = async (req, res) => {
+    const { carParkId } = req.params;
+  
+    Zone.findAll({ where: { carParkId } })
+      .then((data) => {
+        res.status(200).send(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      });
+  };
+
+
 
 // Delete a parking space with the specified id in the request
 const deleteZone = async (req, res) => {
@@ -122,6 +139,7 @@ module.exports = {
     updateZone,
     findAllZones,
     findZoneById,
+    findAllCarParkZones,
     deleteZone,
     deleteAllZones,
 };
