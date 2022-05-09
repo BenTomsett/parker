@@ -1,5 +1,7 @@
 const { verifyToken } = require('../utils/auth');
-const User = require('../models/user.model');
+const db = require('../models/index');
+
+const User = db.User;
 
 const authenticateUser = async (req, res, next) => {
   if (!req.headers.authorization && !req.cookies.token) {

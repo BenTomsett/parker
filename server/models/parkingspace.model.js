@@ -13,51 +13,50 @@ structures for our postgres database through sequelize.
 
 */
 
-const { DataTypes, Model, Deferrable } = require('sequelize');
-const sequelize = require('./index');
+const { Model } = require('sequelize');
 
-const Zone = require('./zone.model');
+module.exports = (sequelize, DataTypes) => {
 
-class ParkingSpace extends Model {}
+  class ParkingSpace extends Model {
 
-ParkingSpace.init(
-  {
-    spaceId: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-      unique: true,
-      // comment: 'This is a column name that has a comment'
-    },
-    zoneId: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-      references: {
-        model: Zone,
-        key: 'zoneId',
-        deferrable: Deferrable.INITIALLY_IMMEDIATE,
+      static associate(models) {
+          ParkingSpace.belongsTo(models.Zone, {
+              foreignKey: 'zoneId'
+          })
+        }
+
+  }
+
+  ParkingSpace.init(
+    {
+      spaceId: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        unique: true,
+        // comment: 'This is a column name that has a comment'
+      },
+      status: {
+        allowNull: false,
+        type: DataTypes.ENUM({
+          values: ['OCCUPIED', 'AVAILABLE', 'RESERVED'],
+        }),
+      },
+      gpsPolygon: {
+          allowNull: false,
+          type: DataTypes.GEOMETRY('Polygon')
       },
     },
-    status: {
-      allowNull: false,
-      type: DataTypes.ENUM({
-        values: ['OCCUPIED', 'AVAILABLE', 'RESERVED'],
-      }),
-    },
-    gpsPolygon: {
-        allowNull: false,
-        type: DataTypes.GEOMETRY('Polygon')
-    },
-  },
-  {
-    sequelize,
-    tableName: 'ParkingSpaces',
-    indexes: [
-      { unique: 'parking_space_idx', fields: ['status', 'gpsPolygon'] },
-    ],
-    // timestamps: false
-  }
-);
-
-module.exports = ParkingSpace;
+    {
+      sequelize,
+      tableName: 'ParkingSpaces',
+      modelName: 'ParkingSpace',
+      indexes: [
+        { unique: 'parking_space_idx', fields: ['status', 'gpsPolygon'] },
+      ],
+      // timestamps: false
+    }
+  );
+  return ParkingSpace;
+}

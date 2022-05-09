@@ -14,7 +14,9 @@ accessed via the accounts routes.
 
 */
 
-const User = require('../models/user.model');
+const db = require('../models/index');
+
+const User = db.User;
 
 const {
   emailRegex,
