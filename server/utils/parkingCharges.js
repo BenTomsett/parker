@@ -17,3 +17,7 @@ function calculateParkingCharge(Booking){
     let duration = Math.abs(Booking.endDate - Booking.startDate) / 36e5 //Calculates duration in hours
     return (duration * flatRate).toFixed(2)
 }
+
+function hasUserPaid(Booking){
+    return Booking.hasPaid === true;
+}
