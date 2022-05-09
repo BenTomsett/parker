@@ -40,6 +40,24 @@ const authenticateUser = async (req, res, next) => {
   return next();
 };
 
+const verifyAdmin = async (req,res,next) =>{
+  const { userId } = req.params;
+  const countResult = await User.count({
+    where: {
+      userId,
+      isAdmin:{
+        [Op.is]: true,
+      },
+    }
+  })
+  if(countResult === 1){
+    return next();
+  }else{
+    res.status(401).send('ERR_UNAUTHORIZED')
+  }
+};
+
 module.exports = {
   authenticateUser,
+  verifyAdmin,
 };
