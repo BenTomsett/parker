@@ -13,46 +13,50 @@ structures for our postgres database through sequelize.
 
 */
 
-const { DataTypes, Model, Deferrable } = require('sequelize');
-const sequelize = require('./index');
+const { DataTypes, Model } = require('sequelize');
 
-const CarPark = require('./carpark.model');
+module.exports = (sequelize, DataTypes) => {
 
-class Zone extends Model {}
+  class Zone extends Model {
 
-Zone.init(
-  {
-    zoneId: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-      unique: true,
-      // comment: 'This is a column name that has a comment'
-    },
-    carParkId: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-      references: {
-        model: CarPark,
-        key: 'carParkId',
-        deferrable: Deferrable.INITIALLY_IMMEDIATE,
+      static associate(models) {
+          Zone.belongsTo(models.CarPark, {
+              foreignKey: 'carParkId'
+          })
+          Zone.hasMany(models.ParkingSpace, {
+              foreignKey: 'zoneId',
+              onDelete: 'CASCADE',
+              onUpdate: 'CASCADE'
+            })
+        }
+
+  }
+
+  Zone.init(
+    {
+      zoneId: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        unique: true,
+        // comment: 'This is a column name that has a comment'
+      },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      spaces: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
       },
     },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    spaces: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'Zones',
-    // timestamps: false
-  }
-);
-
-module.exports = Zone;
+    {
+      sequelize,
+      tableName: 'Zones',
+      modelName: 'Zone',
+      // timestamps: false
+    }
+  );
+  return Zone;
+}

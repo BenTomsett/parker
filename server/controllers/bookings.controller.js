@@ -14,10 +14,10 @@ the bookings routes.
 
 */
 const { Op } = require('sequelize');
-
-const Booking = require('../models/booking.model');
-const ParkingSpace = require('../models/parkingspace.model');
+const db = require('../models/index');
 const { checkParkedLocation } = require('../utils/checkLocation');
+
+const Booking = db.Booking;
 
 // Create and Save a new Booking
 const createBooking = async (req, res) => {
