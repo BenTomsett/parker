@@ -21,7 +21,7 @@ const login = async (req, res) => {
       if (result) {
         const token = generateToken(user);
         res.cookie('token', token, { httpOnly: true });
-        res.status(200).send(token);
+        res.status(200).json({token: token});
       } else if (err) {
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       } else  {
