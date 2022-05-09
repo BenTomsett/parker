@@ -16,7 +16,7 @@ accessed via the accounts routes.
 
 const db = require('../models/index');
 
-const User = db.User;
+const {User} = db;
 
 const {
   emailRegex,
@@ -36,7 +36,7 @@ const createUser = async (req, res) => {
     res.status(400).send('ERR_PASSWORD_WEAK');
   } else if (!dobParsed) {
     res.status(400).send('ERR_INVALID_DATE');
-  } else if (getAge(dobParsed) < 16) {
+  } else if (getAge(dobParsed) <= 16) {
     res.status(400).send('ERR_TOO_YOUNG');
   } else {
     User.create(user, {

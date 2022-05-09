@@ -9,6 +9,7 @@ import BookingsPage from './pages/bookings';
 import ParkingPage from './pages/parking';
 import AccountPage from './pages/account';
 import LoginPage from './pages/login';
+import RegisterPage from './pages/register';
 
 ReactDOM.render(
   <StrictMode>
@@ -23,6 +24,7 @@ ReactDOM.render(
             <Route path="/account" element={<AccountPage />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

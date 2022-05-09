@@ -69,7 +69,7 @@ const LoginPage = () => {
               borderWidth={1}
           >
             <form onSubmit={onSubmit}>
-              <Stack spacing="6">
+              <Stack spacing="4">
                 <FormControl>
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <Input id="email" type="email" autoComplete="email"
@@ -102,7 +102,12 @@ const LoginPage = () => {
           </Box>
           <HStack spacing="1" justify="center">
             <Text color="muted">Don&apos;t have an account?</Text>
-            <Button variant="link" colorScheme="blue">Sign up</Button>
+            <Button
+                variant="link"
+                colorScheme="blue"
+                onClick={() => {
+                  navigate('/register');
+                }}>Sign up</Button>
           </HStack>
         </Stack>
       </Container>
