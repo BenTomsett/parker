@@ -15,6 +15,8 @@ functionality.
 */
 
 const CarPark = require('../models/carpark.model');
+const Zone = require('../models/zone.model');
+const ParkingSpace = require('../models/parkingspace.model');
 
 // Create and Save a new ParkingSpace
 const createCarPark = async (req, res) => {
@@ -75,9 +77,16 @@ const findAllCarParks = async (req, res) => {
 };
 
 const findCarParkByID = async (req, res) => {
-    const { carParkId } = req.params;
+    const { carparkId } = req.params;
 
-    CarPark.findByPk(carParkId)
+    CarPark.findByPk(carparkId, {
+        include: {
+          model: Zone,
+          include: {
+            model: ParkingSpace,
+          }
+        }
+      })
         .then((data) => {
             res.status(200).send(data);
         })

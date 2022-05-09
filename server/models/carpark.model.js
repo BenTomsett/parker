@@ -16,7 +16,17 @@ structures for our postgres database through sequelize.
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('./index');
 
-class CarPark extends Model {}
+class CarPark extends Model {
+
+    static associate(models) {
+        CarPark.hasMany(models.Zone, {
+            foreignKey: 'carParkId',
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE'
+          })
+      }
+
+}
 
 CarPark.init(
   {
@@ -48,6 +58,7 @@ CarPark.init(
   {
     sequelize,
     tableName: 'CarParks',
+    modelName: 'CarPark',
     indexes: [{ unique: true, fields: ['name'] }],
     // timestamps: false
   }

@@ -1,25 +1,11 @@
-/*  CMP5012B - Software Engineer - Coursework 2 -  Parker
-    Author: Bradley Crisp - Group 12
-    IDE Version: Visual Studio Code
-    Current Version: Managed by GitHub
-    Date Created: 02/04/2022
-    Date Finished: 
-    Last Modified: 
-
- -------DESCRIPTION-------
-
-This is our Postgres (sequelize) initisialisation file, this allows us to connect to our Postgres database.
-We use the sequelize ORM to manage the connection and function calls to the DB.
-*/
+'use strict';
 
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
-
 const db = {};
 
 let sequelize;
@@ -35,7 +21,7 @@ fs
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
   })
   .forEach(file => {
-    const model = require(path.join(__dirname, file));
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
     db[model.name] = model;
   });
 
@@ -60,4 +46,3 @@ sequelize
   });
 
 module.exports = db;
-

@@ -18,7 +18,17 @@ const sequelize = require('./index');
 
 const { hashPassword } = require('../utils/auth');
 
-class User extends Model {}
+class User extends Model {
+
+    static associate(models) {
+        User.hasMany(models.Booking, {
+            foreignKey: 'userId',
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE'
+          })
+      }
+
+}
 
 User.init(
   {
@@ -84,6 +94,7 @@ User.init(
   {
     sequelize,
     tableName: 'Users',
+    modelName: 'User',
     indexes: [{ unique: true, fields: ['email'] }],
     defaultScope: {
       attributes: { exclude: ['password'] },

@@ -13,12 +13,18 @@ structures for our postgres database through sequelize.
 
 */
 
-const { DataTypes, Model, Deferrable } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('./index');
 
-const Zone = require('./zone.model');
+class ParkingSpace extends Model {
 
-class ParkingSpace extends Model {}
+    static associate(models) {
+        ParkingSpace.belongsTo(models.Zone, {
+            foreignKey: 'zoneId'
+        })
+      }
+
+}
 
 ParkingSpace.init(
   {
@@ -29,15 +35,6 @@ ParkingSpace.init(
       type: DataTypes.INTEGER,
       unique: true,
       // comment: 'This is a column name that has a comment'
-    },
-    zoneId: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-      references: {
-        model: Zone,
-        key: 'zoneId',
-        deferrable: Deferrable.INITIALLY_IMMEDIATE,
-      },
     },
     status: {
       allowNull: false,
@@ -53,6 +50,7 @@ ParkingSpace.init(
   {
     sequelize,
     tableName: 'ParkingSpaces',
+    modelName: 'ParkingSpace',
     indexes: [
       { unique: 'parking_space_idx', fields: ['status', 'gpsPolygon'] },
     ],

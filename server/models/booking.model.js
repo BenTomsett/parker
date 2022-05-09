@@ -13,13 +13,21 @@ structures for our postgres database through sequelize.
 
 */
 
-const { DataTypes, Model, Deferrable } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('./index');
 
-const User = require('./user.model');
-const CarPark = require('./carpark.model');
+class Booking extends Model {
 
-class Booking extends Model {}
+    static associate(models) {
+        Booking.belongsTo(models.User, {
+            foreignKey: 'userId'
+        })
+        Booking.belongsTo(models.ParkingSpace, {
+            foreignKey: 'spaceId'
+        })
+    }
+
+}
 
 Booking.init(
   {
@@ -31,33 +39,11 @@ Booking.init(
       unique: true,
       // comment: 'This is a column name that has a comment'
     },
-    carParkId: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-      references: {
-        model: CarPark,
-        key: 'carParkId',
-        deferrable: Deferrable.INITIALLY_IMMEDIATE,
-      },
-    },
-    spaceId: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-    },
     bookingType: {
       allowNull: false,
       type: DataTypes.ENUM({
         values: ['USER', 'EVENT', 'RESTRICTION'],
       }),
-    },
-    userId: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: 'userId',
-        deferrable: Deferrable.INITIALLY_IMMEDIATE,
-      },
     },
     startDate: {
       allowNull: false,
@@ -79,6 +65,7 @@ Booking.init(
   {
     sequelize,
     tableName: 'Bookings',
+    modelName: 'Booking',
     indexes: [
       {
         unique: 'booking_idx',
