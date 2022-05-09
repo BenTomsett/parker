@@ -54,6 +54,23 @@ const sendBookingConfirmationEmail = async (bookingID,firstName,email) => {
         }
     });
 }
+const sendNonArrivalEmail = async (bookingID,firstName,email,bookingDate,arrivalTime,parkingSpace,vehicleReg) => {
+    const mailOptionsConfirmation = {
+        from: 'NoReply from Parker <parkeruea@gmail.com>',
+        to: email, //users email address
+        subject: 'Parker - Missed booking for vehicle: ' + vehicleReg,
+        text: 'Hi ' + firstName + ",\n\n" +
+            'you have not shown up for your reservation at: ' + parkingSpace +' \n' +
+           ' Unfortunately you will still be charged!'
+    };
+    await transporter.sendNonArrivalEmail(mailOptionsConfirmation, function (err, info) {
+        if (err) {
+            console.log(err);// If an error is found it will be displayed to console
+        } else {
+            console.log('Email sent: ' + info.response); //If email is successfully sent the console will show a confirmation message
+        }
+    });
+}
 const sendOverstayEmail = async (bookingID,firstName,email,checkOutTime,parkingSpace,vehicleReg) => {
     const mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
@@ -71,7 +88,7 @@ const sendOverstayEmail = async (bookingID,firstName,email,checkOutTime,parkingS
         }
     });
 }
-const sendSMS = async (bookingID,firstName,telNum,bookingDate,parkingSpace) =>{
+const sendOverstaySMS = async (bookingID,firstName,telNum,bookingDate,parkingSpace) =>{
     SMSclient.messages
         .create({
             body: 'Hello ' + firstName +
@@ -82,14 +99,19 @@ const sendSMS = async (bookingID,firstName,telNum,bookingDate,parkingSpace) =>{
         .then((message) => console.log(message.sid));
 }
 
-function checkDuration(checkOutTime){
+function checkOverstay(checkOutTime){
     let curDate = new Date();
     return checkOutTime < curDate.getTime();
+}
+function checkCurrentSpace(bookedSpace,currentSpace){
+    return currentSpace !== bookedSpace
 }
 
 module.exports = {
 sendBookingConfirmationEmail,
-sendSMS,
+sendOverstaySMS,
 sendOverstayEmail,
-checkDuration
+checkOverstay,
+sendNonArrivalEmail,
+checkCurrentSpace
 };
