@@ -61,11 +61,11 @@ Booking.init(
     },
     startDate: {
       allowNull: false,
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
     },
-    duration: {
+    endDate: {
       allowNull: false,
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
     },
     checkedIn: {
       allowNull: false,
