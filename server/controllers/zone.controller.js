@@ -14,8 +14,9 @@ functionality.
 
 */
 
-const Zone = require('../models/zone.model');
-const sequelize = require('../models/index');
+const db = require('../models/index');
+
+const Zone = db.Zone;
 
 // Create and Save a new ParkingSpace
 const createZone = async (req, res) => {

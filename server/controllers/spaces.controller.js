@@ -13,10 +13,11 @@ It involves all database interactions and has all the CRUD functions that are ac
 the car parks routes.
 */
 
-const ParkingSpace = require('../models/parkingspace.model');
-const CarPark = require('../models/carpark.model');
-const sequelize = require('../models/index');
-// const Zone = require('../models/zone.model');
+
+const db = require('../models/index');
+
+const ParkingSpace = db.ParkingSpace;
+const CarPark = db.CarPark;
 
 // Create and Save a new ParkingSpace
 const createParkingSpace = async (req, res) => {

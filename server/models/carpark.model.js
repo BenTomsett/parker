@@ -13,55 +13,52 @@ structures for our postgres database through sequelize.
 
 */
 
-const { DataTypes, Model } = require('sequelize');
-const sequelize = require('./index');
+const { Model } = require('sequelize');
 
-class CarPark extends Model {
+module.exports = (sequelize, DataTypes) => {
 
-    static associate(models) {
-        CarPark.hasMany(models.Zone, {
-            foreignKey: 'carParkId',
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
-          })
-      }
+  class CarPark extends Model {
 
-}
+      static associate(models) {
+          CarPark.hasMany(models.Zone, {
+              foreignKey: 'carParkId',
+              onDelete: 'CASCADE',
+              onUpdate: 'CASCADE'
+            })
+        }
 
-CarPark.init(
-  {
-    carParkId: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-      unique: true,
-      // comment: 'This is a column name that has a comment'
-    },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    numOfSpaces:{
-        allowNull: false,
-        type: DataTypes.INTEGER,
-    },
-    zones: {
-      allowNull: true,
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
-    },
-    gpsPoint: {
-        allowNull: false,
-        type: DataTypes.GEOMETRY('Point')
-    },
-  },
-  {
-    sequelize,
-    tableName: 'CarParks',
-    modelName: 'CarPark',
-    indexes: [{ unique: true, fields: ['name'] }],
-    // timestamps: false
   }
-);
 
-module.exports = CarPark;
+  CarPark.init(
+    {
+      carParkId: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        unique: true,
+        // comment: 'This is a column name that has a comment'
+      },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      numOfSpaces:{
+          allowNull: false,
+          type: DataTypes.INTEGER,
+      },
+      gpsPoint: {
+          allowNull: false,
+          type: DataTypes.GEOMETRY('Point')
+      },
+    },
+    {
+      sequelize,
+      tableName: 'CarParks',
+      modelName: 'CarPark',
+      indexes: [{ unique: true, fields: ['name'] }],
+      // timestamps: false
+    }
+  );
+  return CarPark;
+}

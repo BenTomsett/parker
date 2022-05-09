@@ -14,48 +14,49 @@ structures for our postgres database through sequelize.
 */
 
 const { DataTypes, Model } = require('sequelize');
-const sequelize = require('./index');
 
-class Zone extends Model {
+module.exports = (sequelize, DataTypes) => {
 
-    static associate(models) {
-        Zone.belongsTo(models.CarPark, {
-            foreignKey: 'carParkId'
-        })
-        Zone.hasMany(models.ParkingSpace, {
-            foreignKey: 'zoneId',
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
+  class Zone extends Model {
+
+      static associate(models) {
+          Zone.belongsTo(models.CarPark, {
+              foreignKey: 'carParkId'
           })
-      }
+          Zone.hasMany(models.ParkingSpace, {
+              foreignKey: 'zoneId',
+              onDelete: 'CASCADE',
+              onUpdate: 'CASCADE'
+            })
+        }
 
-}
-
-Zone.init(
-  {
-    zoneId: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-      unique: true,
-      // comment: 'This is a column name that has a comment'
-    },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    spaces: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'Zones',
-    modelName: 'Zone',
-    // timestamps: false
   }
-);
 
-module.exports = Zone;
+  Zone.init(
+    {
+      zoneId: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        unique: true,
+        // comment: 'This is a column name that has a comment'
+      },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      spaces: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+    },
+    {
+      sequelize,
+      tableName: 'Zones',
+      modelName: 'Zone',
+      // timestamps: false
+    }
+  );
+  return Zone;
+}

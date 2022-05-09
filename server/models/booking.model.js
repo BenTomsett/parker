@@ -13,67 +13,68 @@ structures for our postgres database through sequelize.
 
 */
 
-const { DataTypes, Model } = require('sequelize');
-const sequelize = require('./index');
+const { Model } = require('sequelize');
 
-class Booking extends Model {
+module.exports = (sequelize, DataTypes) => {
 
-    static associate(models) {
-        Booking.belongsTo(models.User, {
-            foreignKey: 'userId'
-        })
-        Booking.belongsTo(models.ParkingSpace, {
-            foreignKey: 'spaceId'
-        })
-    }
+  class Booking extends Model {
 
-}
+      static associate(models) {
+          Booking.belongsTo(models.User, {
+              foreignKey: 'userId'
+          })
+          Booking.belongsTo(models.ParkingSpace, {
+              foreignKey: 'spaceId'
+          })
+      }
 
-Booking.init(
-  {
-    bookingId: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-      unique: true,
-      // comment: 'This is a column name that has a comment'
-    },
-    bookingType: {
-      allowNull: false,
-      type: DataTypes.ENUM({
-        values: ['USER', 'EVENT', 'RESTRICTION'],
-      }),
-    },
-    startDate: {
-      allowNull: false,
-      type: DataTypes.DATEONLY,
-    },
-    duration: {
-      allowNull: false,
-      type: DataTypes.TIME,
-    },
-    checkedIn: {
-      allowNull: false,
-      type: DataTypes.BOOLEAN,
-    },
-    checkedOut: {
-      allowNull: false,
-      type: DataTypes.BOOLEAN,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'Bookings',
-    modelName: 'Booking',
-    indexes: [
-      {
-        unique: 'booking_idx',
-        fields: ['bookingType', 'startDate', 'duration'],
-      },
-    ],
-    // timestamps: false
   }
-);
 
-module.exports = Booking;
+  Booking.init(
+    {
+      bookingId: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        unique: true,
+        // comment: 'This is a column name that has a comment'
+      },
+      bookingType: {
+        allowNull: false,
+        type: DataTypes.ENUM({
+          values: ['USER', 'EVENT', 'RESTRICTION'],
+        }),
+      },
+      startDate: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      endDate: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      checkedIn: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+      },
+      checkedOut: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+      },
+    },
+    {
+      sequelize,
+      tableName: 'Bookings',
+      modelName: 'Booking',
+      indexes: [
+        {
+          unique: 'booking_idx',
+          fields: ['bookingType', 'startDate', 'duration'],
+        },
+      ],
+      // timestamps: false
+    }
+  );
+  return Booking;
+}

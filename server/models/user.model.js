@@ -14,99 +14,99 @@ structures for our postgres database through sequelize.
 */
 
 const { DataTypes, Model } = require('sequelize');
-const sequelize = require('./index');
-
 const { hashPassword } = require('../utils/auth');
 
-class User extends Model {
+module.exports = (sequelize, DataTypes) => {
 
-    static associate(models) {
-        User.hasMany(models.Booking, {
-            foreignKey: 'userId',
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
-          })
-      }
+  class User extends Model {
 
-}
+      static associate(models) {
+          User.hasMany(models.Booking, {
+              foreignKey: 'userId',
+              onDelete: 'CASCADE',
+              onUpdate: 'CASCADE'
+            })
+        }
 
-User.init(
-  {
-    userId: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-      unique: true,
-      // comment: 'This is a column name that has a comment'
-    },
-    forename: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    surname: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    dob: {
-      allowNull: false,
-      type: DataTypes.DATEONLY,
-    },
-    email: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    password: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    addressLine1: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    addressLine2: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    city: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    postcode: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    country: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    isAdmin: {
-      allowNull: false,
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    isBanned: {
-      allowNull: false,
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      },
-  },
-  {
-    sequelize,
-    tableName: 'Users',
-    modelName: 'User',
-    indexes: [{ unique: true, fields: ['email'] }],
-    defaultScope: {
-      attributes: { exclude: ['password'] },
-    },
-    // timestamps: false
   }
-);
 
-// Method 3 via the direct method
-User.beforeCreate(async (user, options) => {
-    const hashedPassword = await hashPassword(user.password);
-    user.password = hashedPassword;
-  });
+  User.init(
+    {
+      userId: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        unique: true,
+        // comment: 'This is a column name that has a comment'
+      },
+      forename: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      surname: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      dob: {
+        allowNull: false,
+        type: DataTypes.DATEONLY,
+      },
+      email: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      password: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      addressLine1: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      addressLine2: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      city: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      postcode: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      country: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      isAdmin: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      isBanned: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        },
+    },
+    {
+      sequelize,
+      tableName: 'Users',
+      modelName: 'User',
+      indexes: [{ unique: true, fields: ['email'] }],
+      defaultScope: {
+        attributes: { exclude: ['password'] },
+      },
+      // timestamps: false
+    }
+  );
 
-module.exports = User;
+  // Method 3 via the direct method
+  User.beforeCreate(async (user, options) => {
+      const hashedPassword = await hashPassword(user.password);
+      user.password = hashedPassword;
+    });
+  return User;
+}

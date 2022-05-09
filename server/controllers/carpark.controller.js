@@ -14,9 +14,11 @@ functionality.
 
 */
 
-const CarPark = require('../models/carpark.model');
-const Zone = require('../models/zone.model');
-const ParkingSpace = require('../models/parkingspace.model');
+const db = require('../models/index');
+
+const CarPark = db.CarPark;
+const Zone = db.Zone;
+const ParkingSpace = db.ParkingSpace;
 
 // Create and Save a new ParkingSpace
 const createCarPark = async (req, res) => {

@@ -13,49 +13,50 @@ structures for our postgres database through sequelize.
 
 */
 
-const { DataTypes, Model } = require('sequelize');
-const sequelize = require('./index');
+const { Model } = require('sequelize');
 
-class ParkingSpace extends Model {
+module.exports = (sequelize, DataTypes) => {
 
-    static associate(models) {
-        ParkingSpace.belongsTo(models.Zone, {
-            foreignKey: 'zoneId'
-        })
-      }
+  class ParkingSpace extends Model {
 
-}
+      static associate(models) {
+          ParkingSpace.belongsTo(models.Zone, {
+              foreignKey: 'zoneId'
+          })
+        }
 
-ParkingSpace.init(
-  {
-    spaceId: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-      unique: true,
-      // comment: 'This is a column name that has a comment'
-    },
-    status: {
-      allowNull: false,
-      type: DataTypes.ENUM({
-        values: ['OCCUPIED', 'AVAILABLE', 'RESERVED'],
-      }),
-    },
-    gpsPolygon: {
-        allowNull: false,
-        type: DataTypes.GEOMETRY('Polygon')
-    },
-  },
-  {
-    sequelize,
-    tableName: 'ParkingSpaces',
-    modelName: 'ParkingSpace',
-    indexes: [
-      { unique: 'parking_space_idx', fields: ['status', 'gpsPolygon'] },
-    ],
-    // timestamps: false
   }
-);
 
-module.exports = ParkingSpace;
+  ParkingSpace.init(
+    {
+      spaceId: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        unique: true,
+        // comment: 'This is a column name that has a comment'
+      },
+      status: {
+        allowNull: false,
+        type: DataTypes.ENUM({
+          values: ['OCCUPIED', 'AVAILABLE', 'RESERVED'],
+        }),
+      },
+      gpsPolygon: {
+          allowNull: false,
+          type: DataTypes.GEOMETRY('Polygon')
+      },
+    },
+    {
+      sequelize,
+      tableName: 'ParkingSpaces',
+      modelName: 'ParkingSpace',
+      indexes: [
+        { unique: 'parking_space_idx', fields: ['status', 'gpsPolygon'] },
+      ],
+      // timestamps: false
+    }
+  );
+  return ParkingSpace;
+}
