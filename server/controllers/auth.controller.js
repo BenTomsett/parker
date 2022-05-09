@@ -33,6 +33,11 @@ const login = async (req, res) => {
   }
 };
 
+const verify = async (req, res) => {
+  return res.status(200).send();
+}
+
 module.exports = {
   login,
+  verify
 };
