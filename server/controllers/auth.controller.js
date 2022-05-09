@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
-const User = require('../models/user.model');
+const db = require('../models/index');
 const { generateToken } = require('../utils/auth');
+
+const User = db.User;
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -18,12 +20,13 @@ const login = async (req, res) => {
     const user = users[0];
 
     bcrypt.compare(password, user.password, (err, result) => {
-      if (err) {
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      } else if (result) {
+      if (result) {
         const token = generateToken(user);
-        res.status(200).send(token);
-      } else {
+        res.cookie('token', token, { httpOnly: true });
+        res.status(200).json({token: token});
+      } else if (err) {
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      } else  {
         res.status(401).send('ERR_INVALID_CREDENTIALS');
       }
     });
