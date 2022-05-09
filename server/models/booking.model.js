@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
       indexes: [
         {
           unique: 'booking_idx',
-          fields: ['bookingType', 'startDate', 'duration'],
+          fields: ['bookingType', 'startDate', 'endDate'],
         },
       ],
       // timestamps: false
