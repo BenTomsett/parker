@@ -6,7 +6,7 @@ import {
   Heading,
   HStack, Image, Input, Spinner,
   Stack,
-  Text, useBreakpointValue,
+  Text, useBreakpointValue, useToast,
 } from '@chakra-ui/react';
 import {useNavigate} from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
@@ -17,10 +17,10 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
+  const toast = useToast({status: 'error', isClosable: false});
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const [error, setError] = useState(undefined);
 
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +40,7 @@ const LoginPage = () => {
       if(response.status === 200){
         navigate('/');
       }else if(response.status === 401) {
-        setError('Incorrect username or password');
+        toast({ title: 'Incorrect username or password' });
       }
       setLoading(false);
     });
@@ -79,10 +79,6 @@ const LoginPage = () => {
                          autoComplete="current-password" value={password}
                          onChange={(event) => setPassword(event.target.value)}/>
                 </FormControl>
-
-                {error !== undefined &&
-                    <Text color="red">{error}</Text>
-                }
 
                 <Button variant="solid" colorScheme="blue"
                         type="submit">

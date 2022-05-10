@@ -8,7 +8,7 @@ import {
   Heading,
   HStack, Image, Input, Spinner,
   Stack,
-  Text, useBreakpointValue,
+  Text, useBreakpointValue, useToast,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
@@ -27,8 +27,9 @@ const RegisterPage = () => {
 
   const navigate = useNavigate();
 
+  const toast = useToast({status: 'error', isClosable: false});
+
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(false);
 
   const updateFormData = (property, value) => {
@@ -40,7 +41,6 @@ const RegisterPage = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setError(undefined);
 
     const {
       forename,
@@ -58,17 +58,17 @@ const RegisterPage = () => {
     const dobParsed = new Date(Date.parse(dob));
 
     if(!forename || !surname){
-      setError('Please enter your name.')
+      toast({ title: 'Please enter your name.' })
     } else if (!email || !emailRegex.test(email)){
-      setError('Please enter a valid email address.')
+      toast({ title: 'Please enter a valid email address.' })
     } else if(!password || !strongPassRegex.test(password)){
-      setError('Please enter a valid password with 8 characters, and at least one capital letter, one symbol, and one number.');
+      toast({ title: 'Please enter a valid password with 8 characters, and at least one capital letter, one symbol, and one number.' })
     }else if(!dob){
-      setError("Please enter your date of birth.");
+      toast({ title: "Please enter your date of birth." })
     }else if(getAge(dobParsed) <= 16){
-      setError("You must be at least 16 year of age to use Parker.");
+      toast({ title: "You must be at least 16 year of age to use Parker." })
     }else if(!addressLine1 || !addressLine2 || !city || !postcode || !country){
-      setError('Please enter your address.');
+      toast({ title: "You must be at least 16 year of age to use Parker." })
     }else{
       setLoading(true);
       fetch('/api/users', {
@@ -81,9 +81,9 @@ const RegisterPage = () => {
         if(response.status !== 201){
           response.text().then((text) => {
             if(text === "ERR_USER_EXISTS"){
-              setError("A user with that email address already exists - sign in to access your Parker account.")
+              toast({ title: "A user with that email address already exists - sign in to access your Parker account." })
             } else {
-              setError("An unexpected error occurred whilst trying to create your account.")
+              toast({ title: "An unexpected error occurred whilst trying to create your account." })
             }
             setLoading(false);
           });
@@ -198,8 +198,6 @@ const RegisterPage = () => {
                        onChange={(event) => updateFormData('country',
                          event.target.value)} />
               </FormControl>
-
-              <Text color="red">{error}</Text>
 
               <Button disabled={loading} variant='solid' colorScheme='blue' type='submit'>
                 {
