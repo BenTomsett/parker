@@ -1,7 +1,7 @@
 const { verifyToken } = require('../utils/auth');
 const db = require('../models/index');
 
-const User = db.User;
+const {User} = db;
 
 const authenticateUser = async (req, res, next) => {
   if (!req.headers.authorization && !req.cookies.token) {
@@ -27,7 +27,7 @@ const authenticateUser = async (req, res, next) => {
   });
 
   if (users < 1) {
-    return res.status(401).send('ERR_INVALID_CREDENTIALS');
+    return res.status(401).send('ERR_UNAUTHORIZED');
   }
   if (users > 1) {
     return res.status(500).send('ERR_MULTIPLE_USERS');
