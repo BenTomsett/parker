@@ -9,6 +9,10 @@ import BookingsPage from './pages/bookings';
 import ParkingPage from './pages/parking';
 import AccountPage from './pages/account';
 import LoginPage from './pages/login';
+import RegisterPage from './pages/register';
+import BillingSetupPage from './pages/register/billing';
+import SetupForm from './pages/register/billing/SetupForm';
+import SetupComplete from './pages/register/billing/SetupComplete';
 
 ReactDOM.render(
   <StrictMode>
@@ -23,6 +27,11 @@ ReactDOM.render(
             <Route path="/account" element={<AccountPage />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register/billing" element={<BillingSetupPage />}>
+            <Route index element={<SetupForm />} />
+            <Route path="complete" element={<SetupComplete />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

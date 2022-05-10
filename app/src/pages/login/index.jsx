@@ -6,7 +6,7 @@ import {
   Heading,
   HStack, Image, Input, Spinner,
   Stack,
-  Text, useBreakpointValue,
+  Text, useBreakpointValue, useToast,
 } from '@chakra-ui/react';
 import {useNavigate} from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
@@ -17,10 +17,10 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
+  const toast = useToast({status: 'error', isClosable: false});
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const [error, setError] = useState(undefined);
 
   const [loading, setLoading] = useState(false);
 
@@ -38,12 +38,9 @@ const LoginPage = () => {
       },
     }).then((response) => {
       if(response.status === 200){
-        response.json().then((json) => {
-          alert(json);
-          navigate('/');
-        });
+        navigate('/');
       }else if(response.status === 401) {
-        setError('Incorrect username or password');
+        toast({ title: 'Incorrect username or password' });
       }
       setLoading(false);
     });
@@ -69,7 +66,7 @@ const LoginPage = () => {
               borderWidth={1}
           >
             <form onSubmit={onSubmit}>
-              <Stack spacing="6">
+              <Stack spacing="4">
                 <FormControl>
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <Input id="email" type="email" autoComplete="email"
@@ -82,10 +79,6 @@ const LoginPage = () => {
                          autoComplete="current-password" value={password}
                          onChange={(event) => setPassword(event.target.value)}/>
                 </FormControl>
-
-                {error !== undefined &&
-                    <Text color="red">{error}</Text>
-                }
 
                 <Button variant="solid" colorScheme="blue"
                         type="submit">
@@ -102,7 +95,12 @@ const LoginPage = () => {
           </Box>
           <HStack spacing="1" justify="center">
             <Text color="muted">Don&apos;t have an account?</Text>
-            <Button variant="link" colorScheme="blue">Sign up</Button>
+            <Button
+                variant="link"
+                colorScheme="blue"
+                onClick={() => {
+                  navigate('/register');
+                }}>Sign up</Button>
           </HStack>
         </Stack>
       </Container>

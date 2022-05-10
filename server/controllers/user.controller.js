@@ -16,13 +16,14 @@ accessed via the accounts routes.
 
 const db = require('../models/index');
 
-const User = db.User;
+const {User} = db;
 
 const {
   emailRegex,
   strongPassRegex,
-  getAge,
+  getAge, generateToken,
 } = require('../utils/auth');
+const { Stripe } = require('../config/stripe');
 
 // Create and save a new user to the database
 const createUser = async (req, res) => {
@@ -36,7 +37,7 @@ const createUser = async (req, res) => {
     res.status(400).send('ERR_PASSWORD_WEAK');
   } else if (!dobParsed) {
     res.status(400).send('ERR_INVALID_DATE');
-  } else if (getAge(dobParsed) < 16) {
+  } else if (getAge(dobParsed) <= 16) {
     res.status(400).send('ERR_TOO_YOUNG');
   } else {
     User.create(user, {
@@ -55,7 +56,22 @@ const createUser = async (req, res) => {
     })
       .then(async (obj) => {
         await obj.reload();
-        res.status(201).json(obj);
+        const customer = await Stripe.customers.create({
+          email: obj.email,
+          name: `${obj.forename} ${obj.surname}`,
+        });
+        console.log(customer);
+        if(customer){
+          obj.set({
+            stripeCustomerId: customer.id
+          })
+          await obj.save();
+          const token = generateToken(obj);
+          res.cookie('token', token, { httpOnly: true });
+          return res.status(201).json(obj);
+        }
+          await obj.destroy();
+          return res.status(500).send("ERR_INTERNAL_EXCEPTION");
       })
       .catch((err) => {
         if (err.name === 'SequelizeUniqueConstraintError') {
