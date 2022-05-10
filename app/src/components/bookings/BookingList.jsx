@@ -1,38 +1,70 @@
-import React, {useState} from 'react';
-import {Button, Heading, Text, VStack} from '@chakra-ui/react';
+import React, {useEffect, useState} from 'react';
+import {Box, Table, TableContainer, Tbody, Th, Thead, Tr, VStack} from '@chakra-ui/react';
+import Booking from './Booking';
+
+
 
 const BookingList = () => {
-    const [bookings, setBookings] = useState(null);
+  const [bookings, setBookings] = useState(null);
+  const [update, setUpdate] = useState(false);
 
-    const fetchBookings = () => {
-        fetch('http://localhost:5000/bookings', {
-            method: 'GET',
-            headers: {
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0ZW1haWwxQGV4YW1wbGUuY29tIiwiZm9yZW5hbWUiOiJOYXRoYW4iLCJzdXJuYW1lIjoiU2ViaGFzdGlhbiIsImlhdCI6MTY1MjA5NTI2NywiZXhwIjoxNjUyMTgxNjY3fQ.4pEwHT17p5Z_SZNPxSjdKBpZnTBn0CqgK4Id1-PP8fU',
-            }
-        }).then((response) => {
-            response.json().then((json) => {
-                setBookings(json);
-            })
-        })
-    }
+  const fetchBookings = () => {
+    fetch('/api/bookings/', {
+      method: 'GET',
+    }).then((response) => {
+      response.json().then((json) => {
+        console.log(json);
+        setBookings(json);
+      })
+    });
+  }
 
-    return (
-        <VStack align="start" spacing={0}>
-            <Heading size="lg">Welcome to your Bookings Page</Heading>
-            <Text fontSize="xl">Here are your bookings.</Text>
+  useEffect(() => {
+    fetchBookings();
+  }, []);
 
-            <Button onClick={fetchBookings()}>Get Bookings</Button>
+  /* const bookingItems = bookings.map((booking) => (
+    <p key={booking.id}>{JSON.stringify(booking)}</p>
+  )); */
 
-            {bookings ? (
-                <code>
-                    {JSON.stringify(bookings)}
-                </code>
-            ) : (
-                <p>No bookings Fetched</p>
-            )}
-        </VStack>
-    );
+  return (
+    <VStack align="start" spacing={0}>
+      {
+        bookings ?
+          (
+            <Box w="100%" borderWidth="1px" >
+            <TableContainer >
+              <Table>
+                <Thead>
+                  <Tr alignItems='center'>
+                    <Th>Booking ID</Th>
+                    <Th>Car park</Th>
+                    <Th>Space</Th>
+                    <Th>Start Date</Th>
+                    <Th>Start Time</Th>
+                    <Th>End Date</Th>
+                    <Th>End Time</Th>
+                    <Th/>
+                  </Tr>
+                </Thead>
+
+
+                <Tbody>
+                  {
+                    bookings.map((booking) => (
+                      <Booking key={booking.bookingId} booking={booking} update={fetchBookings} />
+                    ))
+                  }
+                </Tbody>
+              </Table>
+            </TableContainer>
+            </Box>
+          ) : (
+            <p>No bookings Fetched</p>
+          )
+      }
+    </VStack>
+  );
 };
 
 export default BookingList;

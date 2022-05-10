@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading } from '@chakra-ui/react';
+import {Heading, Text} from '@chakra-ui/react';
 import BookingList from '../../components/bookings/BookingList';
 import useTitle from '../../hooks/useTitle';
 
@@ -9,6 +9,8 @@ const BookingsPage = () => {
   return (
       <div>
         <Heading size="xl">Bookings</Heading>,
+        <Heading size="md">Welcome to your Bookings Page</Heading>
+        <Text fontSize="xl">Here are your bookings.</Text>
         <BookingList />
       </div>
   )
