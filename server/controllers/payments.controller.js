@@ -1,19 +1,40 @@
-const stripe = require('stripe')(process.env.STRIPE_API_KEY);
+const { Stripe } = require('../config/stripe');
+const db = require('../models');
 
-const setup = async (req, res) => {
-  const { name, email } = req.body;
-  const customer = await stripe.customers.create({
-    email,
-    name,
+const { User } = db;
+
+const createSetupIntent = async (req, res) => {
+  const email = req.user.sub;
+  const user = await User.findOne({
+    where: { email },
   });
-  const setupIntent = await stripe.setupIntents.create({
-    customer: customer.id,
+
+  if (!user || !user.stripeCustomerId) {
+    return res.status(500).send('ERR_INTERNAL_EXCEPTION');
+  }
+
+  const setupIntent = await Stripe.setupIntents.create({
+    customer: user.stripeCustomerId,
     payment_method_types: ['card'],
   });
 
-  return res.json({ client_secret: setupIntent.client_secret });
+  return res.status(201).json({ client_secret: setupIntent.client_secret });
+};
+
+const storePaymentMethod = async (req, res) => {
+  const { paymentMethodId } = req.body;
+  const email = req.user.sub;
+  const user = await User.findOne({
+    where: { email }
+  });
+  user.set({
+    paymentMethodId,
+  });
+  await user.save();
+  res.status(200).send();
 };
 
 module.exports = {
-  setup,
+  createSetupIntent,
+  storePaymentMethod,
 };

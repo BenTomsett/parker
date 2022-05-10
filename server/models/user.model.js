@@ -90,6 +90,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
         },
+      stripeCustomerId: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      paymentMethodId: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      }
     },
     {
       sequelize,

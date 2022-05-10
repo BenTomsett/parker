@@ -5,12 +5,9 @@
     Date Created: 02/04/2022
     Date Finished: 
     Last Modified: 
-
  -------DESCRIPTION-------
-
 This is the booking model and is the foundation of a booking 'object' this is where we define all data types and needed
 structures for our postgres database through sequelize.
-
 */
 
 const { Model } = require('sequelize');
@@ -19,14 +16,14 @@ module.exports = (sequelize, DataTypes) => {
 
   class Booking extends Model {
 
-      static associate(models) {
-          Booking.belongsTo(models.User, {
-              foreignKey: 'userId'
-          })
-          Booking.belongsTo(models.ParkingSpace, {
-              foreignKey: 'spaceId'
-          })
-      }
+    static associate(models) {
+      Booking.belongsTo(models.User, {
+        foreignKey: 'userId'
+      })
+      Booking.belongsTo(models.ParkingSpace, {
+        foreignKey: 'spaceId'
+      })
+    }
 
   }
 

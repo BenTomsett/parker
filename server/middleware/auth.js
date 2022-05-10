@@ -27,7 +27,7 @@ const authenticateUser = async (req, res, next) => {
   });
 
   if (users < 1) {
-    return res.status(401).send('ERR_INVALID_CREDENTIALS');
+    return res.status(401).send('ERR_UNAUTHORIZED');
   }
   if (users > 1) {
     return res.status(500).send('ERR_MULTIPLE_USERS');

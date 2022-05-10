@@ -12,7 +12,13 @@ const App = () => {
       if (response.status === 401) {
         navigate('/login');
       } else {
-        setLoading(false);
+        response.text().then((text) => {
+          if(text === "NEED_BILLING_SETUP"){
+            navigate('/register/billing');
+          }else{
+            setLoading(false);
+          }
+        })
       }
     }).catch(() => {});
   }, [navigate]);
