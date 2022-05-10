@@ -2,7 +2,6 @@
 
 import React from 'react';
 import {Td, Tr} from '@chakra-ui/react';
-import ManageBooking from "./ManageBooking";
 import CancelBooking from "./CancelBooking";
 
 const Booking = ({booking, update}) => (
@@ -15,7 +14,6 @@ const Booking = ({booking, update}) => (
       <Td>{booking.endDate.toLocaleString().slice(0,10)}</Td>
       <Td>{booking.endDate.toLocaleString().slice(12,19)}</Td>
       <Td>
-        <ManageBooking booking={booking} update={update}/>
         <CancelBooking booking={booking} update={update}/>
       </Td>
     </Tr>
