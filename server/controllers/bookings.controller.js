@@ -194,8 +194,8 @@ const deleteBooking = async (req, res) => {
   const { bookingId } = req.params;
 
   Booking.destroy({ where: { bookingId } })
-    .then((data) => {
-      res.status(200).send(data);
+    .then(() => {
+      res.sendStatus(200);
     })
     .catch((err) => {
       console.error(err);
@@ -209,8 +209,8 @@ const deleteAllBookings = async (req, res) => {
     where: {},
     truncate: false,
   })
-    .then((data) => {
-      res.status(200).send(data);
+    .then(() => {
+      res.sendStatus(200);
     })
     .catch((err) => {
       console.error(err);
