@@ -47,9 +47,9 @@ const SetupComplete = () => {
             }else{
               setSuccess(false);
             }
+            setLoading(false);
           })
         }
-        setLoading(false);
       });
     }
   }, [stripe])

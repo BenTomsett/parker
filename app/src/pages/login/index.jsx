@@ -38,10 +38,7 @@ const LoginPage = () => {
       },
     }).then((response) => {
       if(response.status === 200){
-        response.json().then((json) => {
-          alert(json);
-          navigate('/');
-        });
+        navigate('/');
       }else if(response.status === 401) {
         setError('Incorrect username or password');
       }
