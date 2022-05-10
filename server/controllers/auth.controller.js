@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../models/index');
 const { generateToken } = require('../utils/auth');
 
-dconst {User} = db;
+const {User} = db;
 
 const login = async (req, res) => {
   const { email, password } = req.body;

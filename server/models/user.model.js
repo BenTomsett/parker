@@ -93,6 +93,10 @@ module.exports = (sequelize, DataTypes) => {
       stripeCustomerId: {
         allowNull: true,
         type: DataTypes.STRING,
+      },
+      paymentMethodId: {
+        allowNull: true,
+        type: DataTypes.STRING,
       }
     },
     {
