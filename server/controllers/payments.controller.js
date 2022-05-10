@@ -1,12 +1,12 @@
-const stripe = require('stripe')(process.env.STRIPE_API_KEY);
+const { Stripe } = require('../config/stripe');
 
 const setup = async (req, res) => {
   const { name, email } = req.body;
-  const customer = await stripe.customers.create({
+  const customer = await Stripe.customers.create({
     email,
     name,
   });
-  const setupIntent = await stripe.setupIntents.create({
+  const setupIntent = await Stripe.setupIntents.create({
     customer: customer.id,
     payment_method_types: ['card'],
   });

@@ -23,6 +23,7 @@ const {
   strongPassRegex,
   getAge,
 } = require('../utils/auth');
+const { Stripe } = require('../config/stripe');
 
 // Create and save a new user to the database
 const createUser = async (req, res) => {
@@ -55,7 +56,20 @@ const createUser = async (req, res) => {
     })
       .then(async (obj) => {
         await obj.reload();
-        res.status(201).json(obj);
+        const customer = await Stripe.customers.create({
+          email: obj.email,
+          name: `${obj.forename} ${obj.surname}`,
+        });
+        console.log(customer);
+        if(customer){
+          obj.set({
+            stripeCustomerId: customer.id
+          })
+          await obj.save();
+          return res.status(201).json(obj);
+        }
+          await obj.destroy();
+          return res.status(500).send("ERR_INTERNAL_EXCEPTION");
       })
       .catch((err) => {
         if (err.name === 'SequelizeUniqueConstraintError') {
