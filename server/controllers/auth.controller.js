@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../models/index');
 const { generateToken } = require('../utils/auth');
 
-const User = db.User;
+dconst {User} = db;
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -23,7 +23,7 @@ const login = async (req, res) => {
       if (result) {
         const token = generateToken(user);
         res.cookie('token', token, { httpOnly: true });
-        res.status(200).json({token: token});
+        res.status(200).json({token});
       } else if (err) {
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       } else  {
@@ -33,9 +33,7 @@ const login = async (req, res) => {
   }
 };
 
-const verify = async (req, res) => {
-  return res.status(200).send();
-}
+const verify = async (req, res) => res.status(200).send()
 
 module.exports = {
   login,

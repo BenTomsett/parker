@@ -21,7 +21,7 @@ const {User} = db;
 const {
   emailRegex,
   strongPassRegex,
-  getAge,
+  getAge, generateToken,
 } = require('../utils/auth');
 const { Stripe } = require('../config/stripe');
 
@@ -66,6 +66,8 @@ const createUser = async (req, res) => {
             stripeCustomerId: customer.id
           })
           await obj.save();
+          const token = generateToken(obj);
+          res.cookie('token', token, { httpOnly: true });
           return res.status(201).json(obj);
         }
           await obj.destroy();
