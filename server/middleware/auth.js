@@ -1,7 +1,7 @@
 const { verifyToken } = require('../utils/auth');
 const db = require('../models/index');
 
-const User = db.User;
+const { User } = db;
 
 const authenticateUser = async (req, res, next) => {
   if (!req.headers.authorization && !req.cookies.token) {
@@ -9,11 +9,11 @@ const authenticateUser = async (req, res, next) => {
   }
 
   let token;
-  if(req.headers.authorization && req.headers.authorization.split(' ')[1]){
+  if (req.headers.authorization && req.headers.authorization.split(' ')[1]) {
     token = req.headers.authorization.split(' ')[1];
-  }else if(req.cookies.token){
+  } else if (req.cookies.token) {
     token = req.cookies.token;
-  }else{
+  } else {
     return res.status(401).send('ERR_UNAUTHORIZED');
   }
 
@@ -40,21 +40,21 @@ const authenticateUser = async (req, res, next) => {
   return next();
 };
 
-const verifyAdmin = async (req,res,next) =>{
-  const { userId } = req.params;
+const verifyAdmin = async (req, res, next) => {
+  const { sub } = req.user;
+
   const countResult = await User.count({
     where: {
-      userId,
-      isAdmin:{
-        [Op.is]: true,
-      },
-    }
-  })
-  if(countResult === 1){
+      email: sub,
+      isAdmin: true,
+    },
+  });
+
+  if (countResult === 1) {
     return next();
-  }else{
-    res.status(401).send('ERR_UNAUTHORIZED')
   }
+
+  return res.status(401).send('ERR_UNAUTHORIZED');
 };
 
 module.exports = {
