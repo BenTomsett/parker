@@ -16,20 +16,21 @@ module.exports = {
 
     await queryInterface.bulkInsert('ParkingSpaces', 
     [
-      {zoneId: 1, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps1polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 1, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps2polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 2, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps3polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 2, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps4polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 3, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps5polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 3, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps6polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 4, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps7polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 4, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps8polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 5, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps9polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 5, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps10polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 6, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps11polygon)), createdAt: new Date(), updatedAt: new Date()},
-      {zoneId: 6, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps12polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 1, zoneId: 7, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps1polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 2, zoneId: 7, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps2polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 3, zoneId: 8, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps3polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 4, zoneId: 8, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps4polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 5, zoneId: 9, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps5polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 6, zoneId: 9, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps6polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 7, zoneId: 10, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps7polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 8 ,zoneId: 10, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps8polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 9 ,zoneId: 11, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps9polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 10 ,zoneId: 11, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps10polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 11 ,zoneId: 12, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps11polygon)), createdAt: new Date(), updatedAt: new Date()},
+      {spaceId: 12 ,zoneId: 12, status: "AVAILABLE", gpsPolygon: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(ps12polygon)), createdAt: new Date(), updatedAt: new Date()},
     ])
   },
+
 
   async down (queryInterface, Sequelize) {
     await queryInterface.bulkDelete('ParkingSpaces', null, {});
