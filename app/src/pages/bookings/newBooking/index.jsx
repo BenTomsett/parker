@@ -26,7 +26,6 @@ const NewBooking = () => {
   const [loading, setLoading] = useState(false);
 
   const [buildings, setBuildings] = useState(null);
-  const [carParkingSpaces, setCarParkingSpace] = useState(null);
 
 
   const updateFormData = (property, value) => {
@@ -108,12 +107,12 @@ const NewBooking = () => {
               <Stack spacing='4'>
                 <Divider/>
                 <FormControl>
-                  <FormLabel htmlFor='Car Park'>Destination Building</FormLabel>
+                  <FormLabel htmlFor='BuildingName'>Destination Building</FormLabel>
                   {
                     buildings ?
                       (
-                        <Select name="carParkName" id="carParkName" value={formData.startTime || ''}
-                                onChange={(event) => updateFormData('carParkName', event.target.value)}>
+                        <Select name="buildingName" id="buildingName" value={formData.buildingName || ''}
+                                onChange={(event) => updateFormData('buildingName', event.target.value)}>
                           {
                             buildings.map((building) => (
                               <Building key={building.buildingId} building={building}/>
