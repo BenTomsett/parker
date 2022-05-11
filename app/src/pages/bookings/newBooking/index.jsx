@@ -11,8 +11,9 @@ import {
   Stack,
   useBreakpointValue, useToast
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
+// import Building from "../../../components/bookings/Building";
 import CarPark from "../../../components/bookings/CarPark";
 
 const NewBooking = () => {
@@ -24,10 +25,10 @@ const NewBooking = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const [carParks, setCarParks] = useState(null);
+  const [buildings, setBuildings] = useState(null);
   const [carParkingSpaces, setCarParkingSpace] = useState(null);
 
-  
+
   const updateFormData = (property, value) => {
     setFormData((prevState => ({
       ...prevState,
@@ -35,59 +36,58 @@ const NewBooking = () => {
     })));
   };
 
-  const fetchCarParks = () => {
+  const fetchBuildings = () => {
     fetch('/api/carparks/', {
       method: 'GET',
     }).then((response) => {
       response.json().then((json) => {
-        console.log(json);
-        setCarParks(json);
+        // console.log(json);
+        setBuildings(json);
       })
     });
   }
 
-  const fetchCarParkingSpace = () =>
-  {
-    fetch()
 
-    fetch('/api/carparks', {
-      method: 'GET',
+  const processData = (event) => {
+    event.preventDefault();
+
+    const startDatetime = new Date(Date.parse(`${formData.startDate}T${formData.startTime}`));
+    const endDatetime = new Date(Date.parse(`${formData.endDate}T${formData.endTime}`));
+
+    if(startDatetime > endDatetime){
+      toast({title: "The start date must be before the end date"});
+    }else{
+
+    }
+
+
+    /*
+
+    fetch('/api/bookingrequests/', {
+      method: 'PUT',
     }).then((response) => {
       response.json().then((json) => {
-        console.log(json);
-        setCarParks(json);
+        // console.log(json);
+        setBuildings(json);
       })
     });
-}
-  const processData = () => {
-     const startStr = (formData.startTime).toString()
-     const endStr = (formData.endTime).toString()
-     formData.startDateTime = formData.startDate.concat(" ",startStr,":00.00+00")
-     formData.endtDateTime = formData.endDate.concat(" ",endStr,":00.00+00")
 
-    console.log(formData.startTime)
-    console.log(formData.endTime)
-    console.log(formData.carParkName)
-    console.log(formData.startDate)
-    console.log(formData.endDate)
 
-    console.log(formData.startDateTime)
-    console.log(formData.endDateTime)
+     */
 
   }
 
-
-    useEffect(()=> {
-    fetchCarParks();
-  },[] )
+  useEffect(() => {
+    fetchBuildings();
+  }, [])
 
   return (
     <div>
       <Heading size="xl">Request a new Booking</Heading>
       <br/>
+
       <Heading size="md">Fill out the below to request a new booking </Heading>
       <br/>
-
 
       <Container maxW='xl' py={{base: '12', md: '24'}}
                  px={{base: '0', sm: '8'}}>
@@ -106,23 +106,23 @@ const NewBooking = () => {
             borderRadius={{base: 'none', sm: 'xl'}}
             borderWidth={1}
           >
-            <form /* onSubmit={} */>
+            <form onSubmit={processData}>
               <Stack spacing='4'>
                 <Divider/>
                 <FormControl>
-                  <FormLabel htmlFor='Car Park'> Car Park</FormLabel>
+                  <FormLabel htmlFor='Car Park'>Destination Building</FormLabel>
                   {
-                    carParks ?
+                    buildings ?
                       (
                         <Select name="carParkName" id="carParkName" value={formData.startTime || ''}
                                 onChange={(event) => updateFormData('carParkName', event.target.value)}>
                           {
-                          carParks.map((carpark) => (
-                            <CarPark key={carpark.carParkId} carpark={carpark} />
-                          ))
+                            buildings.map((building) => (
+                              <CarPark key={building.carParkId} carpark={building}/>
+                            ))
                           }
                         </Select>
-                      ) : (<p>No Car Parks Found</p>)
+                      ) : (<p>Buildings found</p>)
                   }
                 </FormControl>
 
@@ -130,10 +130,10 @@ const NewBooking = () => {
                   <FormControl>
                     <FormLabel htmlFor='startDate'>Start Date</FormLabel>
                     <Input id='startDate' type='date'
-                         autoComplete='startDate'
-                         value={formData.startDate || ''}
-                         onChange={(event) => updateFormData('startDate',
-                           event.target.value)}
+                           autoComplete='startDate'
+                           value={formData.startDate || ''}
+                           onChange={(event) => updateFormData('startDate',
+                             event.target.value)}
                     />
                   </FormControl>
                   <FormControl>
@@ -178,7 +178,7 @@ const NewBooking = () => {
                              event.target.value)}/>
                   </FormControl>
                   <FormControl>
-                  <FormLabel htmlFor='endTime'>End Time</FormLabel>
+                    <FormLabel htmlFor='endTime'>End Time</FormLabel>
                     <Select name="endTime" id="endTime" value={formData.endTime || ''}
                             onChange={(event) => updateFormData('endTime', event.target.value)}>
                       <option value="00:00">00:00</option>
@@ -209,11 +209,11 @@ const NewBooking = () => {
                   </FormControl>
                 </HStack>
 
-                { /* console.log(formData.startDateTime) */ }
-                { /*  console.log(formData.endDateTime) */ }
+                { /* console.log(formData.startDateTime) */}
+                { /*  console.log(formData.endDateTime) */}
 
-                <Button variant='solid' colorScheme='blue' onClick={processData}>
-                      Create Booking
+                <Button variant='solid' colorScheme='blue' type="submit">
+                  Create Booking
                 </Button>
 
               </Stack>
