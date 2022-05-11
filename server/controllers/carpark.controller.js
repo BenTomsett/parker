@@ -98,6 +98,25 @@ const findCarParkByID = async (req, res) => {
         });
 };
 
+const findCarParkID = async (req, res) => {
+
+    const {name}= req.params;
+
+    CarPark.findAll({
+        where:{
+         name,
+        },
+    })
+      .then((data) => {
+          res.status(200).send(data);
+      })
+      .catch((err) => {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      });
+};
+
+
 // Delete a parking space with the specified id in the request
 const deleteCarPark = async (req, res) => {
     const { carParkID } = req.params;
@@ -132,6 +151,7 @@ module.exports = {
     updateCarPark,
     findAllCarParks,
     findCarParkByID,
+    findCarParkID,
     deleteCarPark,
     deleteAllCarParks,
 };

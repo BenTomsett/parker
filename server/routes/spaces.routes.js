@@ -27,7 +27,6 @@ router.put('/', authenticateUser, SpacesController.createParkingSpace);
 
 // Delete all car parking spaces
 router.delete('/', authenticateUser, SpacesController.deleteAllParkingSpaces);
-
 // Retrieve a single parking space
 router.get(
   '/:parkingSpaceId',

@@ -1,8 +1,18 @@
+/* eslint react/prop-types: 0 */
+
 import React, {useEffect, useState} from 'react';
-import {Box, Table, TableContainer, Tbody, Th, Thead, Tr, VStack} from '@chakra-ui/react';
+import {
+  Box,
+  Table,
+  TableContainer,
+  Tbody,
+  Th,
+  Thead,
+  Tr,
+  VStack
+} from '@chakra-ui/react';
+
 import Booking from './Booking';
-
-
 
 const BookingList = () => {
   const [bookings, setBookings] = useState(null);
@@ -47,8 +57,6 @@ const BookingList = () => {
                     <Th/>
                   </Tr>
                 </Thead>
-
-
                 <Tbody>
                   {
                     bookings.map((booking) => (
