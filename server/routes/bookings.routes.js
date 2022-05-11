@@ -15,7 +15,7 @@ These are our booking routes which handle all of our http requests.
 const express = require('express');
 
 const BookingController = require('../controllers/bookings.controller');
-const { authenticateUser } = require('../middleware/auth');
+const { authenticateUser, verifyAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -74,6 +74,7 @@ router.get(
 router.get(
   '/user/:userId',
   authenticateUser,
+  verifyAdmin,
   BookingController.findUserBookings
 );
 

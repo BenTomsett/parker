@@ -136,6 +136,7 @@ const updateUser = async (req, res) => {
     where: {
       userId,
     },
+    individualHooks:true
   })
     .then((data) => {
       res.status(200).send(data);
@@ -187,11 +188,9 @@ const deleteAllUsers = async (req, res) => {
 
 const banUser = async (req, res) => {
   const { userId } = req.params;
-
   User.update({isBanned:true},{ where:{userId} })
-
     .then((data) => {
-      res.status(200).send(data);
+      res.status(200);
     })
     .catch((err) => {
       if (err.name === 'SequelizeUniqueConstraintError') {
@@ -204,6 +203,23 @@ const banUser = async (req, res) => {
       }
     });
 };
+const unBanUser = async (req, res) => {
+  const { userId } = req.params;
+  User.update({isBanned:false},{ where:{userId} })
+      .then((data) => {
+        res.status(200);
+      })
+      .catch((err) => {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+          res.status(409).send('ERR_USER_EXISTS');
+        } else if (err.name === 'SequelizeValidationError') {
+          res.status(400).send('ERR_DATA_MISSING');
+        } else {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        }
+      });
+};
 
 module.exports = {
   createUser,
@@ -214,4 +230,5 @@ module.exports = {
   deleteUser,
   deleteAllUsers,
   banUser,
+  unBanUser,
 };
