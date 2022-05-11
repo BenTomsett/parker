@@ -13,7 +13,7 @@ structures for our postgres database through sequelize.
 
 */
 
-const { DataTypes, Model } = require('sequelize');
+const { Model } = require('sequelize');
 const { hashPassword } = require('../utils/auth');
 
 module.exports = (sequelize, DataTypes) => {

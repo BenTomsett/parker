@@ -54,10 +54,17 @@ module.exports = (sequelize, DataTypes) => {
       checkedIn: {
         allowNull: false,
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       checkedOut: {
         allowNull: false,
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      approved: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
     },
     {
