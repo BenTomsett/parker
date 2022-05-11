@@ -136,6 +136,7 @@ const updateUser = async (req, res) => {
     where: {
       userId,
     },
+    individualHooks:true
   })
     .then((data) => {
       res.status(200).send(data);
