@@ -17,6 +17,16 @@ const { Op } = require('sequelize');
 const db = require('../models/index');
 const { checkParkedLocation } = require('../utils/checkLocation');
 
+const {
+    sendBookingConfirmationEmail,
+    sendBookingApprovedEmail,
+    sendBookingDeniedEmail,
+    sendOverstaySMS,
+    sendOverstayEmail,
+    sendNonArrivalSMS,
+    sendNonArrivalEmail,
+} = require('../utils/notifications')
+
 const { Booking, ParkingSpace } = db;
 
 // Create and Save a new Booking
@@ -34,6 +44,7 @@ const createBooking = async (req, res) => {
     ],
   })
     .then((data) => {
+      sendBookingConfirmationEmail(data);
       res.status(200).send(data);
     })
     .catch((err) => {
@@ -196,12 +207,57 @@ const checkInBooking = async (req, res) => {
   }
 };
 
+// Checkin a booking by the id in the request
+const approveBooking = async (req, res) => {
+    const { bookingId } = req.params;
+
+    Booking.update(
+        { isApproved: true },
+        { where: { bookingId } })
+      .then((data) => {
+        sendBookingApprovedEmail(data);  
+        res.status(200).send(data);
+      })
+      .catch((err) => {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+          res.status(409).send('ERR_BOOKING_EXISTS');
+        } else if (err.name === 'SequelizeValidationError') {
+          res.status(400).send('ERR_DATA_MISSING');
+        } else {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        }
+      });
+  };
+
+// Delete a Booking with the specified id in the request
+const denyBooking = async (req, res) => {
+    const { bookingId } = req.params;
+  
+    await Booking.findByPk(bookingId)
+    .then((data) => {
+        sendBookingDeniedEmail(data);
+        data.destroy()
+        .then(() => {
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
+  };
+
 // Delete a Booking with the specified id in the request
 const deleteBooking = async (req, res) => {
   const { bookingId } = req.params;
 
   Booking.destroy({ where: { bookingId } })
-    .then(() => {
+    .then(() => {  
       res.sendStatus(200);
     })
     .catch((err) => {
@@ -234,6 +290,8 @@ module.exports = {
   findCarPark24HBookings,
   updateBooking,
   checkInBooking,
+  approveBooking,
+  denyBooking,
   deleteBooking,
   deleteAllBookings,
 };
