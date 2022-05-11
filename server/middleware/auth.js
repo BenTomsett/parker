@@ -22,15 +22,19 @@ const authenticateUser = async (req, res, next) => {
     return res.status(401).send('ERR_UNAUTHORIZED');
   }
 
-  const users = await User.count({
+  const users = await User.findAll({
     where: { email: user.sub },
   });
 
-  if (users < 1) {
+  if (users.length < 1) {
     return res.status(401).send('ERR_UNAUTHORIZED');
   }
-  if (users > 1) {
+  if (users.length > 1) {
     return res.status(500).send('ERR_MULTIPLE_USERS');
+  }
+
+  if (users[0].isBanned) {
+    return res.status(403).send('ERR_USER_BANNED');
   }
 
   delete user.iat;
