@@ -16,7 +16,7 @@ functionality.
 
 const db = require('../models/index');
 
-const Zone = db.Zone;
+const { Zone } = db;
 
 // Create and Save a new ParkingSpace
 const createZone = async (req, res) => {

@@ -16,15 +16,16 @@ structures for our postgres database through sequelize.
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-
   class ParkingSpace extends Model {
+    static associate(models) {
+      ParkingSpace.belongsTo(models.Zone, {
+        foreignKey: 'zoneId',
+      });
 
-      static associate(models) {
-          ParkingSpace.belongsTo(models.Zone, {
-              foreignKey: 'zoneId'
-          })
-        }
-
+      ParkingSpace.belongsTo(models.CarPark, {
+        foreignKey: 'carParkId',
+      });
+    }
   }
 
   ParkingSpace.init(
@@ -37,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         // comment: 'This is a column name that has a comment'
       },
+      spaceNo: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        // comment: 'This is a column name that has a comment'
+      },
       status: {
         allowNull: false,
         type: DataTypes.ENUM({
@@ -44,8 +50,8 @@ module.exports = (sequelize, DataTypes) => {
         }),
       },
       gpsPolygon: {
-          allowNull: false,
-          type: DataTypes.GEOMETRY('Polygon')
+        allowNull: false,
+        type: DataTypes.GEOMETRY('Polygon'),
       },
     },
     {
@@ -53,10 +59,10 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'ParkingSpaces',
       modelName: 'ParkingSpace',
       indexes: [
-        { unique: 'parking_space_idx', fields: ['status', 'gpsPolygon'] },
+        { unique: 'parking_space_idx', fields: ['status', 'gpsPolygon', 'spaceNo'] },
       ],
       // timestamps: false
     }
   );
   return ParkingSpace;
-}
+};
