@@ -17,7 +17,7 @@ const { Op } = require('sequelize');
 const db = require('../models/index');
 const { checkParkedLocation } = require('../utils/checkLocation');
 
-const Booking = db.Booking;
+const { Booking, ParkingSpace } = db;
 
 // Create and Save a new Booking
 const createBooking = async (req, res) => {
