@@ -2,6 +2,7 @@ import React from 'react';
 import Map, { Marker } from 'react-map-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { Heading, VStack } from '@chakra-ui/react';
 
 const MapCard = () => {
   /*
@@ -23,20 +24,31 @@ const MapCard = () => {
   }
 
   return (
-    <Map
-      mapboxAccessToken="pk.eyJ1IjoiYmVudG9tc2V0dCIsImEiOiJjazFxbDBpZTgwMmJkM21sZWZhY3VuZ2lkIn0.HxUAYfiWTsU-Abl0bm3aBg"
-      initialViewState={{
-        longitude: 1.2431,
-        latitude: 52.6235,
-        zoom: 14
-      }}
-      style={{width: 600, height: 400}}
-      mapStyle="mapbox://styles/mapbox/streets-v11"
+    <VStack
+      flex={1}
+      spacing={4}
+      borderWidth={1}
+      borderRadius="xl"
+      p={4}
+      align="start"
     >
-      <Marker longitude={main.longitude} latitude={main.latitude}/>
-      <Marker longitude={newSci.longitude} latitude={newSci.latitude}/>
-      <Marker longitude={constable.longitude} latitude={constable.latitude}/>
-    </Map>
+      <Heading size="md" align>Nearby car parks</Heading>
+      <Map
+        mapboxAccessToken="pk.eyJ1IjoiYmVudG9tc2V0dCIsImEiOiJjazFxbDBpZTgwMmJkM21sZWZhY3VuZ2lkIn0.HxUAYfiWTsU-Abl0bm3aBg"
+        initialViewState={{
+          longitude: 1.2431,
+          latitude: 52.6235,
+          zoom: 14
+        }}
+        style={{width: "100%", height: "100%"}}
+        mapStyle="mapbox://styles/mapbox/streets-v11"
+
+      >
+        <Marker longitude={main.longitude} latitude={main.latitude}/>
+        <Marker longitude={newSci.longitude} latitude={newSci.latitude}/>
+        <Marker longitude={constable.longitude} latitude={constable.latitude}/>
+      </Map>
+    </VStack>
   );
 }
 

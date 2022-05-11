@@ -20,7 +20,7 @@ const Scaffold = () => {
   return (
     <Flex flexDirection="column" maxH="100vh">
       <NavBar navbarRef={navbarRef} />
-      <Box p={8} maxH="100vh" mt={`${navbarHeight}px`}>
+      <Box p={8} h="100vh" mt={`${navbarHeight}px`}>
         <Outlet />
       </Box>
     </Flex>
