@@ -40,6 +40,10 @@ router.put('/:userId', authenticateUser, UserController.updateUser);
 // Update a User with the UserId
 router.put('/:userId/ban', authenticateUser, UserController.banUser);
 
+// Update a User with the UserId
+router.put('/:userId/unban', authenticateUser, UserController.unBanUser);
+
+
 // Delete a user with the UserId
 router.delete('/:userId', authenticateUser, UserController.deleteUser);
 

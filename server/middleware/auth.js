@@ -37,6 +37,9 @@ const authenticateUser = async (req, res, next) => {
     return res.status(403).send('ERR_USER_BANNED');
   }
 
+  user.isAdmin = users[0].isAdmin;
+  user.userId = users[0].userId;
+
   delete user.iat;
   delete user.exp;
 
