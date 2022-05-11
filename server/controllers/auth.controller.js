@@ -39,9 +39,14 @@ const verify = async (req, res) => {
     where: { email: sub },
   });
   if (user.paymentMethodId) {
-    return res.status(200).send();
+    return res.status(200).json({
+      forename: user.forename,
+      surname: user.surname,
+      email: user.email,
+      isAdmin: user.isAdmin
+    });
   }
-  return res.status(200).send('NEED_BILLING_SETUP');
+  return res.status(402).send('NEED_BILLING_SETUP');
 
 };
 
