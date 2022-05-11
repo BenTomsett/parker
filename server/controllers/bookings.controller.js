@@ -17,6 +17,12 @@ const { Op } = require('sequelize');
 const db = require('../models/index');
 const { checkParkedLocation } = require('../utils/checkLocation');
 
+const {
+  sendBookingConfirmationEmail,
+  sendBookingApprovedEmail,
+  sendBookingDeniedEmail,
+} = require('../utils/notifications');
+
 const { Booking, ParkingSpace } = db;
 
 // Create and Save a new Booking
@@ -34,6 +40,7 @@ const createBooking = async (req, res) => {
     ],
   })
     .then((data) => {
+      sendBookingConfirmationEmail(data);
       res.status(200).send(data);
     })
     .catch((err) => {
@@ -50,13 +57,13 @@ const createBooking = async (req, res) => {
 
 // Retrieve all bookings from the database.
 const findAllBookings = async (req, res) => {
-  const {isAdmin} = req.user;
+  const { isAdmin } = req.user;
   Booking.findAll({
-    ...(!isAdmin) && {
+    ...(!isAdmin && {
       where: {
         userId: isAdmin ? '' : req.user.userId,
       },
-    }
+    }),
   })
     .then((data) => {
       res.status(200).send(data);
@@ -130,6 +137,49 @@ const findCarPark24HBookings = async (req, res) => {
   });
 };
 
+// Find bookings for a specific car park
+const findOverstayedBookings = async () => {
+  Booking.findAll({
+    where: {
+      endDate: {
+        [Op.ge]: new Date(Date.now() - 15 * 60 * 1000),
+        [Op.le]: new Date(Date.now()),
+      },
+      checkedIn: {
+        [Op.eq]: true,
+      },
+      checkedOut: {
+        [Op.eq]: false,
+      },
+    }
+      .then((data) => data)
+      .catch((err) => {
+        console.error(err);
+      }),
+  });
+};
+
+// Find bookings past their arrival dates
+const findNonArrivalBookings = async () => {
+  Booking.findAll({
+    where: {
+      startDate: {
+        [Op.le]: new Date(Date.now()),
+      },
+      checkedIn: {
+        [Op.eq]: false,
+      },
+      checkedOut: {
+        [Op.eq]: false,
+      },
+    }
+      .then((data) => data)
+      .catch((err) => {
+        console.error(err);
+      }),
+  });
+};
+
 // Update a booking by the id in the request
 const updateBooking = async (req, res) => {
   const { bookingId } = req.params;
@@ -196,6 +246,50 @@ const checkInBooking = async (req, res) => {
   }
 };
 
+// Checkin a booking by the id in the request
+const approveBooking = async (req, res) => {
+  const { bookingId } = req.params;
+
+  Booking.update({ isApproved: true }, { where: { bookingId } })
+    .then((data) => {
+      sendBookingApprovedEmail(data);
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      if (err.name === 'SequelizeUniqueConstraintError') {
+        res.status(409).send('ERR_BOOKING_EXISTS');
+      } else if (err.name === 'SequelizeValidationError') {
+        res.status(400).send('ERR_DATA_MISSING');
+      } else {
+        console.error(err);
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      }
+    });
+};
+
+// Delete a Booking with the specified id in the request
+const denyBooking = async (req, res) => {
+  const { bookingId } = req.params;
+
+  await Booking.findByPk(bookingId)
+    .then((data) => {
+      sendBookingDeniedEmail(data);
+      data
+        .destroy()
+        .then(() => {
+          res.sendStatus(200);
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
+};
+
 // Delete a Booking with the specified id in the request
 const deleteBooking = async (req, res) => {
   const { bookingId } = req.params;
@@ -232,8 +326,12 @@ module.exports = {
   findUserBookings,
   findCarParkBookings,
   findCarPark24HBookings,
+  findOverstayedBookings,
+  findNonArrivalBookings,
   updateBooking,
   checkInBooking,
+  approveBooking,
+  denyBooking,
   deleteBooking,
   deleteAllBookings,
 };
