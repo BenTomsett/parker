@@ -41,6 +41,8 @@ const LoginPage = () => {
         navigate('/');
       }else if(response.status === 401) {
         toast({ title: 'Incorrect username or password' });
+      }else if (response.status === 403) {
+        toast({ title: 'This user has been banned from accessing Parker' });
       }
       setLoading(false);
     });

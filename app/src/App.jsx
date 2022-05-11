@@ -8,9 +8,10 @@ const App = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [context, setContext] = useState({});
+
   useEffect(() => {
     fetch('/api/auth/verify').then((response) => {
-      if (response.status === 401) {
+      if (response.status === 401 || response.status === 403){
         navigate('/login');
       } else if (response.status === 402) {
         navigate('/register/billing');
@@ -21,7 +22,7 @@ const App = () => {
         })
       }
     }).catch(() => {});
-  }, [navigate]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (loading ? (
       <Center h="100vh">
