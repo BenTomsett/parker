@@ -34,6 +34,12 @@ router.put('/', authenticateUser, CarParkController.createCarPark);
 // Delete all carpark
 router.delete('/', authenticateUser, CarParkController.deleteAllCarParks);
 
+// Retrieve a single carpark via the ID
+router.get('/:carparkId', authenticateUser, CarParkController.findCarParkByID);
+
+// Retrieve a single carpark via the Name
+router.get('/find/:name', authenticateUser, CarParkController.findCarParkID);
+
 // Update a car park with the carpark ID
 router.put('/:carparkId', authenticateUser, CarParkController.updateCarPark);
 

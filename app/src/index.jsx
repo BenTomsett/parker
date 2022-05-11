@@ -13,6 +13,7 @@ import RegisterPage from './pages/register';
 import BillingSetupPage from './pages/register/billing';
 import SetupForm from './pages/register/billing/SetupForm';
 import SetupComplete from './pages/register/billing/SetupComplete';
+import NewBooking from './pages/bookings/newBooking'
 
 ReactDOM.render(
   <StrictMode>
@@ -23,6 +24,7 @@ ReactDOM.render(
           <Route element={<App />}>
             <Route index element={<HomePage />} />
             <Route path="/bookings" element={<BookingsPage />} />
+            <Route path="/bookings/newBooking" element={<NewBooking />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/admin" element={<AdminPage />} />
           </Route>

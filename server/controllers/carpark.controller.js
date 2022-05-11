@@ -96,6 +96,24 @@ const findCarParkByID = async (req, res) => {
         });
 };
 
+const findCarParkID = async (req, res) => {
+
+    const {name}= req.params;
+
+    CarPark.findAll({
+        where:{
+         name,
+        },
+    })
+      .then((data) => {
+          res.status(200).send(data);
+      })
+      .catch((err) => {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      });
+};
+
 const findNearestCarParks = async (req, res) => {
     const { lng, lat } = req.body;
   
@@ -157,6 +175,7 @@ module.exports = {
     updateCarPark,
     findAllCarParks,
     findCarParkByID,
+    findCarParkID,
     findNearestCarParks,
     deleteCarPark,
     deleteAllCarParks,

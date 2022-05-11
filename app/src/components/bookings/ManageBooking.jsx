@@ -3,7 +3,7 @@
 import React from 'react';
 import {
   Button,
-  FormLabel, Input,
+  FormLabel,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -18,30 +18,27 @@ const ManageBooking = ({booking}) =>{
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Button onClick={onOpen}>Manage</Button>
+      <Button onClick={onOpen}>View</Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Manage Booking with Booking ID: {booking.bookingId}</ModalHeader>
+          <ModalHeader>Details of Booking with Booking ID: {booking.bookingId}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <p>Below you can see the details for your booking: </p>
             <formControl>
-              <FormLabel>Car Park</FormLabel>
-              <Input id='carParkID' placeholder='INSERT CAR PARK ID' />
-              <FormLabel>Space</FormLabel>
-              <Input id='spaceId' placeholder={booking.spaceId} />
-              <FormLabel>Start Time</FormLabel>
-              <Input id='startTime' placeholder={booking.startDate.toLocaleString().slice(0,10).concat(' ').concat(booking.startDate.toLocaleString().slice(12,19))} />
-              <FormLabel>End Time</FormLabel>
-              <Input id='endTime' placeholder={booking.endDate.toLocaleString().slice(0,10).concat(' ').concat(booking.endDate.toLocaleString().slice(12,19))} />
+              <FormLabel>Car Park</FormLabel><input id='carParkID' readOnly placeholder='INSERT CAR PARK ID' />
+              <FormLabel>Parking Space</FormLabel><input id='spaceId' readOnly placeholder={booking.spaceId} />
+              <FormLabel>Time and Date of Arrival</FormLabel>
+              <input id='startTime' readOnly placeholder={booking.startDate.toLocaleString().slice(0,10).concat(' ').concat(booking.startDate.toLocaleString().slice(12,19))}/>
+              <FormLabel>Departure Time and Date</FormLabel>
+              <input id='endTime' readOnly placeholder={booking.endDate.toLocaleString().slice(0,10).concat(' ').concat(booking.endDate.toLocaleString().slice(12,19))} />
             </formControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Update
-            </Button>
+            <Button mr={3} onClick={onClose}>Close </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
