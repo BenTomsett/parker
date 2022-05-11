@@ -16,17 +16,20 @@ structures for our postgres database through sequelize.
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-
   class CarPark extends Model {
+    static associate(models) {
+      CarPark.hasMany(models.Zone, {
+        foreignKey: 'carParkId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
 
-      static associate(models) {
-          CarPark.hasMany(models.Zone, {
-              foreignKey: 'carParkId',
-              onDelete: 'CASCADE',
-              onUpdate: 'CASCADE'
-            })
-        }
-
+      CarPark.hasMany(models.ParkingSpace, {
+        foreignKey: 'carParkId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+    }
   }
 
   CarPark.init(
@@ -43,13 +46,13 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      numOfSpaces:{
-          allowNull: false,
-          type: DataTypes.INTEGER,
+      numOfSpaces: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
       },
       gpsPoint: {
-          allowNull: false,
-          type: DataTypes.GEOMETRY('Point')
+        allowNull: false,
+        type: DataTypes.GEOMETRY('Point'),
       },
     },
     {
@@ -61,4 +64,4 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   return CarPark;
-}
+};
