@@ -17,7 +17,7 @@ const { Op } = require('sequelize');
 const db = require('../models/index');
 const { checkParkedLocation } = require('../utils/checkLocation');
 
-const Booking = db.Booking;
+const { Booking, ParkingSpace } = db;
 
 // Create and Save a new Booking
 const createBooking = async (req, res) => {
@@ -50,7 +50,14 @@ const createBooking = async (req, res) => {
 
 // Retrieve all bookings from the database.
 const findAllBookings = async (req, res) => {
-  Booking.findAll()
+  const {isAdmin} = req.user;
+  Booking.findAll({
+    ...(!isAdmin) && {
+      where: {
+        userId: isAdmin ? '' : req.user.userId,
+      },
+    }
+  })
     .then((data) => {
       res.status(200).send(data);
     })

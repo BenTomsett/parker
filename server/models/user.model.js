@@ -13,7 +13,7 @@ structures for our postgres database through sequelize.
 
 */
 
-const { DataTypes, Model } = require('sequelize');
+const { Model } = require('sequelize');
 const { hashPassword } = require('../utils/auth');
 
 module.exports = (sequelize, DataTypes) => {
@@ -115,6 +115,11 @@ module.exports = (sequelize, DataTypes) => {
   User.beforeCreate(async (user, options) => {
       const hashedPassword = await hashPassword(user.password);
       user.password = hashedPassword;
+    });
+    User.beforeUpdate(async (user, options) => {
+        const hashedPassword = await hashPassword(user.password);
+        user.password = hashedPassword;
+        console.log(hashedPassword)
     });
   return User;
 }

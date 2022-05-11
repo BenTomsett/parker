@@ -2,13 +2,13 @@
     Author: Bradley Crisp - Group 12
     IDE Version: Visual Studio Code
     Current Version: Managed by GitHub
-    Date Created: 02/04/2022
+    Date Created: 11/05/2022
     Date Finished: 
     Last Modified: 
 
  -------DESCRIPTION-------
 
-This is the zone model and is the foundation of a zone 'object' this is where we define all data types and needed
+This is the building model and is the foundation of a building 'object' this is where we define all data types and needed
 structures for our postgres database through sequelize.
 
 */
@@ -16,25 +16,12 @@ structures for our postgres database through sequelize.
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-
-  class Zone extends Model {
-
-      static associate(models) {
-          Zone.belongsTo(models.CarPark, {
-              foreignKey: 'carParkId'
-          })
-          Zone.hasMany(models.ParkingSpace, {
-              foreignKey: 'zoneId',
-              onDelete: 'CASCADE',
-              onUpdate: 'CASCADE'
-            })
-        }
-
+  class Building extends Model {
   }
 
-  Zone.init(
+  Building.init(
     {
-      zoneId: {
+      buildingId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -46,17 +33,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      spaces: {
+      gpsPoint: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.GEOMETRY('Point'),
       },
     },
     {
       sequelize,
-      tableName: 'Zones',
-      modelName: 'Zone',
+      tableName: 'Buildings',
+      modelName: 'Building',
+      indexes: [{ unique: true, fields: ['name'] }],
       // timestamps: false
     }
   );
-  return Zone;
-}
+  return Building
+};

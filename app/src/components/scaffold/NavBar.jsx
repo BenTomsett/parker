@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import * as PropTypes from 'prop-types';
 import {
   Button,
@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import NavButton from './NavButton';
 import NavUser from './NavUser';
 import logo from '../../parker.svg';
+import UserContext from '../../context/user';
 
 /**
  * NavBar component, provides navigation between the main areas of the app
@@ -27,6 +28,8 @@ import logo from '../../parker.svg';
  */
 const NavBar = ({ navbarRef }) => {
   const navigate = useNavigate();
+
+  const user = useContext(UserContext);
 
   const bg = useColorModeValue('white', 'gray.800');
   const { isOpen, onClose, onToggle } = useDisclosure();
@@ -54,14 +57,14 @@ const NavBar = ({ navbarRef }) => {
         <HStack spacing={2} display={{ base: 'none', md: 'flex' }}>
           <NavButton label="Home" to="/" />
           <NavButton label="Bookings" to="/bookings" />
-          <NavButton label="Parking" to="/parking" />
           <NavButton label="Account" to="/account" />
+          {user.isAdmin && <NavButton label="Admin" to="/admin" />}
         </HStack>
       </Flex>
 
       <NavUser
-        name="Ben Tomsett"
-        email="ben@tomsett.xyz"
+        name={`${user.forename} ${user.surname}`}
+        email={user.email}
         reversed
         display={{ base: 'none', md: 'flex' }}
       />
@@ -85,7 +88,7 @@ const NavBar = ({ navbarRef }) => {
             <NavButton label="Account" to="/account" onClick={() => mobileNavButtonClick('/account')} fullWidth />
 
             <HStack w="full" justifyContent="space-between" pt={4}>
-              <NavUser name="Ben Tomsett" email="ben@tomsett.xyz" />
+              <NavUser name={`${user.forename} ${user.surname}`} email={user.email} />
               <Button variant="ghost" size="sm">
                 Log out
               </Button>

@@ -1,14 +1,14 @@
 /*  CMP5012B - Software Engineering - Coursework 2 -  Parker
-    Author: James Kerrison - Group 12
+    Author: Bradley Crisp - Group 12
     IDE Version: IntelliJ Idea
     Current Version: Managed by GitHub
-    Date Created: 25/04/2022
+    Date Created: 11/05/2022
     Date Finished:
-    Last Modified: 13:11 25/04/2022
+    Last Modified: 
 
  -------DESCRIPTION-------
 
-This is the controller which handles the processing of the data for the zones.
+This is the controller which handles the processing of the data for the builds.
 It does this through database interactions using Sequelize to implement all CRUD
 functionality.
 
@@ -16,26 +16,19 @@ functionality.
 
 const db = require('../models/index');
 
-const { Zone } = db;
+const { Building } = db;
 
-// Create and Save a new ParkingSpace
-const createZone = async (req, res) => {
-    const zone = req.body;
+// Create and Save a new building
+const createBuilding = async (req, res) => {
+    const { building } = req.body;
 
-    zone.create(zone, {
-        fields: [
-            'zoneId',
-            'carParkId',
-            'name',
-            'spaces',
-        ],
-    })
+    Building.create(building)
         .then((data) => {
             res.status(200).send(data);
         })
         .catch((err) => {
             if (err.name === 'SequelizeUniqueConstraintError') {
-                res.status(409).send('ERR_ZONE_EXISTS');
+                res.status(409).send('ERR_BUILDING_EXISTS');
             } else if (err.name === 'SequelizeValidationError') {
                 res.status(400).send('ERR_DATA_MISSING');
             } else {
@@ -46,16 +39,16 @@ const createZone = async (req, res) => {
 };
 
 // Update a parking by the id in the request
-const updateZone = async (req, res) => {
-    const { zoneId } = req.params;
+const updateBuilding = async (req, res) => {
+    const { buildingID } = req.params;
 
-    Zone.update(req.body, { where: { zoneId } })
+    Building.update(req.body, { where: { buildingID } })
         .then((data) => {
             res.status(200).send(data);
         })
         .catch((err) => {
             if (err.name === 'SequelizeUniqueConstraintError') {
-                res.status(409).send('ERR_ZONE_EXISTS');
+                res.status(409).send('ERR_Building_EXISTS');
             } else if (err.name === 'SequelizeValidationError') {
                 res.status(400).send('ERR_DATA_MISSING');
             } else {
@@ -65,8 +58,8 @@ const updateZone = async (req, res) => {
         });
 };
 
-const findAllZones = async (req, res) => {
-    Zone.findAll()
+const findAllBuildings = async (req, res) => {
+    Building.findAll()
         .then((data) => {
             res.status(200).send(data);
         })
@@ -76,10 +69,10 @@ const findAllZones = async (req, res) => {
         });
 };
 
-const findZoneById = async (req, res) => {
-    const { zoneId } = req.params;
+const findBuildingByID = async (req, res) => {
+    const { buildingId } = req.params;
 
-    Zone.findByPk(zoneId)
+    Building.findByPk(buildingId)
         .then((data) => {
             res.status(200).send(data);
         })
@@ -88,29 +81,12 @@ const findZoneById = async (req, res) => {
             res.status(500).send('ERR_INTERNAL_EXCEPTION');
         });
 };
-
-
-// Find parking spaces for a specific car park
-const findAllCarParkZones = async (req, res) => {
-    const { carParkId } = req.params;
-  
-    Zone.findAll({ where: { carParkId } })
-      .then((data) => {
-        res.status(200).send(data);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      });
-  };
-
-
 
 // Delete a parking space with the specified id in the request
-const deleteZone = async (req, res) => {
-    const { zoneId } = req.params;
+const deleteBuilding = async (req, res) => {
+    const { buildingID } = req.params;
 
-    Zone.destroy({ where: { zoneId } })
+    Building.destroy({ where: { buildingID } })
         .then((data) => {
             res.status(200).send(data);
         })
@@ -121,8 +97,8 @@ const deleteZone = async (req, res) => {
 };
 
 // Delete all parking spaces from the database.
-const deleteAllZones = async (req, res) => {
-    Zone.destroy({
+const deleteAllBuildings = async (req, res) => {
+    Building.destroy({
         where: {},
         truncate: false,
     })
@@ -136,11 +112,10 @@ const deleteAllZones = async (req, res) => {
 };
 
 module.exports = {
-    createZone,
-    updateZone,
-    findAllZones,
-    findZoneById,
-    findAllCarParkZones,
-    deleteZone,
-    deleteAllZones,
+    createBuilding,
+    updateBuilding,
+    findAllBuildings,
+    findBuildingByID,
+    deleteBuilding,
+    deleteAllBuildings,
 };

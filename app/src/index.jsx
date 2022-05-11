@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App';
 import HomePage from './pages/home';
 import BookingsPage from './pages/bookings';
-import ParkingPage from './pages/parking';
+import AdminPage from './pages/admin';
 import AccountPage from './pages/account';
 import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
@@ -24,9 +24,13 @@ ReactDOM.render(
           <Route element={<App />}>
             <Route index element={<HomePage />} />
             <Route path="/bookings" element={<BookingsPage />} />
+<<<<<<< HEAD
             <Route path="/bookings/newBooking" element={<NewBooking />} />
             <Route path="/parking" element={<ParkingPage />} />
+=======
+>>>>>>> main
             <Route path="/account" element={<AccountPage />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

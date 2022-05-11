@@ -16,9 +16,7 @@ functionality.
 
 const db = require('../models/index');
 
-const CarPark = db.CarPark;
-const Zone = db.Zone;
-const ParkingSpace = db.ParkingSpace;
+const { CarPark, Zone, ParkingSpace } = db;
 
 // Create and Save a new ParkingSpace
 const createCarPark = async (req, res) => {
@@ -98,6 +96,7 @@ const findCarParkByID = async (req, res) => {
         });
 };
 
+<<<<<<< HEAD
 const findCarParkID = async (req, res) => {
 
     const {name}= req.params;
@@ -117,6 +116,35 @@ const findCarParkID = async (req, res) => {
 };
 
 
+=======
+const findNearestCarParks = async (req, res) => {
+    const { lng, lat } = req.body;
+  
+    const location = db.sequelize.literal(`ST_GeomFromText('POINT(${lng} ${lat})')`);
+  
+    // Haversine Formula (More accurate?)
+    // var distance = sequelize.literal("6371 * acos(cos(radians("+lat+")) * cos(radians(ST_X(location))) * cos(radians("+lng+") - radians(ST_Y(location))) + sin(radians("+lat+")) * sin(radians(ST_X(location))))");
+  
+    CarPark.findAll({
+      attributes: {
+        include: [
+          [
+            db.sequelize.fn(
+              'ST_DistanceSphere',
+              db.sequelize.literal('"gpsPoint"'),
+              location
+            ),
+            'distance',
+          ],
+        ],
+      },
+      order: [[db.sequelize.fn('ST_DistanceSphere', db.sequelize.literal('"gpsPoint"'),location), 'ASC']]
+    }).then((data) => {
+      res.status(200).send(data);
+    });
+};
+
+>>>>>>> main
 // Delete a parking space with the specified id in the request
 const deleteCarPark = async (req, res) => {
     const { carParkID } = req.params;
@@ -151,7 +179,11 @@ module.exports = {
     updateCarPark,
     findAllCarParks,
     findCarParkByID,
+<<<<<<< HEAD
     findCarParkID,
+=======
+    findNearestCarParks,
+>>>>>>> main
     deleteCarPark,
     deleteAllCarParks,
 };
