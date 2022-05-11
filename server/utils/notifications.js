@@ -157,60 +157,6 @@ function checkCurrentSpace(bookedSpace,currentSpace){
     return currentSpace !== bookedSpace
 }
 
-// Find bookings past their duration
-const findOverstayedBookings = async (req, res) => {
-    const { carParkId } = req.params;
-    let curDate = new Date(Date.now())
-    Booking.findAll({
-        where: {
-            carParkId,
-            endDate: {
-                [Op.lt]: new Date(Date.now()),
-            },
-            checkedIn:{
-                [Op.eq]: true,
-            },
-            checkedOut:{
-                [Op.eq]: false,
-            },
-        }
-            .then((data) => {
-                res.status(200).send(data);
-            })
-            .catch((err) => {
-                console.error(err);
-                res.status(500).send('ERR_INTERNAL_EXCEPTION');
-            }),
-    });
-};
-
-// Find bookings past their arrival dates
-const findNonArrivalBookings = async (req, res) => {
-    const { carParkId } = req.params;
-    let curDate = new Date(Date.now())
-    Booking.findAll({
-        where: {
-            carParkId,
-            startDate: {
-                [Op.lt]: new Date(Date.now()),
-            },
-            checkedIn:{
-                [Op.eq]: false,
-            },
-            checkedOut:{
-                [Op.eq]: false,
-            },
-        }
-            .then((data) => {
-                res.status(200).send(data);
-            })
-            .catch((err) => {
-                console.error(err);
-                res.status(500).send('ERR_INTERNAL_EXCEPTION');
-            }),
-    });
-};
-
 module.exports = {
 sendBookingConfirmationEmail,
 sendOverstaySMS,
