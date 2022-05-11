@@ -1,42 +1,42 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  Box,
-  Stack,
-} from '@chakra-ui/react';
-import mapbox from 'mapbox-gl';
+import React from 'react';
+import Map, { Marker } from 'react-map-gl';
+
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const MapCard = () => {
-  const mapContainer = useRef(null);
-  const map = useRef(null);
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35)
-  const [zoom, setZoom] = useState(9);
-
-  useEffect(() => {
-    mapbox.accessToken = "pk.eyJ1IjoiYmVudG9tc2V0dCIsImEiOiJjazFxbDBpZTgwMmJkM21sZWZhY3VuZ2lkIn0.HxUAYfiWTsU-Abl0bm3aBg";
-
-    if(!map.current){
-      map.current = new mapbox.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [lng, lat],
-        zoom
-      })
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  /*
+  main (1.242931 52.623311)
+  newsci (1.232728 52.622202)
+  constable (1.235463 52.621316)
+   */
+  const main = {
+    longitude: 1.242931,
+    latitude: 52.623311,
+  };
+  const newSci = {
+    longitude: 1.232728,
+    latitude: 52.622202,
+  };
+  const constable = {
+    longitude: 1.235463,
+    latitude: 52.621316,
+  }
 
   return (
-    <Box
-      py={4}
-      px={4}
-      bg="bg-surface"
-      borderRadius="xl"
-      borderWidth={1}
+    <Map
+      mapboxAccessToken="pk.eyJ1IjoiYmVudG9tc2V0dCIsImEiOiJjazFxbDBpZTgwMmJkM21sZWZhY3VuZ2lkIn0.HxUAYfiWTsU-Abl0bm3aBg"
+      initialViewState={{
+        longitude: 1.2431,
+        latitude: 52.6235,
+        zoom: 14
+      }}
+      style={{width: 600, height: 400}}
+      mapStyle="mapbox://styles/mapbox/streets-v11"
     >
-      <Stack spacing='4'>
-        <div ref={mapContainer} className="map-container" />
-      </Stack>
-    </Box>
+      <Marker longitude={main.longitude} latitude={main.latitude}/>
+      <Marker longitude={newSci.longitude} latitude={newSci.latitude}/>
+      <Marker longitude={constable.longitude} latitude={constable.latitude}/>
+    </Map>
   );
 }
 
