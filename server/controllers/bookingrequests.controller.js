@@ -20,11 +20,8 @@ const { BookingRequest } = db;
 
 // Create and Save a new BookingReRequest
 const createBookingRequest = async (req, res) => {
-  const bookingReRequest = req.body;
-
-  BookingRequest.create(bookingReRequest, {
-
-  })
+  console.log(req.body);
+  BookingRequest.create(req.body)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -32,6 +29,7 @@ const createBookingRequest = async (req, res) => {
       if (err.name === 'SequelizeUniqueConstraintError') {
         res.status(409).send('ERR_BookingReRequest_EXISTS');
       } else if (err.name === 'SequelizeValidationError') {
+        console.log(err.message);
         res.status(400).send('ERR_DATA_MISSING');
       } else {
         console.error(err);
