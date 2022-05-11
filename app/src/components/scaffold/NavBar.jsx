@@ -56,6 +56,7 @@ const NavBar = ({ navbarRef }) => {
           <NavButton label="Bookings" to="/bookings" />
           <NavButton label="Parking" to="/parking" />
           <NavButton label="Account" to="/account" />
+          <NavButton label="Users" to="/users" />
         </HStack>
       </Flex>
 
@@ -83,6 +84,7 @@ const NavBar = ({ navbarRef }) => {
             <NavButton label="Bookings" to="/bookings" onClick={() => mobileNavButtonClick('/bookings')} fullWidth />
             <NavButton label="Parking" to="/parking" onClick={() => mobileNavButtonClick('/parking')} fullWidth />
             <NavButton label="Account" to="/account" onClick={() => mobileNavButtonClick('/account')} fullWidth />
+            <NavButton label="Users" to="/users" onClick={() => mobileNavButtonClick('/account')} fullWidth />
 
             <HStack w="full" justifyContent="space-between" pt={4}>
               <NavUser name="Ben Tomsett" email="ben@tomsett.xyz" />
