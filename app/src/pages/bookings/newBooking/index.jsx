@@ -60,8 +60,11 @@ const NewBooking = () => {
     });
 }
   const processData = () => {
-    formData.startDateTime = formData.startDate.concat(" ",formData.startTime,":00",".00+00")
-    formData.endtDateTime = formData.endDate.concat(" ",formData.endTime,":00",".00+00")
+    // const startStr = (formData.startTime).toString()
+    // const endStr = (formData.endTime).toString()
+
+    // formData.startDateTime = formData.startDate.concat(" ",startStr,":00.00+00")
+    // formData.endtDateTime = formData.endDate.concat(" ",endStr,":00.00+00")
   }
 
   useEffect(()=> {
