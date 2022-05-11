@@ -7,7 +7,7 @@ import {
   Divider,
   FormControl, FormLabel,
   Heading,
-  HStack, Input, Select, Spinner,
+  HStack, Input, Select,
   Stack,
   useBreakpointValue, useToast
 } from '@chakra-ui/react';
@@ -60,22 +60,32 @@ const NewBooking = () => {
     });
 }
   const processData = () => {
-    // const startStr = (formData.startTime).toString()
-    // const endStr = (formData.endTime).toString()
+     const startStr = (formData.startTime).toString()
+     const endStr = (formData.endTime).toString()
+     formData.startDateTime = formData.startDate.concat(" ",startStr,":00.00+00")
+     formData.endtDateTime = formData.endDate.concat(" ",endStr,":00.00+00")
 
-    // formData.startDateTime = formData.startDate.concat(" ",startStr,":00.00+00")
-    // formData.endtDateTime = formData.endDate.concat(" ",endStr,":00.00+00")
+    console.log(formData.startTime)
+    console.log(formData.endTime)
+    console.log(formData.carParkName)
+    console.log(formData.startDate)
+    console.log(formData.endDate)
+
+    console.log(formData.startDateTime)
+    console.log(formData.endDateTime)
+
   }
 
-  useEffect(()=> {
+
+    useEffect(()=> {
     fetchCarParks();
   },[] )
 
   return (
     <div>
-      <Heading size="xl">Create a new Booking</Heading>,
+      <Heading size="xl">Request a new Booking</Heading>
       <br/>
-      <Heading size="md">Fill out the below to create a new booking </Heading>
+      <Heading size="md">Fill out the below to request a new booking </Heading>
       <br/>
 
 
@@ -85,7 +95,7 @@ const NewBooking = () => {
           <Stack spacing='6'>
             <Stack spacing={{base: '2', md: '3'}} textAlign='center'>
               <Heading size='md'>
-                Create New Booking
+                Request New Booking
               </Heading>
             </Stack>
           </Stack>
@@ -123,7 +133,8 @@ const NewBooking = () => {
                          autoComplete='startDate'
                          value={formData.startDate || ''}
                          onChange={(event) => updateFormData('startDate',
-                           event.target.value)}/>
+                           event.target.value)}
+                    />
                   </FormControl>
                   <FormControl>
                     <FormLabel htmlFor='startTime'>Start Time</FormLabel>
@@ -198,27 +209,13 @@ const NewBooking = () => {
                   </FormControl>
                 </HStack>
 
+                { /* console.log(formData.startDateTime) */ }
+                { /*  console.log(formData.endDateTime) */ }
 
-                {console.log(formData.startTime)}
-                {console.log(formData.endTime)}
-                {console.log(formData.carParkName)}
-                {console.log(formData.startDate)}
-                {console.log(formData.endDate)}
-                {console.log(formData.startDateTime)}
-                {console.log(formData.endDateTime)}
-
-                {processData()}
-
-
-                <Button disabled={loading} variant='solid' colorScheme='blue' type='submit'>
-                  {
-                    loading ? (
-                      <Spinner/>
-                    ) : (
-                      'Create Booking'
-                    )
-                  }
+                <Button variant='solid' colorScheme='blue' onClick={processData}>
+                      Create Booking
                 </Button>
+
               </Stack>
             </form>
           </Box>
