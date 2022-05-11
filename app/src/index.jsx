@@ -24,11 +24,7 @@ ReactDOM.render(
           <Route element={<App />}>
             <Route index element={<HomePage />} />
             <Route path="/bookings" element={<BookingsPage />} />
-<<<<<<< HEAD
             <Route path="/bookings/newBooking" element={<NewBooking />} />
-            <Route path="/parking" element={<ParkingPage />} />
-=======
->>>>>>> main
             <Route path="/account" element={<AccountPage />} />
             <Route path="/admin" element={<AdminPage />} />
           </Route>

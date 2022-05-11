@@ -96,7 +96,6 @@ const findCarParkByID = async (req, res) => {
         });
 };
 
-<<<<<<< HEAD
 const findCarParkID = async (req, res) => {
 
     const {name}= req.params;
@@ -115,8 +114,6 @@ const findCarParkID = async (req, res) => {
       });
 };
 
-
-=======
 const findNearestCarParks = async (req, res) => {
     const { lng, lat } = req.body;
   
@@ -144,7 +141,6 @@ const findNearestCarParks = async (req, res) => {
     });
 };
 
->>>>>>> main
 // Delete a parking space with the specified id in the request
 const deleteCarPark = async (req, res) => {
     const { carParkID } = req.params;
@@ -179,11 +175,8 @@ module.exports = {
     updateCarPark,
     findAllCarParks,
     findCarParkByID,
-<<<<<<< HEAD
     findCarParkID,
-=======
     findNearestCarParks,
->>>>>>> main
     deleteCarPark,
     deleteAllCarParks,
 };

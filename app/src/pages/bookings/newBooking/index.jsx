@@ -13,8 +13,8 @@ import {
 } from '@chakra-ui/react';
 import {useNavigate} from 'react-router-dom';
 
-// import Building from "../../../components/bookings/Building";
-import CarPark from "../../../components/bookings/CarPark";
+import Building from "../../../components/bookings/Building";
+//  import CarPark from "../../../components/bookings/CarPark";
 
 const NewBooking = () => {
 
@@ -37,11 +37,11 @@ const NewBooking = () => {
   };
 
   const fetchBuildings = () => {
-    fetch('/api/carparks/', {
+    fetch('/api/buildings/', {
       method: 'GET',
     }).then((response) => {
       response.json().then((json) => {
-        // console.log(json);
+        console.log(json);
         setBuildings(json);
       })
     });
@@ -56,8 +56,6 @@ const NewBooking = () => {
 
     if(startDatetime > endDatetime){
       toast({title: "The start date must be before the end date"});
-    }else{
-
     }
 
 
@@ -118,7 +116,7 @@ const NewBooking = () => {
                                 onChange={(event) => updateFormData('carParkName', event.target.value)}>
                           {
                             buildings.map((building) => (
-                              <CarPark key={building.carParkId} carpark={building}/>
+                              <Building key={building.buildingId} building={building}/>
                             ))
                           }
                         </Select>
