@@ -57,8 +57,8 @@ const NavBar = ({ navbarRef }) => {
         <HStack spacing={2} display={{ base: 'none', md: 'flex' }}>
           <NavButton label="Home" to="/" />
           <NavButton label="Bookings" to="/bookings" />
-          <NavButton label="Parking" to="/parking" />
           <NavButton label="Account" to="/account" />
+          {user.isAdmin && <NavButton label="Admin" to="/admin" />}
         </HStack>
       </Flex>
 
