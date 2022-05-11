@@ -1,9 +1,10 @@
 /* eslint react/prop-types: 0 */
 /* eslint no-else-return: 0 */
 import React from 'react';
-import {Td, Tr} from '@chakra-ui/react';
+import {HStack, Td, Tr} from '@chakra-ui/react';
 import DeleteUser from "./DeleteUser";
 import BanUser from "./BanUser";
+import EditUser from "./EditUser";
 
 const User = ({user, update}) => (
 
@@ -18,8 +19,12 @@ const User = ({user, update}) => (
 
 
       <Td>
-        <DeleteUser user={user} update={update}/>
-        <BanUser user={user} update={update}/>
+          <HStack>
+            <EditUser user={user} update={update}/>
+            <DeleteUser user={user} update={update}/>
+            <BanUser user={user} update={update}/>
+
+          </HStack>
       </Td>
     </Tr>
   );

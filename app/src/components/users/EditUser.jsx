@@ -14,27 +14,39 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-const ManageBooking = ({booking}) =>{
+const EditUser = ({user}) =>{
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Button onClick={onOpen}>Manage</Button>
+      <Button onClick={onOpen}>Edit</Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Manage Booking with Booking ID: {booking.bookingId}</ModalHeader>
+          <ModalHeader>Edit User: {`${user.forename} ${user.surname}`}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <formControl>
-              <FormLabel>Car Park</FormLabel>
-              <Input id='carParkID' placeholder='INSERT CAR PARK ID' />
-              <FormLabel>Space</FormLabel>
-              <Input id='spaceId' placeholder={booking.spaceId} />
-              <FormLabel>Start Time</FormLabel>
-              <Input id='startTime' placeholder={booking.startDate.toLocaleString().slice(0,10).concat(' ').concat(booking.startDate.toLocaleString().slice(12,19))} />
-              <FormLabel>End Time</FormLabel>
-              <Input id='endTime' placeholder={booking.endDate.toLocaleString().slice(0,10).concat(' ').concat(booking.endDate.toLocaleString().slice(12,19))} />
+              <FormLabel>Forename</FormLabel>
+              <Input id='forename' placeholder={user.forename} />
+              <FormLabel>Surname</FormLabel>
+              <Input id='surname' placeholder={user.surname} />
+              <FormLabel>Date of Birth</FormLabel>
+              <Input id='dob' placeholder={user.dob} type="date" />
+              <FormLabel>Email</FormLabel>
+              <Input id='email' placeholder={user.email} />
+              <FormLabel>New Password</FormLabel>
+              <Input id='password' type="password" />
+              <FormLabel>Address Line 1</FormLabel>
+              <Input id='addressLine1' placeholder={user.addressLine1}/>
+              <FormLabel>Address Line 2</FormLabel>
+              <Input id='addressLine2' placeholder={user.addressLine2}/>
+              <FormLabel>City</FormLabel>
+              <Input id='city' placeholder={user.city}/>
+              <FormLabel>Postcode</FormLabel>
+              <Input id='postcode' placeholder={user.postcode}/>
+              <FormLabel>Country</FormLabel>
+              <Input id='country' placeholder={user.country}/>
             </formControl>
           </ModalBody>
 
@@ -49,4 +61,4 @@ const ManageBooking = ({booking}) =>{
   )
 }
 
-export default ManageBooking;
+export default EditUser;
