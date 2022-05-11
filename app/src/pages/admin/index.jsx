@@ -2,10 +2,10 @@ import React from 'react';
 import { Heading } from '@chakra-ui/react';
 import useTitle from '../../hooks/useTitle';
 
-const ParkingPage = () => {
+const AdminPage = () => {
   useTitle("Parking");
 
   return <Heading size="xl">Parking</Heading>;
 };
 
-export default ParkingPage;
+export default AdminPage;

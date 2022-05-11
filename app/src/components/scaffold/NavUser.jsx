@@ -12,27 +12,27 @@ import * as PropTypes from 'prop-types';
  * @returns {JSX.Element}
  */
 const NavUser = ({ name, email, imageUrl, reversed, ...props }) => (
-  <Flex
-    gap="2"
-    alignItems="center"
-    flexDirection={reversed ? 'row-reverse' : 'row'}
-    {...props}
-  >
-    <Avatar w={12} h={12} src={imageUrl} />
-    <VStack
-      marginInlineStart={0}
-      align={reversed ? 'end' : 'start'}
-      spacing={0}
+    <Flex
+      gap="2"
+      alignItems="center"
+      flexDirection={reversed ? 'row-reverse' : 'row'}
+      {...props}
     >
-      <Text fontSize="sm" fontWeight={500}>
-        {name}
-      </Text>
-      <Text fontSize="sm" color="gray.400">
-        {email}
-      </Text>
-    </VStack>
-  </Flex>
-);
+      <Avatar w={12} h={12} src={imageUrl} />
+      <VStack
+        marginInlineStart={0}
+        align={reversed ? 'end' : 'start'}
+        spacing={0}
+      >
+        <Text fontSize="sm" fontWeight={500}>
+          {name}
+        </Text>
+        <Text fontSize="sm" color="gray.400">
+          {email}
+        </Text>
+      </VStack>
+    </Flex>
+  );
 
 NavUser.defaultProps = {
   name: undefined,
