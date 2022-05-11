@@ -14,6 +14,7 @@ const usersRouter = require('./routes/users.routes');
 const spacesRouter = require('./routes/spaces.routes');
 const zonesRouter = require('./routes/zones.routes');
 const carparkRouter = require('./routes/carparks.routes');
+const buildingRouter = require('./routes/buildings.routes');
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/spaces', spacesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/zones', zonesRouter);
 app.use('/api/carparks', carparkRouter);
+app.use('/api/buildings', buildingRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
