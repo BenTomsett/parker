@@ -40,20 +40,7 @@ const createUser = async (req, res) => {
   } else if (getAge(dobParsed) <= 16) {
     res.status(400).send('ERR_TOO_YOUNG');
   } else {
-    User.create(user, {
-      fields: [
-        'forename',
-        'surname',
-        'dob',
-        'email',
-        'password',
-        'addressLine1',
-        'addressLine2',
-        'city',
-        'postcode',
-        'country',
-      ],
-    })
+    User.create(user)
       .then(async (obj) => {
         await obj.reload();
         const customer = await Stripe.customers.create({
@@ -65,7 +52,6 @@ const createUser = async (req, res) => {
           obj.set({
             stripeCustomerId: customer.id
           })
-          await obj.save();
           const token = generateToken(obj);
           res.cookie('token', token, { httpOnly: true });
           return res.status(201).json(obj);
