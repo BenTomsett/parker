@@ -162,8 +162,8 @@ const deleteUser = async (req, res) => {
       userId,
     },
   })
-    .then((data) => {
-      res.status(200).send(data);
+    .then(() => {
+      res.sendStatus(200);
     })
     .catch((err) => {
       console.error(err);
@@ -177,8 +177,8 @@ const deleteAllUsers = async (req, res) => {
     where: {},
     truncate: false,
   })
-    .then((data) => {
-      res.status(200).send(data);
+    .then(() => {
+      res.sendStatus(200);
     })
     .catch((err) => {
       console.error(err);
@@ -189,7 +189,7 @@ const deleteAllUsers = async (req, res) => {
 const banUser = async (req, res) => {
   const { userId } = req.params;
   User.update({isBanned:true},{ where:{userId} })
-    .then((data) => {
+    .then(() => {
       res.status(200);
     })
     .catch((err) => {
@@ -206,7 +206,7 @@ const banUser = async (req, res) => {
 const unBanUser = async (req, res) => {
   const { userId } = req.params;
   User.update({isBanned:false},{ where:{userId} })
-      .then((data) => {
+      .then(() => {
         res.status(200);
       })
       .catch((err) => {
