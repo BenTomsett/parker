@@ -14,10 +14,15 @@ This is the parking charge util which handles all functions relating to calculat
 
 function calculateParkingCharge(Booking){
     const flatRate = 3.50
-    let duration = Math.abs(Booking.endDate - Booking.startDate) / 36e5 //Calculates duration in hours
+    const duration = Math.abs(Booking.endDate - Booking.startDate) / 36e5 // Calculates duration in hours
     return (duration * flatRate).toFixed(2)
 }
 
 function hasUserPaid(Booking){
     return Booking.hasPaid === true;
+}
+
+module.exports = {
+    calculateParkingCharge,
+    hasUserPaid,
 }
