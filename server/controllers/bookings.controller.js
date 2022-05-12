@@ -18,7 +18,6 @@ const db = require('../models/index');
 const { checkParkedLocation } = require('../utils/checkLocation');
 
 const {
-  sendBookingConfirmationEmail,
   sendBookingApprovedEmail,
   sendBookingDeniedEmail,
   sendOverstayEmail,
@@ -42,7 +41,7 @@ const createBooking = async (req, res) => {
     ],
   })
     .then((data) => {
-      sendBookingConfirmationEmail(data);
+      sendBookingApprovedEmail(data);
       res.status(200).send(data);
     })
     .catch((err) => {
