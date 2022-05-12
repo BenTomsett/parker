@@ -26,7 +26,7 @@ const {
 const { Stripe } = require('../config/stripe');
 const { calculateParkingCharge } = require('../utils/parkingCharges');
 
-const { Booking, ParkingSpace } = db;
+const { Booking, ParkingSpace, CarPark } = db;
 
 // Create and Save a new Booking
 const createBooking = async (req, res) => {
@@ -85,6 +85,10 @@ const findAllBookings = async (req, res) => {
         userId: isAdmin ? '' : req.user.userId,
       },
     }),
+    include: [
+      {model: ParkingSpace, include: [CarPark] }
+    ]
+
   }).then((data) => {
     res.status(200).send(data);
   }).catch((err) => {

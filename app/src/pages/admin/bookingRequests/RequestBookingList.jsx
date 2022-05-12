@@ -12,7 +12,7 @@ const RequestBookingList = () => {
       method: 'GET',
     }).then((response) => {
       response.json().then((json) => {
-        console.log(json);
+        // console.log(json);
         setRequestedBookings(json);
       })
     });
