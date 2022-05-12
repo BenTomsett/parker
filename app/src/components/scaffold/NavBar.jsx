@@ -51,9 +51,13 @@ const NavBar = ({ navbarRef }) => {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
+      zIndex={999}
     >
       <Flex alignItems="center">
+        <a href="/">
         <Image src={logo} alt="Parker logo" h={35} mr={6} />
+        </a>
+
         <HStack spacing={2} display={{ base: 'none', md: 'flex' }}>
           <NavButton label="Home" to="/" />
           <NavButton label="Bookings" to="/bookings" />

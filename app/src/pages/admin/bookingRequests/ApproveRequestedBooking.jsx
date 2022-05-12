@@ -13,14 +13,13 @@ import {
   ModalOverlay, Select, Spinner, Stack, Text, useBreakpointValue, useDisclosure,
   useToast, VStack,
 } from '@chakra-ui/react';
+import UserContext from '../../../context/user';
 
-import UserContext from "../../context/user";
-import user from "./User";
 
 const ApproveRequestedBooking = ({requestedBooking,update}) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const currentUser = useContext(UserContext);
+  const user = useContext(UserContext);
   const toast = useToast({status: 'error', isClosable: false});
 
   const [formData, setFormData] = useState({});
