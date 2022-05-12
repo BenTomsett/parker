@@ -12,19 +12,11 @@
 const cron = require('node-cron');
 const BookingController = require('../controllers/bookings.controller');
 
-const { sendOverstayEmail, sendNonArrivalEmail } = require('./notifications');
+
 
 const task = cron.schedule('*/15 * * * *', () => {
-  const overstayBookings = BookingController.findOverstayedBookings();
-  const nonArrivalBookings = BookingController.findNonArrivalBookings();
-
-  overstayBookings.forEach((booking) => {
-    sendOverstayEmail(booking);
-  });
-
-  nonArrivalBookings.forEach((booking) => {
-    sendNonArrivalEmail(booking);
-  });
+  BookingController.findOverstayedBookings();
+  BookingController.findNonArrivalBookings();
 });
 
 task.start();

@@ -17,6 +17,8 @@ const carparkRouter = require('./routes/carparks.routes');
 const buildingRouter = require('./routes/buildings.routes');
 const bookingRequestRouter = require('./routes/bookingrequests.routes');
 
+const cron = require('./utils/crons')
+
 const app = express();
 
 app.use(logger('dev'));

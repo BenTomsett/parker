@@ -31,17 +31,20 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: "parkerUEA@gmail.com",
+        user: "parkeruea@gmail.com",
         pass: "Parker123//",
     },
 });
 
 const sendBookingConfirmationEmail = async (Booking) => {
+
+    const user = await Booking.getUser();
+
     let mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: Booking.getUser().email, //users email address
+        to: user.email, //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
-        text: 'Hi ' + Booking.getUser().forename + ",\n\n" +
+        text: 'Hi ' + user.forename + ",\n\n" +
             'Thank you for using Parker your booking request has been received \n'
     };
     await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
@@ -53,10 +56,10 @@ const sendBookingConfirmationEmail = async (Booking) => {
     });
     mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: 'parkeradminuea@gmail.com', //users email address
+        to: 'parkeruea@gmail.com', //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
         text: 'Hi, \n\n' +
-            Booking.getUser().forename + ' ' + Booking.getUser().surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
+            user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
     };
     await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
         if (err) {
@@ -69,11 +72,14 @@ const sendBookingConfirmationEmail = async (Booking) => {
 
 
 const sendBookingApprovedEmail = async (Booking) => {
+    
+    const user = await Booking.getUser();
+
     let mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: Booking.getUser().email, //users email address
+        to: user.email, //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
-        text: 'Hi ' + Booking.getUser().forename + ",\n\n" +
+        text: 'Hi ' + user.forename + ",\n\n" +
             + 'Your booking ' + Booking.bookingId + ' has been approved.\n'
     };
     await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
@@ -88,7 +94,7 @@ const sendBookingApprovedEmail = async (Booking) => {
         to: 'parkeradminuea@gmail.com', //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
         text: 'Hi, \n\n' +
-            Booking.getUser().forename + ' ' + Booking.getUser().surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
+            user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
     };
     await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
         if (err) {
@@ -100,11 +106,14 @@ const sendBookingApprovedEmail = async (Booking) => {
 }
 
 const sendBookingDeniedEmail = async (Booking) => {
+
+    const user = await Booking.getUser();
+
     let mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: Booking.getUser().email, //users email address
+        to: user.email, //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
-        text: 'Hi ' + Booking.getUser().forename + ",\n\n" +
+        text: 'Hi ' + user.forename + ",\n\n" +
             + 'Your booking ' + Booking.bookingId + ' has been denied, You will be refunded shortly.\n'
     };
     await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
@@ -119,7 +128,7 @@ const sendBookingDeniedEmail = async (Booking) => {
         to: 'parkeradminuea@gmail.com', //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
         text: 'Hi, \n\n' +
-            Booking.getUser().forename + ' ' + Booking.getUser().surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
+            user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
     };
     await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
         if (err) {
@@ -131,11 +140,14 @@ const sendBookingDeniedEmail = async (Booking) => {
 }
 
 const sendNonArrivalEmail = async (Booking) => {
+
+    const user = await Booking.getUser();
+
     let mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: Booking.getUser().email, //users email address
+        to: user.email, //users email address
         subject: 'Parker - Missed booking for booking: ' + Booking.bookingId,
-        text: 'Hi ' + Booking.getUser().forename + ",\n\n" +
+        text: 'Hi ' + user.forename + ",\n\n" +
             'you have not shown up for your reservation at space: ' + Booking.spaceId + ' \n' +
             ' Unfortunately you will still be charged!'
     };
@@ -151,7 +163,7 @@ const sendNonArrivalEmail = async (Booking) => {
         to: 'parkeradminuea@gmail.com', //users email address
         subject: 'Parker - Missed booking for booking: ' + Booking.bookingId,
         text: 'Hi, \n\n' +
-            Booking.getUser().forename + ' ' + Booking.getUser().surname + ' has not shown up for their reservation at space: ' + Booking.spaceId
+            user.forename + ' ' + user.surname + ' has not shown up for their reservation at space: ' + Booking.spaceId
     };
     await transporter.sendNonArrivalEmail(mailOptionsConfirmation, function (err, info) {
         if (err) {
@@ -162,25 +174,31 @@ const sendNonArrivalEmail = async (Booking) => {
     });
 }
 const sendNonArrivalSMS = async (Booking) => {
+
+    const user = await Booking.getUser();
+
     SMSclient.messages
         .create({
-            body: 'Hello ' + Booking.getUser().forename +
+            body: 'Hello ' + user.forename +
                 'Your booking ' + Booking.bookingId + 'for ' + Booking.startDate + ' at parking space' + Booking.spaceId + ' is due to expire!',
-            to: Booking.getUser().telNum, // Text this number
+            to: user.telNum, // Text this number
             from: '+447923829420', // From a valid Twilio number
         })
         .then((message) => console.log(message.sid));
 }
 const sendOverstayEmail = async (Booking) => {
+
+    const user = await Booking.getUser();
+
     let mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: Booking.getUser().email, //users email address
+        to: user.email, //users email address
         subject: 'Parker - Overstay Warning - ' + Booking.bookingId,
-        text: 'Hi ' + Booking.getUser().forename + ",\n\n" +
+        text: 'Hi ' + user.forename + ",\n\n" +
             'your vehicle has now past its allocated time slot for booking:  \n' +
             Booking.bookingId + ' Please move your vehicle ASAP or you will be charged'
     };
-    await transporter.sendOverstayEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -189,12 +207,12 @@ const sendOverstayEmail = async (Booking) => {
     });
     mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: 'parkeradminuea@gmail.com', //users email address
+        to: 'parkeruea@gmail.com', //users email address
         subject: 'Parker - Overstay Warning - ' + Booking.bookingId,
         text: 'Hi, \n\n' +
-            Booking.getUser().forename + ' ' + Booking.getUser().surname + ' has now past their allocated time slot for booking: ' + Booking.bookingId
+            user.forename + ' ' + user.surname + ' has now past their allocated time slot for booking: ' + Booking.bookingId
     };
-    await transporter.sendNonArrivalEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -203,23 +221,17 @@ const sendOverstayEmail = async (Booking) => {
     });
 }
 const sendOverstaySMS = async (Booking) => {
+
+    const user = await Booking.getUser();
+
     SMSclient.messages
         .create({
             body: 'Hello ' + Booking.forename +
                 'Your booking ' + Booking.bookingId + 'for ' + Booking.startDate + ' at parking space' + Booking.spaceId + ' is due to expire!',
-            to: Booking.getUser().telNum, // Text this number
+            to: user.telNum, // Text this number
             from: '+447923829420', // From a valid Twilio number
         })
         .then((message) => console.log(message.sid));
-}
-
-function checkOverstay(Booking) {
-    let curDate = new Date(Date.now());
-    return curDate.getTime() > Booking.endDate;
-}
-
-function checkCurrentSpace(bookedSpace, currentSpace) {
-    return currentSpace !== bookedSpace
 }
 
 module.exports = {
@@ -227,11 +239,7 @@ module.exports = {
     sendOverstaySMS,
     sendOverstayEmail,
     sendNonArrivalSMS,
-    checkOverstay,
     sendNonArrivalEmail,
-    checkCurrentSpace,
-    findOverstayedBookings,
-    findNonArrivalBookings,
     sendBookingApprovedEmail,
     sendBookingDeniedEmail,
 };
