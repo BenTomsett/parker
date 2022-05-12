@@ -57,8 +57,12 @@ const NewBooking = () => {
     const startDate = new Date(Date.parse(`${formData.startDate}T${formData.startTime}`));
     const endDate = new Date(Date.parse(`${formData.endDate}T${formData.endTime}`));
 
-    if (startDate > endDate) {
+    if (startDate > endDate){
       toast({title: "The start date must be before the end date"});
+    }
+
+    if (startDate < new Date()){
+      toast({title: "The start date must not be in the past"});
     }
 
     setSubmitting(true);
