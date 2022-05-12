@@ -46,6 +46,7 @@ const verify = async (req, res) => {
   }
   if (user.paymentMethodId) {
     return res.status(200).json({
+      userId: user.userId,
       forename: user.forename,
       surname: user.surname,
       email: user.email,
