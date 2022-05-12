@@ -1,28 +1,29 @@
 import React from 'react';
-import {Heading} from '@chakra-ui/react';
-import UserList from '../../components/users/UserList';
-import RequestBookingList from '../../components/users/RequestBookingList';
+import { Tab, TabList, TabPanel, TabPanels, Tabs,
+} from '@chakra-ui/react';
 import useTitle from '../../hooks/useTitle';
+import RequestBookingList from './bookingRequests/RequestBookingList';
+import UserList from './users/UserList';
 
 const UsersPage = () => {
-  useTitle("Admin Dashboard");
+  useTitle('Admin Dashboard');
 
   return (
-      <div>
-        <Heading size="xl">Users</Heading>
-        <Heading size="md">Here is a list of all Parker users</Heading>
-        <br/>
-        <UserList />
-
-        <br/>
-
-        <Heading size="xl">Bookings Requiring Approval</Heading>
-        <Heading size="md">Here is a list of all booking requests currently requiring action.</Heading>
-        <br/>
-        <RequestBookingList />
-        <br/>
-      </div>
-  )
+    <Tabs>
+      <TabList>
+        <Tab>Booking requests</Tab>
+        <Tab>Users</Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel>
+          <RequestBookingList />
+        </TabPanel>
+        <TabPanel>
+          <UserList />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
 };
 
 export default UsersPage;

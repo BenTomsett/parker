@@ -51,6 +51,7 @@ const NavBar = ({ navbarRef }) => {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
+      zIndex={999}
     >
       <Flex alignItems="center">
         <a href="/">
