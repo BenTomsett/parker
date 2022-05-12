@@ -17,7 +17,7 @@ import {
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
-import {emailRegex, getAge, strongPassRegex} from "../../utils/auth";
+import {emailRegex, getAge, strongPassRegex} from "../../../utils/auth";
 
 const EditUser = ({user,update}) => {
     const {isOpen, onOpen, onClose} = useDisclosure()

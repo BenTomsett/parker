@@ -2,8 +2,8 @@ import React from 'react';
 import { Tab, TabList, TabPanel, TabPanels, Tabs,
 } from '@chakra-ui/react';
 import useTitle from '../../hooks/useTitle';
-import UserList from '../../components/users/UserList';
-import RequestBookingList from '../../components/users/RequestBookingList';
+import RequestBookingList from './bookingRequests/RequestBookingList';
+import UserList from './users/UserList';
 
 const UsersPage = () => {
   useTitle('Admin Dashboard');
