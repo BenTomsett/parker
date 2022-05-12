@@ -47,22 +47,10 @@ const createUser = async (req, res) => {
     User.create(user)
       .then(async (obj) => {
         await obj.reload();
-        const customer = await Stripe.customers.create({
-          email: obj.email,
-          name: `${obj.forename} ${obj.surname}`,
-        });
-        console.log(customer);
-        if(customer){
-          obj.set({
-            stripeCustomerId: customer.id
-          })
-          const token = generateToken(obj);
-          res.cookie('token', token, { httpOnly: true });
-          await sendUserRegistrationEmail(obj)
-          return res.status(201).json(obj);
-        }
-          await obj.destroy();
-          return res.status(500).send("ERR_INTERNAL_EXCEPTION");
+        const token = generateToken(obj);
+        res.cookie('token', token, { httpOnly: true });
+        await sendUserRegistrationEmail(obj)
+        return res.status(201).json(obj);
       })
       .catch((err) => {
         if (err.name === 'SequelizeUniqueConstraintError') {
