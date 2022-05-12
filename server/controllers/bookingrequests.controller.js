@@ -15,6 +15,10 @@ the BookingReRequests routes.
 */
 const db = require('../models/index');
 
+const {
+  sendBookingConfirmationEmail,
+} = require('../utils/notifications');
+
 
 const { BookingRequest } = db;
 
@@ -23,6 +27,7 @@ const createBookingRequest = async (req, res) => {
   console.log(req.body);
   BookingRequest.create(req.body)
     .then((data) => {
+      sendBookingConfirmationEmail(data)
       res.status(200).send(data);
     })
     .catch((err) => {

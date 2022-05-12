@@ -18,7 +18,6 @@ const db = require('../models/index');
 const { checkParkedLocation } = require('../utils/checkLocation');
 
 const {
-  sendBookingConfirmationEmail,
   sendBookingApprovedEmail,
   sendBookingDeniedEmail,
   sendOverstayEmail,

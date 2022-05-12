@@ -13,9 +13,9 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-const Delete = async (user) => {
-  const path = 'api/users/'
-  const fullPath = path.concat((user.userId).toString()) /* This is working as expected somewhere else failing */
+const Delete = async (requestedBooking) => {
+  const path = 'api/bookingRequests/'
+  const fullPath = path.concat((requestedBooking.bookingRequestId).toString()) /* This is working as expected somewhere else failing */
 
   return fetch(fullPath, {
     method: 'DELETE',
@@ -24,19 +24,19 @@ const Delete = async (user) => {
   })
 }
 
-const DeleteUser = ({user, update}) =>{
+const DeleteRequestedBooking = ({requestedBooking, update}) =>{
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Button colorScheme='red' onClick={onOpen}>Delete User</Button>
+      <Button colorScheme='red' onClick={onOpen}>Delete</Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Delete User with ID: {user.userId}</ModalHeader>
+          <ModalHeader>Delete Booking Request with ID: {requestedBooking.bookingRequestId}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <h2> Are you sure you want to Delete this user? This can not be reversed!</h2>
+            <h2> Are you sure you want to Delete this booking request? This can not be reversed!</h2>
           </ModalBody>
 
           <ModalFooter>
@@ -44,10 +44,10 @@ const DeleteUser = ({user, update}) =>{
               No
             </Button>
             <Button colorScheme='red' mr={3} onClick={async ()=> {
-              await Delete(user);
+              await Delete(requestedBooking);
               update();
             }}>
-              Yes! Delete the user
+              Yes! Delete the Request
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -56,4 +56,4 @@ const DeleteUser = ({user, update}) =>{
   )
 }
 
-export default DeleteUser;
+export default DeleteRequestedBooking;
