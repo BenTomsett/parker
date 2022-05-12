@@ -36,14 +36,14 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const sendBookingConfirmationEmail = async (Booking) => {
+const sendBookingConfirmationEmail = async (BookingRequest) => {
 
-    const user = await Booking.getUser();
+    const user = await BookingRequest.getUser();
 
     let mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
         to: user.email, //users email address
-        subject: 'Parker Booking ' + Booking.bookingId,
+        subject: 'Parker Booking ' + BookingRequest.bookingRequestId,
         text: 'Hi ' + user.forename + ",\n\n" +
             'Thank you for using Parker your booking request has been received. \n'
     };
@@ -57,9 +57,9 @@ const sendBookingConfirmationEmail = async (Booking) => {
     mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
         to: 'parkeruea@gmail.com', //users email address
-        subject: 'Parker Booking ' + Booking.bookingId,
+        subject: 'Parker Booking ' + BookingRequest.bookingRequestId,
         text: 'Hi, \n\n' +
-            user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
+            user.forename + ' ' + user.surname + ' has requested a booking'
     };
     await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
