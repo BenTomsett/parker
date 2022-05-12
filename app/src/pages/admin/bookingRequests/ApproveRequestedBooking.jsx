@@ -56,7 +56,7 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
     }).then((response) => {
       response.json().then((json) => {
         setSpaces(json);
-        console.log(json)
+        // console.log(json)
         setLoading2(false);
       })
     });

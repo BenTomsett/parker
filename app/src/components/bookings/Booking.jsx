@@ -8,8 +8,8 @@ import ManageBooking from "./ManageBooking";
 const Booking = ({booking, update}) => (
     <Tr>
       <Td>{booking.bookingId}</Td>
-      <Td>{booking.bookingId}</Td>
-      <Td>{booking.spaceId}</Td>
+      <Td>{booking.ParkingSpace.CarPark.name}</Td>
+      <Td>{booking.ParkingSpace.spaceNo}</Td>
       <Td>{booking.startDate.toLocaleString().slice(0,10)}</Td>
       <Td>{booking.startDate.toLocaleString().slice(12,19)}</Td>
       <Td>{booking.endDate.toLocaleString().slice(0,10)}</Td>
