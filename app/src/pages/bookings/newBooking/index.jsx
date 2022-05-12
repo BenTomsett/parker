@@ -35,6 +35,7 @@ const NewBooking = () => {
   };
 
   const [loading, setLoading] = useState(true);
+
   const fetchBuildings = () => {
     setLoading(true);
     fetch('/api/buildings/', {
