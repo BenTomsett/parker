@@ -12,6 +12,7 @@ import * as PropTypes from 'prop-types';
  * @returns {JSX.Element}
  */
 const NavUser = ({ name, email, imageUrl, reversed, ...props }) => (
+    <a href="/account">
     <Flex
       gap="2"
       alignItems="center"
@@ -32,6 +33,7 @@ const NavUser = ({ name, email, imageUrl, reversed, ...props }) => (
         </Text>
       </VStack>
     </Flex>
+    </a>
   );
 
 NavUser.defaultProps = {
