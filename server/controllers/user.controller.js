@@ -16,6 +16,10 @@ accessed via the accounts routes.
 
 const db = require('../models/index');
 
+const {
+  sendUserRegistrationEmail,
+} = require('../utils/notifications');
+
 const { User } = db;
 
 const {
@@ -54,6 +58,7 @@ const createUser = async (req, res) => {
           })
           const token = generateToken(obj);
           res.cookie('token', token, { httpOnly: true });
+          await sendUserRegistrationEmail(obj)
           return res.status(201).json(obj);
         }
           await obj.destroy();
