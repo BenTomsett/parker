@@ -62,10 +62,11 @@ const NewBooking = () => {
     }
 
     setSubmitting(true);
+
     fetch('/api/bookingRequests/', {
       method: 'PUT',
       body: JSON.stringify({
-        userId: user.userId,
+        userId:user.userId,
         buildingId,
         startDate,
         endDate,
@@ -118,9 +119,10 @@ const NewBooking = () => {
                     <Divider/>
                     <FormControl>
                       <FormLabel htmlFor='BuildingName'>Destination Building</FormLabel>
-                      <Select name="buildingName" id="buildingName" value={formData.buildingId} onChange={(event) => {
+                      <Select name="buildingName" id="buildingName" value={formData.buildingId} defaultValue={-1} onChange={(event) => {
                         updateFormData('buildingId', event.target.value)
                       }}>
+                        <option disabled value={-1}>Choose a building</option>
                         {buildings.map((building) => (
                           <option key={building.buildingId} value={building.buildingId} label={building.name} />
                         ))}

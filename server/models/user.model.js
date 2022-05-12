@@ -15,19 +15,23 @@ structures for our postgres database through sequelize.
 
 const { Model } = require('sequelize');
 const { hashPassword } = require('../utils/auth');
+const { Stripe } = require('../config/stripe');
 
 module.exports = (sequelize, DataTypes) => {
-
   class User extends Model {
+    static associate(models) {
+      User.hasMany(models.Booking, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
 
-      static associate(models) {
-          User.hasMany(models.Booking, {
-              foreignKey: 'userId',
-              onDelete: 'CASCADE',
-              onUpdate: 'CASCADE'
-            })
-        }
-
+      User.hasMany(models.BookingRequest, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+    }
   }
 
   User.init(
@@ -89,15 +93,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-        },
+      },
       stripeCustomerId: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.STRING,
+        defaultValue: "stripe",
       },
       paymentMethodId: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.STRING,
-      }
+        defaultValue: "stripe",
+      },
     },
     {
       sequelize,
@@ -113,13 +119,24 @@ module.exports = (sequelize, DataTypes) => {
 
   // Method 3 via the direct method
   User.beforeCreate(async (user, options) => {
-      const hashedPassword = await hashPassword(user.password);
-      user.password = hashedPassword;
-    });
-    User.beforeUpdate(async (user, options) => {
-        const hashedPassword = await hashPassword(user.password);
-        user.password = hashedPassword;
-        console.log(hashedPassword)
-    });
+    const hashedPassword = await hashPassword(user.getDataValue('password'));
+    const userEmail = user.getDataValue('email')
+    const forename = user.getDataValue('forename')
+    const surname = user.getDataValue('surname')
+
+    const customer = await Stripe.customers.create({
+        email: userEmail,
+        name: `${forename} ${surname}`,
+      });
+
+    user.setDataValue('password', hashedPassword)
+    user.setDataValue('stripeCustomerId', customer.id);
+  });
+  User.beforeUpdate(async (user, options) => {
+    if (user.password) {
+        const hashedPassword = await hashPassword(user.getDataValue('password'));
+        user.setDataValue('password', hashedPassword)
+    }
+  });
   return User;
-}
+};

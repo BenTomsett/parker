@@ -18,7 +18,6 @@ const db = require('../models/index');
 const { checkParkedLocation } = require('../utils/checkLocation');
 
 const {
-  sendBookingConfirmationEmail,
   sendBookingApprovedEmail,
   sendBookingDeniedEmail,
   sendOverstayEmail,
@@ -42,7 +41,7 @@ const createBooking = async (req, res) => {
     ],
   })
     .then((data) => {
-      sendBookingConfirmationEmail(data);
+      sendBookingApprovedEmail(data);
       res.status(200).send(data);
     })
     .catch((err) => {
@@ -170,7 +169,8 @@ const findNonArrivalBookings = async () => {
   Booking.findAll({
     where: {
       startDate: {
-        [Op.lte]: new Date(Date.now()),
+        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 15 * 60 * 1000),
+        [Op.lte]: new Date(Date.now() + 1 * 60 * 60 * 1000),
       },
       checkedIn: {
         [Op.eq]: false,

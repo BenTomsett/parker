@@ -16,6 +16,10 @@ accessed via the accounts routes.
 
 const db = require('../models/index');
 
+const {
+  sendUserRegistrationEmail,
+} = require('../utils/notifications');
+
 const { User } = db;
 
 const {
@@ -40,38 +44,13 @@ const createUser = async (req, res) => {
   } else if (getAge(dobParsed) <= 16) {
     res.status(400).send('ERR_TOO_YOUNG');
   } else {
-    User.create(user, {
-      fields: [
-        'forename',
-        'surname',
-        'dob',
-        'email',
-        'password',
-        'addressLine1',
-        'addressLine2',
-        'city',
-        'postcode',
-        'country',
-      ],
-    })
+    User.create(user)
       .then(async (obj) => {
         await obj.reload();
-        const customer = await Stripe.customers.create({
-          email: obj.email,
-          name: `${obj.forename} ${obj.surname}`,
-        });
-        console.log(customer);
-        if(customer){
-          obj.set({
-            stripeCustomerId: customer.id
-          })
-          await obj.save();
-          const token = generateToken(obj);
-          res.cookie('token', token, { httpOnly: true });
-          return res.status(201).json(obj);
-        }
-          await obj.destroy();
-          return res.status(500).send("ERR_INTERNAL_EXCEPTION");
+        const token = generateToken(obj);
+        res.cookie('token', token, { httpOnly: true });
+        await sendUserRegistrationEmail(obj)
+        return res.status(201).json(obj);
       })
       .catch((err) => {
         if (err.name === 'SequelizeUniqueConstraintError') {
