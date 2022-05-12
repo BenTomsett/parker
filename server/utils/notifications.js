@@ -45,9 +45,9 @@ const sendBookingConfirmationEmail = async (Booking) => {
         to: user.email, //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
         text: 'Hi ' + user.forename + ",\n\n" +
-            'Thank you for using Parker your booking request has been received \n'
+            'Thank you for using Parker your booking request has been received. \n'
     };
-    await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -61,7 +61,7 @@ const sendBookingConfirmationEmail = async (Booking) => {
         text: 'Hi, \n\n' +
             user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
     };
-    await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -81,8 +81,9 @@ const sendBookingApprovedEmail = async (Booking) => {
         subject: 'Parker Booking ' + Booking.bookingId,
         text: 'Hi ' + user.forename + ",\n\n" +
             + 'Your booking ' + Booking.bookingId + ' has been approved.\n'
+            + 'Thank you for using parker'
     };
-    await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -91,12 +92,12 @@ const sendBookingApprovedEmail = async (Booking) => {
     });
     mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: 'parkeradminuea@gmail.com', //users email address
+        to: 'parkeruea@gmail.com', //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
         text: 'Hi, \n\n' +
             user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
     };
-    await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -114,9 +115,10 @@ const sendBookingDeniedEmail = async (Booking) => {
         to: user.email, //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
         text: 'Hi ' + user.forename + ",\n\n" +
-            + 'Your booking ' + Booking.bookingId + ' has been denied, You will be refunded shortly.\n'
+            + 'Your booking ' + Booking.bookingId + ' has been denied, You will be refunded shortly.\n' +
+            'Thank you for using Parker'
     };
-    await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -125,12 +127,12 @@ const sendBookingDeniedEmail = async (Booking) => {
     });
     mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: 'parkeradminuea@gmail.com', //users email address
+        to: 'parkeruea@gmail.com', //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
         text: 'Hi, \n\n' +
             user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
     };
-    await transporter.sendBookingConfirmationEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -149,9 +151,10 @@ const sendNonArrivalEmail = async (Booking) => {
         subject: 'Parker - Missed booking for booking: ' + Booking.bookingId,
         text: 'Hi ' + user.forename + ",\n\n" +
             'you have not shown up for your reservation at space: ' + Booking.spaceId + ' \n' +
-            ' Unfortunately you will still be charged!'
+            ' Unfortunately you will still be charged! \n'+
+            'Thank you for using Parker'
     };
-    await transporter.sendNonArrivalEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -160,12 +163,12 @@ const sendNonArrivalEmail = async (Booking) => {
     });
     mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
-        to: 'parkeradminuea@gmail.com', //users email address
+        to: 'parkeruea@gmail.com', //users email address
         subject: 'Parker - Missed booking for booking: ' + Booking.bookingId,
         text: 'Hi, \n\n' +
             user.forename + ' ' + user.surname + ' has not shown up for their reservation at space: ' + Booking.spaceId
     };
-    await transporter.sendNonArrivalEmail(mailOptionsConfirmation, function (err, info) {
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
             console.log(err);// If an error is found it will be displayed to console
         } else {
@@ -194,9 +197,9 @@ const sendOverstayEmail = async (Booking) => {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
         to: user.email, //users email address
         subject: 'Parker - Overstay Warning - ' + Booking.bookingId,
-        text: 'Hi ' + user.forename + ",\n\n" +
-            'your vehicle has now past its allocated time slot for booking:  \n' +
-            Booking.bookingId + ' Please move your vehicle ASAP or you will be charged'
+        text: 'Hi ' + user.forename + ",\n" +
+            'Your vehicle has now past its allocated time slot for booking: ' +  Booking.bookingId + '\n'
+            + ' Please move your vehicle ASAP or you will be charged.'
     };
     await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
@@ -234,6 +237,25 @@ const sendOverstaySMS = async (Booking) => {
         .then((message) => console.log(message.sid));
 }
 
+const sendUserRegistrationEmail = async (User) => {
+
+    let mailOptionsConfirmation = {
+        from: 'NoReply from Parker <parkeruea@gmail.com>',
+        to: User.email, //users email address
+        subject: 'Welcome to Parker  ' + User.forename + '!',
+        text: 'Hi ' + User.forename + ",\n" +
+            'Your account has been successfully created!\n'
+            + 'Thank you for using parker!'
+    };
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
+        if (err) {
+            console.log(err);// If an error is found it will be displayed to console
+        } else {
+            console.log('Email sent: ' + info.response); //If email is successfully sent the console will show a confirmation message
+        }
+    });
+}
+
 module.exports = {
     sendBookingConfirmationEmail,
     sendOverstaySMS,
@@ -242,4 +264,5 @@ module.exports = {
     sendNonArrivalEmail,
     sendBookingApprovedEmail,
     sendBookingDeniedEmail,
+    sendUserRegistrationEmail,
 };
