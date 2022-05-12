@@ -21,6 +21,8 @@ const {
   sendBookingConfirmationEmail,
   sendBookingApprovedEmail,
   sendBookingDeniedEmail,
+  sendOverstayEmail,
+  sendNonArrivalEmail,
 } = require('../utils/notifications');
 
 const { Booking, ParkingSpace } = db;
@@ -126,15 +128,15 @@ const findCarPark24HBookings = async (req, res) => {
       startDate: {
         [Op.lt]: new Date(Date.now() + 24 * 60 * 60 * 1000),
       },
-    }
-      .then((data) => {
-        res.status(200).send(data);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      }),
-  });
+    },
+  })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
 };
 
 // Find bookings for a specific car park
@@ -142,8 +144,8 @@ const findOverstayedBookings = async () => {
   Booking.findAll({
     where: {
       endDate: {
-        [Op.ge]: new Date(Date.now() - 15 * 60 * 1000),
-        [Op.le]: new Date(Date.now()),
+        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 15 * 60 * 1000),
+        [Op.lte]: new Date(Date.now() + 1 * 60 * 60 * 1000),
       },
       checkedIn: {
         [Op.eq]: true,
@@ -151,12 +153,16 @@ const findOverstayedBookings = async () => {
       checkedOut: {
         [Op.eq]: false,
       },
-    }
-      .then((data) => data)
-      .catch((err) => {
-        console.error(err);
-      }),
-  });
+    },
+  })
+    .then((bookings) => {
+      bookings.forEach((booking) => {
+        sendOverstayEmail(booking);
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 // Find bookings past their arrival dates
@@ -164,7 +170,7 @@ const findNonArrivalBookings = async () => {
   Booking.findAll({
     where: {
       startDate: {
-        [Op.le]: new Date(Date.now()),
+        [Op.lte]: new Date(Date.now()),
       },
       checkedIn: {
         [Op.eq]: false,
@@ -172,12 +178,16 @@ const findNonArrivalBookings = async () => {
       checkedOut: {
         [Op.eq]: false,
       },
-    }
-      .then((data) => data)
-      .catch((err) => {
-        console.error(err);
-      }),
-  });
+    },
+  })
+    .then((bookings) => {
+      bookings.forEach((booking) => {
+        sendNonArrivalEmail(booking);
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 // Update a booking by the id in the request
