@@ -41,6 +41,21 @@ router.get(
     BookingRequestController.findUserBookingRequests
   );
 
+// Retrieve all booking requests for a user
+router.post(
+    '/findNextSpace',
+    authenticateUser,
+    verifyAdmin,
+    BookingRequestController.findNextAvailableSpace
+);
+
+router.post(
+    '/findAllSpaces',
+    authenticateUser,
+    verifyAdmin,
+    BookingRequestController.findAllAvailableSpace
+);
+
 // Create a new booking request
 router.put(
   '/',

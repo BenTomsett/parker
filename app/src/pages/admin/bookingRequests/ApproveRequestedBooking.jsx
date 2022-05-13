@@ -25,6 +25,7 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
   const [formData, setFormData] = useState({});
   const [carparks, setCarparks] = useState(null);
   const [spaces, setSpaces] = useState(null);
+  const [nextSpace, setNextSpace] = useState(null);
 
 
   const updateFormData = (property, value) => {
@@ -61,6 +62,22 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
       })
     });
   }
+
+  function getNearestAvailableSpace(){
+
+    fetch('api/bookingRequests/findNextSpace',{
+      method: 'POST',//Change to Carpark id from building ID on row below!!!!!!!!
+      body:JSON.stringify({'startDate':requestedBooking.startDate,'endDate':requestedBooking.endDate,'carParkId':requestedBooking.buildingId}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((response) => {
+      response.json().then((json) => {
+       setNextSpace(json[0].spaceval)
+      })
+    });
+  }
+
 
   const [submitting, setSubmitting] = useState(false);
 
@@ -195,9 +212,9 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
                       {
                         // THIS IS FOR THE Automatic BOOKING
                         <VStack w="100%" align="left">
-                          <Button colorScheme="green" w="100%">Assign Car Park and Space</Button>
-                          <Text>The allocated car park is ENTER HERE </Text>
-                          <Text>The Allocated parking space is </Text>
+                          <Button onClick={() => getNearestAvailableSpace()} colorScheme="green" w="100%">Assign Car Park and Space</Button>
+                          <Text>The allocated car park is BigBalls </Text>
+                          <Text>The Allocated parking space is {nextSpace} </Text>
                         </VStack>
                       }
                     </HStack>
