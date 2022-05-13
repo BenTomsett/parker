@@ -13,12 +13,13 @@ import {
 } from '@chakra-ui/react';
 
 import { formatDuration, intervalToDuration } from 'date-fns';
+import CancelRequestModal from './CancelRequestModal';
 
 const BookingRequestList = ({updateCount}) => {
   const [requests, setRequests] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchBookings = () => {
+  const fetchRequests = () => {
     setLoading(true);
     fetch('/api/bookingRequests/', {
       method: 'GET',
@@ -32,7 +33,7 @@ const BookingRequestList = ({updateCount}) => {
   };
 
   useEffect(() => {
-    fetchBookings();
+    fetchRequests();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -77,6 +78,9 @@ const BookingRequestList = ({updateCount}) => {
                                   'hours',
                                   'minutes'],
                               })}</Td>
+                              <Td>
+                                <CancelRequestModal request={request} update={fetchRequests} />
+                              </Td>
                             </Tr>
                           )
 
@@ -89,7 +93,7 @@ const BookingRequestList = ({updateCount}) => {
             </>
           ) : loading ? (
             <Spinner />
-          ) : <Text>No upcoming bookings.</Text>
+          ) : <Text>No pending booking requests.</Text>
       }
     </VStack>
   );

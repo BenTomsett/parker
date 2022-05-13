@@ -13,12 +13,12 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-const CancelBookingModal = ({ booking, update }) => {
+const CancelRequestModal = ({request, update}) =>{
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [loading, setLoading] = useState(false);
 
-  const cancelBooking = async () => fetch(`/api/bookings/${booking.bookingId}`,
+  const cancelRequest = async () => fetch(`/api/bookingRequests/${request.bookingRequestId}`,
     {
       method: 'DELETE',
     });
@@ -30,21 +30,17 @@ const CancelBookingModal = ({ booking, update }) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Cancel booking</ModalHeader>
+          <ModalHeader>Cancel booking request</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>Are you sure you want to cancel this booking
-              for {booking.ParkingSpace.CarPark.name}?</Text>
-            <br />
-            <Text fontWeight='bold'>You will have to request a new booking if
-              you change your mind.</Text>
+            <Text>Are you sure you want to cancel this booking request?</Text>
           </ModalBody>
 
           <ModalFooter>
             <HStack>
-              <Button colorScheme='red' onClick={async () => {
+              <Button colorScheme='red' onClick={async ()=> {
                 setLoading(true);
-                await cancelBooking(booking);
+                await cancelRequest(request);
                 update();
               }}>
                 {loading ? (
@@ -59,7 +55,7 @@ const CancelBookingModal = ({ booking, update }) => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default CancelBookingModal;
+export default CancelRequestModal;
