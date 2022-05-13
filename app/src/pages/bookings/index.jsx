@@ -39,7 +39,7 @@ const BookingsPage = () => {
           colorScheme="blue"
           leftIcon={<FiPlus />}
           onClick={() => {
-            navigate('/bookings/newBooking');
+            navigate('/bookings/request');
           }}>
           Request booking
         </Button>
