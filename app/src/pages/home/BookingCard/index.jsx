@@ -44,7 +44,15 @@ const BookingCard = () => {
                   fontWeight='bold'>{booking.ParkingSpace.CarPark.name}</chakra.span>
                 - Space {booking.ParkingSpace.spaceNo}
                 <Text>Start: {start.toDateString()}, {start.toLocaleTimeString()}</Text>
-                <Text>Duration: {formatDuration(duration)}</Text>
+                <Text>Duration: {formatDuration(duration, {
+                  format: [
+                    'years',
+                    'months',
+                    'weeks',
+                    'days',
+                    'hours',
+                    'minutes'],
+                })}</Text>
               </VStack>
               <Badge fontSize='mg' colorScheme='green' p='lg'>£{cost}</Badge>
             </HStack>

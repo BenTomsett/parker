@@ -38,7 +38,15 @@ const BookingRequestCard = () => {
               <VStack align='left' spacing={0}>
                 <Text fontWeight='bold'>{request.Building.name}</Text>
                 <Text>Start: {start.toDateString()}, {start.toLocaleTimeString()}</Text>
-                <Text>Duration: {formatDuration(duration)}</Text>
+                <Text>Duration: {formatDuration(duration, {
+                  format: [
+                    'years',
+                    'months',
+                    'weeks',
+                    'days',
+                    'hours',
+                    'minutes'],
+                })}</Text>
               </VStack>
               <Badge fontSize='mg' colorScheme='orange' p='lg'>PENDING</Badge>
             </HStack>
