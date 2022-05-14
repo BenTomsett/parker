@@ -6,6 +6,7 @@ import {
 import useTitle from '../../hooks/useTitle';
 import PersonalDetails from "./PersonalDetails";
 import ChangePassword from './ChangePassword';
+import PaymentInformation from './PaymentInformation';
 
 
 const AccountPage = () => {
@@ -36,7 +37,9 @@ const AccountPage = () => {
           <TabPanel>
             <ChangePassword />
           </TabPanel>
-          <TabPanel />
+          <TabPanel>
+            <PaymentInformation />
+          </TabPanel>
         </TabPanels>
       </Tabs>
     </VStack>

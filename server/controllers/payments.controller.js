@@ -27,6 +27,11 @@ const storePaymentMethod = async (req, res) => {
   const user = await User.findOne({
     where: { email }
   });
+
+  if(user.paymentMethodId){
+    await Stripe.paymentMethods.detach(user.paymentMethodId);
+  }
+
   user.set({
     paymentMethodId,
   });
@@ -34,7 +39,22 @@ const storePaymentMethod = async (req, res) => {
   res.status(200).send();
 };
 
+const getPaymentMethod = async (req, res) => {
+  console.log("*!*!*!*!*!*! made it to method");
+  const {userId} = req.user;
+  const user = await User.findByPk(userId);
+  const paymentMethods = await Stripe.customers.listPaymentMethods(
+    user.stripeCustomerId,
+    { type: 'card' }
+  );
+
+  console.log(paymentMethods);
+
+  res.status(200).json(paymentMethods.data[0]);
+}
+
 module.exports = {
   createSetupIntent,
   storePaymentMethod,
+  getPaymentMethod
 };
