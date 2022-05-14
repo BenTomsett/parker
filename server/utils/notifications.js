@@ -106,16 +106,16 @@ const sendBookingApprovedEmail = async (Booking) => {
     });
 }
 
-const sendBookingDeniedEmail = async (Booking) => {
+const sendBookingDeniedEmail = async (BookingRequest) => {
 
-    const user = await Booking.getUser();
+    const user = await BookingRequest.getUser();
 
     let mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
         to: user.email, //users email address
-        subject: 'Parker Booking ' + Booking.bookingId,
+        subject: 'Parker Booking ' + BookingRequest.bookingId,
         text: 'Hi ' + user.forename + ",\n\n" +
-            + 'Your booking ' + Booking.bookingId + ' has been denied, You will be refunded shortly.\n' +
+            + 'Your booking ' + BookingRequest.bookingId + ' has been denied, You will be refunded shortly.\n' +
             'Thank you for using Parker'
     };
     await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
@@ -128,9 +128,9 @@ const sendBookingDeniedEmail = async (Booking) => {
     mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
         to: 'parkeruea@gmail.com', //users email address
-        subject: 'Parker Booking ' + Booking.bookingId,
+        subject: 'Parker Booking ' + BookingRequest.bookingId,
         text: 'Hi, \n\n' +
-            user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.carParkId
+            user.forename + ' ' + user.surname + ' has booked Space: ' + BookingRequest.spaceId + ' at Car park: ' + BookingRequest.carParkId
     };
     await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {

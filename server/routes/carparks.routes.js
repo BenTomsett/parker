@@ -23,7 +23,7 @@ const router = express.Router();
 router.get('/', authenticateUser, CarParkController.findAllCarParks);
 
 // Retrieve a single carpark via the ID
-router.get('/findcarpark', authenticateUser, CarParkController.findNearestCarParks);
+router.post('/findcarpark', authenticateUser, CarParkController.findNearestCarParks);
 
 // Retrieve a single carpark via the ID
 router.get('/:carparkId', authenticateUser, CarParkController.findCarParkByID);
