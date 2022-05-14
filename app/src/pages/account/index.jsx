@@ -1,44 +1,45 @@
 import React from 'react';
 import {
-  Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text,
+  Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack,
 } from '@chakra-ui/react';
 
 import useTitle from '../../hooks/useTitle';
-import UpdateDetails from "./UpdateDetails";
+import PersonalDetails from "./PersonalDetails";
+import ChangePassword from './ChangePassword';
 
 
 const AccountPage = () => {
   useTitle("Account");
 
   return (
-    <div>
-    <Heading size="xl">Account</Heading>
-    <br/>
-    <Heading size="md">Welcome to your account page</Heading>
-    <Text>On this page you can and modify all of your personal details held by the Parker system.
-    <br/>You can also view and edit your payment details under the Billing Details Section of the page.<br/></Text>
-
-
-    <br/>
-
-      <Tabs>
+    <VStack align='start' spacing={4} height='100%'>
+      <VStack align='start' spacing={0}>
+        <Heading size='lg'>Account</Heading>
+        <Text fontSize='xl'>Edit your data and payment methods</Text>
+      </VStack>
+      <Tabs w="100%">
         <TabList>
-          <Tab>Personal Details</Tab>
-          <Tab>Billing Details</Tab>
+          <Tab>
+            Personal details
+          </Tab>
+          <Tab>
+            Change password
+          </Tab>
+          <Tab>
+            Payment information
+          </Tab>
         </TabList>
         <TabPanels>
-          <TabPanel align="center">
-            <UpdateDetails/>
+          <TabPanel>
+            <PersonalDetails/>
           </TabPanel>
-          <TabPanel align="center">
-            <Heading size="md">Billing Details:</Heading>
-            <br/>
+          <TabPanel>
+            <ChangePassword />
           </TabPanel>
+          <TabPanel />
         </TabPanels>
       </Tabs>
-
-    </div>
-
+    </VStack>
   )
 };
 
