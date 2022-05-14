@@ -128,10 +128,11 @@ const deleteBookingRequest = async (req, res) => {
 // Delete a BookingReRequest with the specified id in the request
 const denyBookingRequest = async (req, res) => {
     const {bookingRequestId} = req.params;
-    BookingRequest.destroy({where: {bookingRequestId}})
+    BookingRequest.findByPk(bookingRequestId)
         .then((data) => {
-            res.sendStatus(200);
             sendBookingDeniedEmail(data)
+            data.destroy()
+            res.sendStatus(200);
         })
         .catch((err) => {
             console.error(err);
