@@ -2,7 +2,7 @@ import React from 'react';
 import Map, { Marker } from 'react-map-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Heading, VStack } from '@chakra-ui/react';
+import { Divider, Heading, VStack } from '@chakra-ui/react';
 
 const MapCard = () => {
   /*
@@ -32,7 +32,8 @@ const MapCard = () => {
       p={4}
       align="start"
     >
-      <Heading size="md" align>Nearby car parks</Heading>
+      <Heading size="md">Nearby car parks</Heading>
+      <Divider />
       <Map
         mapboxAccessToken="pk.eyJ1IjoiYmVudG9tc2V0dCIsImEiOiJjazFxbDBpZTgwMmJkM21sZWZhY3VuZ2lkIn0.HxUAYfiWTsU-Abl0bm3aBg"
         initialViewState={{

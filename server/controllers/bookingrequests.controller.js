@@ -21,8 +21,7 @@ const {
     sendBookingDeniedEmail,
 } = require('../utils/notifications');
 
-
-const {BookingRequest} = db;
+const { BookingRequest, Building } = db;
 
 // Create and Save a new BookingReRequest
 const createBookingRequest = async (req, res) => {
@@ -47,20 +46,23 @@ const createBookingRequest = async (req, res) => {
 
 // Retrieve all BookingReRequests from the database.
 const findAllBookingRequests = async (req, res) => {
+  const { isAdmin } = req.user;
 
-    BookingRequest.findAll({
-            include: {
-                model: db.Building,
-                }
-        }
-    )
-        .then((data) => {
-            res.status(200).send(data);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('ERR_INTERNAL_EXCEPTION');
-        });
+  BookingRequest.findAll({
+    ...(!isAdmin && {
+      where: {
+        userId: isAdmin ? '' : req.user.userId,
+      },
+    }),
+    include: {model: Building}
+  })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
 };
 
 // Find a single BookingReRequest with the BookingReRequest id

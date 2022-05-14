@@ -14,6 +14,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     "no-unused-vars": "off",
     "unused-imports/no-unused-imports": 'error',
-    "unused-imports/no-unused-vars": 'warn'
+    "unused-imports/no-unused-vars": 'warn',
+    "no-nested-ternary": "off"
   },
 };

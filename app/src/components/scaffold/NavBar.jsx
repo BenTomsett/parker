@@ -39,6 +39,14 @@ const NavBar = ({ navbarRef }) => {
     onClose();
   }
 
+  const logout = () => {
+    fetch('/api/auth/logout', {
+      method: 'POST'
+    }).then(() => {
+      navigate('/login');
+    })
+  }
+
   return (
     <chakra.nav
       ref={navbarRef}
@@ -71,6 +79,7 @@ const NavBar = ({ navbarRef }) => {
         email={user.email}
         reversed
         display={{ base: 'none', md: 'flex' }}
+        logout={logout}
       />
 
       {/* Visible on mobile - drawer and drawer toggle */}
@@ -93,7 +102,7 @@ const NavBar = ({ navbarRef }) => {
 
             <HStack w="full" justifyContent="space-between" pt={4}>
               <NavUser name={`${user.forename} ${user.surname}`} email={user.email} />
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" onClick={logout}>
                 Log out
               </Button>
             </HStack>
