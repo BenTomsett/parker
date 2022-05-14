@@ -298,7 +298,6 @@ module.exports = {
   findNonArrivalBookings,
   updateBooking,
   checkInBooking,
-  denyBooking,
   deleteBooking,
   deleteAllBookings,
 };
