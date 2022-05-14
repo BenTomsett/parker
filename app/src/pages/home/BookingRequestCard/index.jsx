@@ -7,42 +7,36 @@ import {
   Heading,
   Spinner,
   Text,
-  VStack, HStack, Badge, Button, Divider,
+  VStack, HStack, Badge, Divider,
 } from '@chakra-ui/react';
 import { formatDuration, intervalToDuration } from 'date-fns';
 
-const BookingCard = () => {
+const BookingRequestCard = () => {
   const [loading, setLoading] = useState(true);
-  const [bookings, setBookings] = useState([]);
+  const [bookingRequests, setBookingRequests] = useState([]);
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/bookings').then((response) => {
+    fetch('/api/bookingRequests').then((response) => {
       response.json().then((json) => {
-        setBookings(json);
+        setBookingRequests(json);
         setLoading(false);
       });
     });
   }, []);
 
-  const showBookings = () => bookings.length > 0 ? (
-    bookings.map((booking, index) => {
-      const start = new Date(booking.startDate);
-      const end = new Date(booking.endDate);
+  const showBookingRequests = () => bookingRequests.length > 0 ? (
+    bookingRequests.map((request, index) => {
+      const start = new Date(request.startDate);
+      const end = new Date(request.endDate);
       const duration = intervalToDuration({ start, end });
 
-      const flatRate = 3.50;
-      const hours = Math.abs(end - start) / 36e5; // Calculates duration in hour
-      const cost = (hours * flatRate).toFixed(2);
-
       return (
-        <chakra.div key={booking.bookingId} w='100%'>
-          <VStack key={booking.bookingId} w='100%' align='left'>
+        <chakra.div key={request.bookingRequestId} w='100%' >
+          <VStack w='100%' align='left'>
             <HStack justify='space-between'>
               <VStack align='left' spacing={0}>
-                <chakra.span
-                  fontWeight='bold'>{booking.ParkingSpace.CarPark.name}</chakra.span>
-                - Space {booking.ParkingSpace.spaceNo}
+                <Text fontWeight='bold'>{request.Building.name}</Text>
                 <Text>Start: {start.toDateString()}, {start.toLocaleTimeString()}</Text>
                 <Text>Duration: {formatDuration(duration, {
                   format: [
@@ -54,17 +48,17 @@ const BookingCard = () => {
                     'minutes'],
                 })}</Text>
               </VStack>
-              <Badge fontSize='mg' colorScheme='green' p='lg'>£{cost}</Badge>
+              <Badge fontSize='mg' colorScheme='orange' p='lg'>PENDING</Badge>
             </HStack>
           </VStack>
-          {index > bookings.length && (
+          {index > bookingRequests.length && (
             <Divider />
           )}
         </chakra.div>
       );
     })
   ) : (
-    <Text>No upcoming bookings.</Text>
+    <Text>No pending booking requests.</Text>
   );
 
   return (
@@ -76,20 +70,17 @@ const BookingCard = () => {
       p={4}
       align='start'
     >
-      <HStack align='center' justifyContent='space-between' w="100%">
-        <Heading size='md'>Upcoming bookings</Heading>
-        <Button variant='link'>View all</Button>
-      </HStack>
+      <Heading size='md'>Pending booking requests</Heading>
       <Divider />
       {loading ? (
         <Center w='100%' h='100%'>
           <Spinner />
         </Center>
       ) : (
-        showBookings()
+        showBookingRequests()
       )}
     </VStack>
   );
 };
 
-export default BookingCard;
+export default BookingRequestCard;

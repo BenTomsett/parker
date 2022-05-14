@@ -21,7 +21,7 @@ const {
   sendBookingApprovedEmail,
   sendBookingDeniedEmail,
   sendOverstayEmail,
-  sendNonArrivalEmail,
+  sendNonArrivalEmail, sendBookingConfirmationEmail,
 } = require('../utils/notifications');
 const { Stripe } = require('../config/stripe');
 const { calculateParkingCharge } = require('../utils/parkingCharges');
@@ -57,9 +57,8 @@ const createBooking = async (req, res) => {
         confirm: true,
         receipt_email: user.email,
       });
-
-      await sendBookingConfirmationEmail(data);
       res.status(200).send(data);
+      await sendBookingConfirmationEmail(data);
     } catch (err) {
       await data.destroy();
       res.status(402).send('ERR_PAYMENT_FAILED');
