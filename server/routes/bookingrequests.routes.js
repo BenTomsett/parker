@@ -41,6 +41,21 @@ router.get(
     BookingRequestController.findUserBookingRequests
   );
 
+// Retrieve all booking requests for a user
+router.post(
+    '/findNextSpace',
+    authenticateUser,
+    verifyAdmin,
+    BookingRequestController.findNextAvailableSpace
+);
+
+router.post(
+    '/findAllSpaces',
+    authenticateUser,
+    verifyAdmin,
+    BookingRequestController.findAllAvailableSpaces
+);
+
 // Create a new booking request
 router.put(
   '/',
@@ -67,6 +82,13 @@ router.delete(
   '/:bookingRequestId',
   authenticateUser,
   BookingRequestController.deleteBookingRequest
+);
+
+// Delete a booking request with the bookingRequestId
+router.delete(
+    '/deny/:bookingRequestId',
+    authenticateUser,
+    BookingRequestController.denyBookingRequest
 );
 
 // Delete a booking request with the bookingId
