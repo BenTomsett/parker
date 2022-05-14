@@ -36,6 +36,10 @@ const login = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  res.status(200).clearCookie('token').send();
+}
+
 const verify = async (req, res) => {
   const { sub } = req.user;
   const user = await User.findOne({
@@ -59,5 +63,6 @@ const verify = async (req, res) => {
 
 module.exports = {
   login,
+  logout,
   verify,
 };

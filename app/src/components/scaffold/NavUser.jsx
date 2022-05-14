@@ -1,5 +1,10 @@
 import React from 'react';
-import { Text, VStack, Avatar, Flex } from '@chakra-ui/react';
+import {
+  Text,
+  VStack,
+  Avatar,
+  Flex, MenuButton, MenuList, MenuItem, Menu,
+} from '@chakra-ui/react';
 import * as PropTypes from 'prop-types';
 
 /**
@@ -8,17 +13,29 @@ import * as PropTypes from 'prop-types';
  * @param {string} email The user's email address
  * @param {string} imageUrl The URL of the user's profile picture
  * @param {boolean} reversed If true, shows the profile picture on the right and text on the left
+ * @param {function} logout If defined, renders a menu when the avatar is clicked to allow the user to log out
  * @param props Any other Box props to pass to the root element
  * @returns {JSX.Element}
  */
-const NavUser = ({ name, email, imageUrl, reversed, ...props }) => (
+const NavUser = ({ name, email, imageUrl, reversed, logout, ...props }) => (
     <Flex
       gap="2"
       alignItems="center"
       flexDirection={reversed ? 'row-reverse' : 'row'}
       {...props}
     >
-      <Avatar w={12} h={12} src={imageUrl} />
+
+      {logout ? (
+        <Menu>
+          <MenuButton as={Avatar} w={12} h={12} src={imageUrl} cursor="pointer" />
+          <MenuList>
+            <MenuItem onClick={logout}>Log out</MenuItem>
+          </MenuList>
+        </Menu>
+      ) : (
+        <Avatar w={12} h={12} src={imageUrl} />
+      )}
+
       <VStack
         marginInlineStart={0}
         align={reversed ? 'end' : 'start'}
@@ -39,6 +56,7 @@ NavUser.defaultProps = {
   email: undefined,
   imageUrl: undefined,
   reversed: false,
+  logout: undefined,
 };
 
 NavUser.propTypes = {
@@ -46,6 +64,7 @@ NavUser.propTypes = {
   email: PropTypes.string,
   imageUrl: PropTypes.string,
   reversed: PropTypes.bool,
+  logout: PropTypes.func,
 };
 
 export default NavUser;
