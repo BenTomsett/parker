@@ -17,6 +17,7 @@ const db = require('../models/index');
 
 const {
     sendBookingConfirmationEmail,
+    sendBookingDeniedEmail,
 } = require('../utils/notifications');
 
 
@@ -115,6 +116,7 @@ const deleteBookingRequest = async (req, res) => {
 
     BookingRequest.destroy({where: {bookingRequestId}})
         .then(() => {
+            sendBookingDeniedEmail(data);
             res.sendStatus(200);
         })
         .catch((err) => {
