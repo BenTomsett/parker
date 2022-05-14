@@ -57,6 +57,7 @@ const PaymentInformation = () => {
         response.json().then((json) => {
           setClientSecret(json.client_secret);
           onOpen();
+          setLoading(false);
         });
       } else {
         toast({
@@ -92,7 +93,7 @@ const PaymentInformation = () => {
                 <Td>•••• {paymentMethod.last4}</Td>
                 <Td>{paymentMethod.expiry}</Td>
                 <Td>
-                  <Button colorScheme='orange' onClick={updateCard}>{
+                  <Button disabled={loading} colorScheme='orange' onClick={updateCard}>{
                     loading ? (
                       <Spinner />
                     ) : (
