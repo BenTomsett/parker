@@ -7,6 +7,7 @@ import UserContext from '../../context/user';
 import MapCard from './MapCard';
 import BookingCard from './BookingCard';
 import BookingRequestCard from './BookingRequestCard';
+import CheckinCard from './CheckinCard';
 
 const HomePage = () => {
   useTitle('Home');
@@ -31,6 +32,7 @@ const HomePage = () => {
           Request booking
         </Button>
       </HStack>
+      <CheckinCard />
       <Flex h='100%' w='100%' gap={4}>
         <MapCard />
         <VStack flex={1}>
