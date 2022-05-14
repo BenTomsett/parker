@@ -84,6 +84,13 @@ router.delete(
   BookingRequestController.deleteBookingRequest
 );
 
+// Delete a booking request with the bookingRequestId
+router.delete(
+    '/deny/:bookingRequestId',
+    authenticateUser,
+    BookingRequestController.denyBookingRequest
+);
+
 // Delete a booking request with the bookingId
 router.delete(
     '/',

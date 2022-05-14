@@ -13,6 +13,7 @@ It involves all database interactions and has all the CRUD functions that are ac
 the BookingReRequests routes.
 
 */
+
 const db = require('../models/index');
 
 const {
@@ -116,8 +117,21 @@ const deleteBookingRequest = async (req, res) => {
 
     BookingRequest.destroy({where: {bookingRequestId}})
         .then(() => {
-            sendBookingDeniedEmail(data);
             res.sendStatus(200);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        });
+};
+
+// Delete a BookingReRequest with the specified id in the request
+const denyBookingRequest = async (req, res) => {
+    const {bookingRequestId} = req.params;
+    BookingRequest.destroy({where: {bookingRequestId}})
+        .then((data) => {
+            res.sendStatus(200);
+            sendBookingDeniedEmail(data)
         })
         .catch((err) => {
             console.error(err);
@@ -187,6 +201,7 @@ module.exports = {
     findUserBookingRequests,
     updateBookingReRequest,
     deleteBookingRequest,
+    denyBookingRequest,
     deleteAllBookingRequests,
     findNextAvailableSpace,
     findAllAvailableSpaces,
