@@ -40,6 +40,7 @@ const createBooking = async (req, res) => {
       'userId',
       'startDate',
       'endDate',
+      'approved',
     ],
   }).then(async (data) => {
     const amount = calculateParkingCharge(data) * 100;
@@ -58,7 +59,7 @@ const createBooking = async (req, res) => {
         receipt_email: user.email,
       });
 
-      await sendBookingConfirmationEmail(data);
+      await sendBookingApprovedEmail(data);
       res.status(200).send(data);
     } catch (err) {
       await data.destroy();

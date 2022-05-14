@@ -53,7 +53,7 @@ router.post(
     '/findAllSpaces',
     authenticateUser,
     verifyAdmin,
-    BookingRequestController.findAllAvailableSpace
+    BookingRequestController.findAllAvailableSpaces
 );
 
 // Create a new booking request

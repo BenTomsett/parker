@@ -46,7 +46,12 @@ const createBookingRequest = async (req, res) => {
 // Retrieve all BookingReRequests from the database.
 const findAllBookingRequests = async (req, res) => {
 
-    BookingRequest.findAll()
+    BookingRequest.findAll({
+            include: {
+                model: db.Building,
+                }
+        }
+    )
         .then((data) => {
             res.status(200).send(data);
         })
@@ -138,7 +143,7 @@ const findNextAvailableSpace = async (req, res) => {
     const {startDate, endDate, carParkId} = req.body;
     db.sequelize
         .query(
-            'SELECT min("spaceNo") as spaceVal FROM "ParkingSpaces" WHERE "carParkId" = ' + carParkId + ' AND "spaceId" NOT IN (SELECT "spaceId" FROM "Bookings" WHERE "startDate" >= CAST(\'' + startDate + '\' AS DATE) AND "endDate" <= CAST(\'' + endDate + '\' AS DATE))',
+            'SELECT "spaceId",min("spaceNo") as "spaceNo" FROM "ParkingSpaces" WHERE "carParkId" = ' + carParkId + ' AND "spaceId" NOT IN (SELECT "spaceId" FROM "Bookings" WHERE "startDate" >= \'' + startDate + '\' AND "endDate" <= \'' + endDate + '\')GROUP BY "spaceId"',
             {
                 replacements: {carParkId: carParkId, startDate: startDate, endDate: endDate},
                 type: db.sequelize.QueryTypes.SELECT,
@@ -154,11 +159,11 @@ const findNextAvailableSpace = async (req, res) => {
 };
 
 //Find all available spaces between time range of a given car park
-const findAllAvailableSpace = async (req, res) => {
+const findAllAvailableSpaces = async (req, res) => {
     const {startDate, endDate, carParkId} = req.body;
     db.sequelize
         .query(
-            'SELECT "spaceNo" FROM "ParkingSpaces" WHERE "carParkId" = ' + carParkId + ' AND "spaceId" NOT IN (SELECT "spaceId" FROM "Bookings" WHERE "startDate" >= CAST(' + startDate + ' AS DATE) AND "endDate" <= CAST(' + endDate + ' AS DATE))',
+            'SELECT "spaceId","spaceNo"  as "spaceNo" FROM "ParkingSpaces" WHERE "carParkId" = ' + carParkId + ' AND "spaceId" NOT IN (SELECT "spaceId" FROM "Bookings" WHERE "startDate" >= \'' + startDate + '\'  AND "endDate" <= \'' + endDate + '\' )',
             {
                 replacements: {carParkId: carParkId, startDate: startDate, endDate: endDate},
                 type: db.sequelize.QueryTypes.SELECT,
@@ -182,5 +187,5 @@ module.exports = {
     deleteBookingRequest,
     deleteAllBookingRequests,
     findNextAvailableSpace,
-    findAllAvailableSpace,
+    findAllAvailableSpaces,
 };
