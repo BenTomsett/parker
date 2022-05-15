@@ -5,6 +5,7 @@ import {
 import useTitle from '../../hooks/useTitle';
 import RequestBookingList from './bookingRequests/RequestBookingList';
 import UserList from './users/UserList';
+import CarparkList from './carparks/CarparkList';
 
 const UsersPage = () => {
   useTitle('Admin Dashboard');
@@ -24,7 +25,7 @@ const UsersPage = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Heading>PLACEHOLDER ADD INFORMATION HERE:</Heading>
+            <CarparkList />
           </TabPanel>
           <TabPanel>
             <RequestBookingList />
