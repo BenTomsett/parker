@@ -64,6 +64,15 @@ router.get(
   BookingController.findUserBookings
 );
 
+// Retrieve all restricted bookings
+router.get(
+    '/restricted',
+    authenticateUser,
+    verifyAdmin,
+    BookingController.findRestrictedBookings
+);
+
+
 // Retrieve a single booking
 router.get(
   '/:bookingId',

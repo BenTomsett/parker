@@ -8,14 +8,22 @@ import UserList from './users/UserList';
 import ZoneList from './zones/ZoneList';
 import CarparkList from './carparks/CarparkList';
 import ParkingSpaceList from "./spaces/ParkingSpaceList";
+import BlockedSpaceList from "./blockedSpaces/BlockedSpaceList";
 
 const UsersPage = () => {
   useTitle('Admin');
 
   const [itemCount, setItemCount] = useState({});
+  const [restrictedItemCount, setRestrictedItemCount] = useState({});
 
   const updateCount = (property, value) => {
     setItemCount((prevState => ({
+      ...prevState,
+      [property]: value,
+    })));
+  };
+  const updateRestrictedCount = (property, value) => {
+    setRestrictedItemCount((prevState => ({
       ...prevState,
       [property]: value,
     })));
@@ -39,6 +47,12 @@ const UsersPage = () => {
               <Badge>{itemCount.requests}</Badge>
             </HStack>
           </Tab>
+          <Tab>
+            <HStack>
+              <Text>Restricted Bookings</Text>
+              <Badge>{restrictedItemCount.bookings}</Badge>
+            </HStack>
+          </Tab>
           <Tab>Users</Tab>
         </TabList>
         <TabPanels>
@@ -53,6 +67,9 @@ const UsersPage = () => {
           </TabPanel>
           <TabPanel>
             <BookingRequestList updateCount={updateCount} />
+          </TabPanel>
+          <TabPanel>
+            <BlockedSpaceList updateRestrictedCount={updateRestrictedCount}/>
           </TabPanel>
           <TabPanel>
             <UserList />

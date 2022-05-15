@@ -22,7 +22,6 @@ const {
   sendOverstayEmail,
   sendNonArrivalEmail,
   sendBookingConfirmationEmail,
-  sendUserInWrongSpaceEmail
 } = require('../utils/notifications');
 const { Stripe } = require('../config/stripe');
 const { calculateParkingCharge } = require('../utils/parkingCharges');
@@ -78,6 +77,29 @@ const createBooking = async (req, res) => {
   });
 };
 
+//Create restricted bookings
+const createRestrictedBooking = async (req, res) => {
+  const booking = req.body;
+
+  Booking.create(booking, {
+
+  }).then((data) => {
+    try {
+      res.status(200).send(data);
+    } catch (err) {
+    }
+  }).catch((err) => {
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      res.status(409).send('ERR_BOOKING_EXISTS');
+    } else if (err.name === 'SequelizeValidationError') {
+      res.status(400).send('ERR_DATA_MISSING');
+    } else {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    }
+  });
+}
+
 // Retrieve all bookings from the database.
 const findAllBookings = async (req, res) => {
   const { isAdmin } = req.user;
@@ -116,7 +138,6 @@ const findBooking = async (req, res) => {
 // Find bookings for a specific user
 const findUserBookings = async (req, res) => {
   const { userId } = req.params;
-
   Booking.findAll({ where: { userId } }).then((data) => {
     res.status(200).send(data);
   }).catch((err) => {
@@ -124,6 +145,20 @@ const findUserBookings = async (req, res) => {
     res.status(500).send('ERR_INTERNAL_EXCEPTION');
   });
 };
+
+
+// Find restricted space bookings
+const findRestrictedBookings = async (req, res) => {
+   Booking.findAll({ where: {bookingType:"RESTRICTION"},include: [
+       { model: ParkingSpace, include: [CarPark] },
+     ],}).then((data) => {
+    res.status(200).send(data);
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send('ERR_INTERNAL_EXCEPTION');
+  });
+};
+
 
 // Find bookings for a specific car park
 const findCarParkBookings = async (req, res) => {
@@ -335,4 +370,6 @@ module.exports = {
   checkOutBooking,
   deleteBooking,
   deleteAllBookings,
+  findRestrictedBookings,
+  createRestrictedBooking,
 };
