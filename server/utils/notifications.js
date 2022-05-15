@@ -256,6 +256,29 @@ const sendUserRegistrationEmail = async (User) => {
     });
 }
 
+const sendUserInWrongSpaceEmail = async (Booking) => {
+
+    const user = await Booking.getUser();
+    const parkingSpace = await Booking.getParkingSpace();
+
+    const mailOptionsConfirmation = {
+        from: 'NoReply from Parker <parkeruea@gmail.com>',
+        to: 'parkeruea@gmail.com', //users email address
+        subject: 'Parker - User in Wrong Space Warning: - ' + Booking.bookingId,
+        text: 'Hi, \n\n' +
+            user.forename + ' ' + user.surname + ' has not parked int the correct location for the booking: ' + Booking.bookingId + '.' +
+            'They should be parked in the following location, ' + parkingSpace.CarPark.name + ', space number: ' + parkingSpace.spaceNo + '.'
+    };
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
+        if (err) {
+            console.log(err);// If an error is found it will be displayed to console
+        } else {
+            console.log('Admin Email sent: ' + info.response); //If email is successfully sent the console will show a confirmation message
+        }
+    });
+}
+
+
 module.exports = {
     sendBookingConfirmationEmail,
     sendOverstaySMS,
@@ -265,4 +288,5 @@ module.exports = {
     sendBookingApprovedEmail,
     sendBookingDeniedEmail,
     sendUserRegistrationEmail,
+    sendUserInWrongSpaceEmail
 };

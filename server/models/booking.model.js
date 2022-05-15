@@ -61,10 +61,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      approved: {
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      cost: {
+        allowNull: true,
+        type: DataTypes.DECIMAL,
       },
     },
     {
@@ -74,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
       indexes: [
         {
           unique: 'booking_idx',
-          fields: ['bookingType', 'startDate', 'endDate'],
+          fields: ['userId', 'bookingType', 'startDate', 'endDate'],
         },
       ],
       // timestamps: false

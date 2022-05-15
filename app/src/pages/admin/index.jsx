@@ -6,6 +6,8 @@ import {
 import useTitle from '../../hooks/useTitle';
 import BookingRequestList from './bookingRequests/BookingRequestList';
 import UserList from './users/UserList';
+import ZoneList from './zones/ZoneList';
+import CarparkList from './carparks/CarparkList';
 
 const UsersPage = () => {
   useTitle('Admin');
@@ -39,8 +41,11 @@ const UsersPage = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Heading>PLACEHOLDER ADD INFORMATION HERE:</Heading>
+            <CarparkList />
           </TabPanel>
+            <TabPanel>
+                <ZoneList />
+            </TabPanel>
           <TabPanel>
             <BookingRequestList updateCount={updateCount} />
           </TabPanel>

@@ -49,9 +49,9 @@ module.exports = (sequelize, DataTypes) => {
           values: ['OCCUPIED', 'AVAILABLE', 'RESERVED'],
         }),
       },
-      gpsPolygon: {
+      gpsPoint: {
         allowNull: false,
-        type: DataTypes.GEOMETRY('Polygon'),
+        type: DataTypes.GEOMETRY('Point'),
       },
     },
     {
@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'ParkingSpaces',
       modelName: 'ParkingSpace',
       indexes: [
-        { unique: 'parking_space_idx', fields: ['status', 'gpsPolygon', 'spaceNo'] },
+        { unique: 'parking_space_idx', fields: ['status', 'gpsPoint', 'spaceNo'] },
       ],
       // timestamps: false
     }
