@@ -31,6 +31,7 @@ const UsersPage = () => {
       <Tabs w="100%">
         <TabList>
           <Tab>Car Parks</Tab>
+          <Tab>Zones</Tab>
           <Tab>
             <HStack>
               <Text>Booking requests</Text>
