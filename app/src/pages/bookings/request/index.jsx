@@ -55,7 +55,7 @@ const NewBookingRequest = () => {
     const endDate = new Date(
       Date.parse(`${formData.endDate}T${formData.endTime}`));
 
-    if (startDate > endDate) {
+    if (startDate > endDate || startDate.getSeconds() === endDate.getSeconds()) {
       toast({ title: 'The start date must be before the end date' });
     } else if (startDate < new Date()) {
       toast({ title: 'The start date must not be in the past' });
@@ -75,10 +75,17 @@ const NewBookingRequest = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-      }).then(() => {
+      }).then((response) => {
         setSubmitting(false);
-      }).catch(() => {
-        setSubmitting(false);
+        if (response.status === 201) {
+          navigate('/bookings');
+        } else if (response.status === 409) {
+          toast(
+            { title: 'An identical booking request already exists - an admin must approve that request.' });
+        } else {
+          toast(
+            { title: 'There was an error creating your booking request. Wait a few minutes and try again.' });
+        }
       });
     }
   };
