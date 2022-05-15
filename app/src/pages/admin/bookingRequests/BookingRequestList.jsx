@@ -1,3 +1,5 @@
+/* eslint react/prop-types: 0 */
+
 import React, { useEffect, useState } from 'react';
 import {
   Box, HStack, Spinner,
@@ -14,7 +16,7 @@ import { formatDuration, intervalToDuration } from 'date-fns';
 import DenyRequestModal from './DenyRequestModal';
 import ApproveRequestModal from './ApproveRequestModal';
 
-const BookingRequestList = () => {
+const BookingRequestList = ({updateCount}) => {
   const [requests, setRequests] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,6 +28,7 @@ const BookingRequestList = () => {
       response.json().then((json) => {
         setRequests(json);
         setLoading(false);
+        updateCount('requests', json.length);
       });
     });
   };
