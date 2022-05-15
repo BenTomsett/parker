@@ -13,32 +13,30 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-const Delete = async (requestedBooking) => {
-  const path = 'api/bookingRequests/deny/'
-  const fullPath = path.concat((requestedBooking.bookingRequestId).toString()) /* This is working as expected somewhere else failing */
+const Delete = async (carpark) => {
+  const path = 'api/carparks/'
+  const fullPath = path.concat((carpark.carParkId).toString());
 
   return fetch(fullPath, {
     method: 'DELETE',
-  }).then((response) => {
-    console.log(response)
-  }).catch((err) => {
-    console.log(err)
-  });
+    headers: {
+    }
+  })
 }
 
-const DeleteRequestedBooking = ({request, update}) =>{
+const DeleteCarpark = ({carpark, update}) =>{
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Button colorScheme='red' onClick={onOpen}>Delete</Button>
+      <Button colorScheme='red' onClick={onOpen}>Delete Carpark</Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Delete Booking Request with ID: {request.bookingRequestId}</ModalHeader>
+          <ModalHeader>Delete Carpark with ID: {carpark.carParkId}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <h2> Are you sure you want to Delete this booking request? This can not be reversed!</h2>
+            <h2> Are you sure you want to Delete this carpark? This can not be reversed!</h2>
           </ModalBody>
 
           <ModalFooter>
@@ -46,10 +44,10 @@ const DeleteRequestedBooking = ({request, update}) =>{
               No
             </Button>
             <Button colorScheme='red' mr={3} onClick={async ()=> {
-              await Delete(request);
+              await Delete(carpark);
               update();
             }}>
-              Yes! Delete the Request
+              Yes! Delete the Carpark
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -58,4 +56,4 @@ const DeleteRequestedBooking = ({request, update}) =>{
   )
 }
 
-export default DeleteRequestedBooking;
+export default DeleteCarpark

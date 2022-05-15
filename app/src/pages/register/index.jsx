@@ -96,7 +96,7 @@ const RegisterPage = () => {
 
   return (
     <Container maxW='xl' py={{ base: '12', md: '24' }}
-               px={{ base: '0', sm: '8' }}>
+               px={4}>
       <Stack spacing='8'>
         <Stack spacing='6'>
           <Image src={logo} alt='Parker logo' h={35} />
@@ -107,8 +107,7 @@ const RegisterPage = () => {
           </Stack>
         </Stack>
         <Box
-          py={{ base: '0', sm: '8' }}
-          px={{ base: '4', sm: '10' }}
+          p={8}
           bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
           borderRadius={{ base: 'none', sm: 'xl' }}
           borderWidth={1}

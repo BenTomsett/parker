@@ -1,23 +1,24 @@
 import React from 'react';
 import {
-    Button,Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text,
+  Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack,
 } from '@chakra-ui/react';
 import useTitle from '../../hooks/useTitle';
-import RequestBookingList from './bookingRequests/RequestBookingList';
+import BookingRequestList from './bookingRequests/BookingRequestList';
 import UserList from './users/UserList';
 import ZoneList from './zones/ZoneList';
+import CarparkList from './carparks/CarparkList';
 
 const UsersPage = () => {
   useTitle('Admin Dashboard');
 
   return (
 
-    <div>
-      <Heading size="xl">Admin Dashboard</Heading>
-      <br/>
-      <Heading size="md">Welcome to your Admin Dashboard</Heading>
-      <Text> Use this page to approve bookings, modify current accounts and see an overview of the car parks currently on the system. </Text>
-      <Tabs>
+    <VStack align='start' spacing={4} height='100%'>
+      <VStack align='start' spacing={0}>
+        <Heading size='lg'>Admin</Heading>
+        <Text fontSize='xl'>Manage car parks, booking requests and users</Text>
+      </VStack>
+      <Tabs w="100%">
         <TabList>
           <Tab>Car Parks</Tab>
           <Tab>Zones</Tab>
@@ -26,21 +27,22 @@ const UsersPage = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Heading>PLACEHOLDER ADD INFORMATION HERE:</Heading>
+            <CarparkList />
           </TabPanel>
             <TabPanel>
                 <Button colorScheme='blue' mr={3}>Add Zone</Button>
                 <ZoneList />
             </TabPanel>
           <TabPanel>
-            <RequestBookingList />
+            <BookingRequestList />
           </TabPanel>
           <TabPanel>
             <UserList />
           </TabPanel>
         </TabPanels>
       </Tabs>
-    </div>
+    </VStack>
+
   );
 };
 

@@ -26,6 +26,7 @@ const MapCard = () => {
   return (
     <VStack
       flex={1}
+      minHeight={{base: '500px', md: 'unset'}}
       spacing={4}
       borderWidth={1}
       borderRadius="xl"
