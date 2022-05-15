@@ -11,6 +11,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../../context/user';
 import { emailRegex, getAge } from '../../utils/auth';
 import useTitle from '../../hooks/useTitle';
+import DeleteUser from "./DeleteUser";
 
 const PersonalDetails = () => {
   useTitle('Personal details - Account');
@@ -191,6 +192,8 @@ const PersonalDetails = () => {
             ) : "Update"}
           </Button>
         </form>
+        <br />
+        <DeleteUser />
       </Box>
     ) : (
       <Spinner />
