@@ -29,7 +29,7 @@ router.put('/', authenticateUser, SpacesController.createParkingSpace);
 router.delete('/', authenticateUser, SpacesController.deleteAllParkingSpaces);
 // Retrieve a single parking space
 router.get(
-  '/:parkingSpaceId',
+  '/:spaceId',
   authenticateUser,
   SpacesController.findParkingSpace
 );
@@ -43,14 +43,14 @@ router.get(
 
 // Update a parking space with the parkingSpaceId
 router.put(
-  '/carpark/:carParkId/:parkingSpaceId',
+  '/:spaceId',
   authenticateUser,
   SpacesController.updateParkingSpace
 );
 
 // Delete a car parking space with the parkingSpaceId
 router.delete(
-  '/carpark/:carParkId/:parkingSpaceId',
+  '/:spaceId',
   authenticateUser,
   SpacesController.deleteParkingSpace
 );

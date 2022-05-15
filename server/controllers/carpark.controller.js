@@ -59,7 +59,11 @@ const updateCarPark = async (req, res) => {
 };
 
 const findAllCarParks = async (req, res) => {
-    CarPark.findAll()
+    CarPark.findAll({
+        include: {
+            model: Zone,
+        }
+    })
         .then((data) => {
             res.status(200).send(data);
         })
