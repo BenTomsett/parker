@@ -20,7 +20,9 @@ const { checkParkedLocation } = require('../utils/checkLocation');
 const {
   sendBookingApprovedEmail,
   sendOverstayEmail,
-  sendNonArrivalEmail, sendBookingConfirmationEmail,
+  sendNonArrivalEmail, 
+  sendBookingConfirmationEmail,
+  sendUserInWrongSpaceEmail
 } = require('../utils/notifications');
 const { Stripe } = require('../config/stripe');
 const { calculateParkingCharge } = require('../utils/parkingCharges');
@@ -256,6 +258,7 @@ const checkInBooking = async (req, res) => {
         }
       });
   } else {
+    sendUserInWrongSpaceEmail(booking);
     res.status(401).send('ERR_INCORRECT_LOCATION');
   }
 };
