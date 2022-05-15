@@ -100,9 +100,8 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "stripe",
       },
       paymentMethodId: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.STRING,
-        defaultValue: "stripe",
       },
     },
     {
