@@ -11,8 +11,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { formatDuration, intervalToDuration } from 'date-fns';
-import ApproveRequestedBooking from './ApproveRequestedBooking';
-import DeleteRequestedBooking from './DeleteRequestedBooking';
+import DenyRequestModal from './DenyRequestModal';
+import ApproveRequestModal from './ApproveRequestModal';
 
 const BookingRequestList = () => {
   const [requests, setRequests] = useState(null);
@@ -24,7 +24,6 @@ const BookingRequestList = () => {
       method: 'GET',
     }).then((response) => {
       response.json().then((json) => {
-        console.log(json);
         setRequests(json);
         setLoading(false);
       });
@@ -78,8 +77,8 @@ const BookingRequestList = () => {
                               })}</Td>
                               <Td>
                                 <HStack>
-                                  <ApproveRequestedBooking request={request} update={fetchRequests}/>
-                                  <DeleteRequestedBooking request={request} update={fetchRequests}/>
+                                  <ApproveRequestModal request={request} update={fetchRequests}/>
+                                  <DenyRequestModal request={request} update={fetchRequests}/>
                                 </HStack>
                               </Td>
                             </Tr>

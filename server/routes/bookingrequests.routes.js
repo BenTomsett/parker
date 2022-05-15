@@ -98,4 +98,10 @@ router.delete(
     BookingRequestController.deleteAllBookingRequests
   );
 
+router.post(
+  '/autoAssign',
+  authenticateUser,
+  BookingRequestController.autoAssignRequest
+)
+
 module.exports = router;
