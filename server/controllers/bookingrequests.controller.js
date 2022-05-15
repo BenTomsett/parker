@@ -21,7 +21,7 @@ const {
     sendBookingDeniedEmail,
 } = require('../utils/notifications');
 
-const { BookingRequest, Building, User } = db;
+const { BookingRequest, Building, User, CarPark } = db;
 
 // Create and Save a new BookingReRequest
 const createBookingRequest = async (req, res) => {
@@ -160,14 +160,14 @@ const deleteAllBookingRequests = async (req, res) => {
         });
 };
 
-//Find closest available space between time range of a given car park
+// Find closest available space between time range of a given car park
 const findNextAvailableSpace = async (req, res) => {
     const {startDate, endDate, carParkId} = req.body;
     db.sequelize
         .query(
-            'SELECT "spaceId",min("spaceNo") as "spaceNo" FROM "ParkingSpaces" WHERE "carParkId" = ' + carParkId + ' AND "spaceId" NOT IN (SELECT "spaceId" FROM "Bookings" WHERE "startDate" >= \'' + startDate + '\' AND "endDate" <= \'' + endDate + '\')GROUP BY "spaceId"',
+            `SELECT "spaceId",min("spaceNo") as "spaceNo" FROM "ParkingSpaces" WHERE "carParkId" = ${  carParkId  } AND "spaceId" NOT IN (SELECT "spaceId" FROM "Bookings" WHERE "startDate" >= '${  startDate  }' AND "endDate" <= '${  endDate  }')GROUP BY "spaceId"`,
             {
-                replacements: {carParkId: carParkId, startDate: startDate, endDate: endDate},
+                replacements: {carParkId, startDate, endDate},
                 type: db.sequelize.QueryTypes.SELECT,
             }
         )
@@ -180,14 +180,15 @@ const findNextAvailableSpace = async (req, res) => {
         });
 };
 
-//Find all available spaces between time range of a given car park
+// Find all available spaces between time range of a given car park
 const findAllAvailableSpaces = async (req, res) => {
     const {startDate, endDate, carParkId} = req.body;
+
     db.sequelize
         .query(
-            'SELECT "spaceId","spaceNo"  as "spaceNo" FROM "ParkingSpaces" WHERE "carParkId" = ' + carParkId + ' AND "spaceId" NOT IN (SELECT "spaceId" FROM "Bookings" WHERE "startDate" >= \'' + startDate + '\'  AND "endDate" <= \'' + endDate + '\' )',
+            `SELECT "spaceId","spaceNo"  as "spaceNo" FROM "ParkingSpaces" WHERE "carParkId" = ${  carParkId  } AND "spaceId" NOT IN (SELECT "spaceId" FROM "Bookings" WHERE "startDate" >= '${  startDate  }'  AND "endDate" <= '${  endDate  }' )`,
             {
-                replacements: {carParkId: carParkId, startDate: startDate, endDate: endDate},
+                replacements: {carParkId, startDate, endDate},
                 type: db.sequelize.QueryTypes.SELECT,
             }
         )
@@ -199,6 +200,47 @@ const findAllAvailableSpaces = async (req, res) => {
             res.status(500).send('ERR_INTERNAL_EXCEPTION');
         });
 };
+
+const autoAssignRequest = async (req, res) => {
+    const {startDate, endDate, carParkId, lng, lat} = req.body;
+
+    const location = db.sequelize.literal(`ST_GeomFromText('POINT(${lng} ${lat})')`);
+
+    CarPark.findAll({
+        attributes: {
+            include: [
+                [
+                    db.sequelize.fn(
+                      'ST_DistanceSphere',
+                      db.sequelize.literal('"gpsPoint"'),
+                      location
+                    ),
+                    'distance',
+                ],
+            ],
+        },
+        order: [[db.sequelize.fn('ST_DistanceSphere', db.sequelize.literal('"gpsPoint"'),location), 'ASC']]
+    }).then((carParkData) => {
+        db.sequelize
+        .query(
+          `SELECT "spaceId",min("spaceNo") as "spaceNo" FROM "ParkingSpaces" WHERE "carParkId" = ${carParkData[0].carParkId} AND "spaceId" NOT IN (SELECT "spaceId" FROM "Bookings" WHERE "startDate" >= '${  startDate  }' AND "endDate" <= '${  endDate  }')GROUP BY "spaceId"`,
+          {
+              replacements: {carParkId, startDate, endDate},
+              type: db.sequelize.QueryTypes.SELECT,
+          }
+        )
+        .then((spaceData) => {
+            res.status(200).json({
+                carParkId: carParkData[0].carParkId,
+                spaceId: spaceData[0].spaceId,
+            });
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        });
+    });
+}
 
 module.exports = {
     createBookingRequest,
@@ -211,4 +253,5 @@ module.exports = {
     deleteAllBookingRequests,
     findNextAvailableSpace,
     findAllAvailableSpaces,
+    autoAssignRequest
 };

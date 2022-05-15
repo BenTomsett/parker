@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack,
+  Badge,
+  Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack,
 } from '@chakra-ui/react';
 import useTitle from '../../hooks/useTitle';
 import BookingRequestList from './bookingRequests/BookingRequestList';
@@ -9,7 +10,16 @@ import ZoneList from './zones/ZoneList';
 import CarparkList from './carparks/CarparkList';
 
 const UsersPage = () => {
-  useTitle('Admin Dashboard');
+  useTitle('Admin');
+
+  const [itemCount, setItemCount] = useState({});
+
+  const updateCount = (property, value) => {
+    setItemCount((prevState => ({
+      ...prevState,
+      [property]: value,
+    })));
+  };
 
   return (
 
@@ -21,8 +31,12 @@ const UsersPage = () => {
       <Tabs w="100%">
         <TabList>
           <Tab>Car Parks</Tab>
-          <Tab>Zones</Tab>
-          <Tab>Booking requests</Tab>
+          <Tab>
+            <HStack>
+              <Text>Booking requests</Text>
+              <Badge>{itemCount.requests}</Badge>
+            </HStack>
+          </Tab>
           <Tab>Users</Tab>
         </TabList>
         <TabPanels>
@@ -33,7 +47,7 @@ const UsersPage = () => {
                 <ZoneList />
             </TabPanel>
           <TabPanel>
-            <BookingRequestList />
+            <BookingRequestList updateCount={updateCount} />
           </TabPanel>
           <TabPanel>
             <UserList />

@@ -1,3 +1,5 @@
+/* eslint react/prop-types: 0 */
+
 import React, { useEffect, useState } from 'react';
 import {
   Box, HStack, Spinner,
@@ -11,10 +13,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { formatDuration, intervalToDuration } from 'date-fns';
-import ApproveRequestedBooking from './ApproveRequestedBooking';
-import DeleteRequestedBooking from './DeleteRequestedBooking';
+import DenyRequestModal from './DenyRequestModal';
+import ApproveRequestModal from './ApproveRequestModal';
 
-const BookingRequestList = () => {
+const BookingRequestList = ({updateCount}) => {
   const [requests, setRequests] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,9 +26,9 @@ const BookingRequestList = () => {
       method: 'GET',
     }).then((response) => {
       response.json().then((json) => {
-        console.log(json);
         setRequests(json);
         setLoading(false);
+        updateCount('requests', json.length);
       });
     });
   };
@@ -78,8 +80,8 @@ const BookingRequestList = () => {
                               })}</Td>
                               <Td>
                                 <HStack>
-                                  <ApproveRequestedBooking request={request} update={fetchRequests}/>
-                                  <DeleteRequestedBooking request={request} update={fetchRequests}/>
+                                  <ApproveRequestModal request={request} update={fetchRequests}/>
+                                  <DenyRequestModal request={request} update={fetchRequests}/>
                                 </HStack>
                               </Td>
                             </Tr>
