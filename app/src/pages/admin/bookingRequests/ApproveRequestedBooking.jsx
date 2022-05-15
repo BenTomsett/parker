@@ -16,7 +16,7 @@ import {
 import UserContext from '../../../context/user';
 
 
-const ApproveRequestedBooking = ({requestedBooking,update}) => {
+const ApproveRequestedBooking = ({request, update}) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const user = useContext(UserContext);
@@ -106,7 +106,7 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
       <Modal size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay/>
         <ModalContent>
-            <ModalHeader>Approve Booking for with ID: {requestedBooking.bookingRequestId}</ModalHeader>
+            <ModalHeader>Approve Booking for with ID: {request.bookingRequestId}</ModalHeader>
             <ModalCloseButton/>
             <ModalBody>
 

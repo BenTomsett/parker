@@ -24,7 +24,7 @@ const Delete = async (requestedBooking) => {
   })
 }
 
-const DeleteRequestedBooking = ({requestedBooking, update}) =>{
+const DeleteRequestedBooking = ({request, update}) =>{
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -33,7 +33,7 @@ const DeleteRequestedBooking = ({requestedBooking, update}) =>{
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Delete Booking Request with ID: {requestedBooking.bookingRequestId}</ModalHeader>
+          <ModalHeader>Delete Booking Request with ID: {request.bookingRequestId}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <h2> Are you sure you want to Delete this booking request? This can not be reversed!</h2>
@@ -44,7 +44,7 @@ const DeleteRequestedBooking = ({requestedBooking, update}) =>{
               No
             </Button>
             <Button colorScheme='red' mr={3} onClick={async ()=> {
-              await Delete(requestedBooking);
+              await Delete(request);
               update();
             }}>
               Yes! Delete the Request
