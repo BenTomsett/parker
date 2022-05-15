@@ -27,7 +27,7 @@ const CarparkStatus = ({ carpark }) => {
   const [carparkStatus, setCarparkStatus] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const fetchCarparkStatus = () => {
+  const fetchCarparkStatus = async () => {
     fetch(`/api/carparks/${carpark.carParkId}`, {
       method: 'GET',
     }).then((response) => {
@@ -37,9 +37,9 @@ const CarparkStatus = ({ carpark }) => {
     });
   };
 
-//   useEffect(() => {
-//     fetchCarparkStatus();
-//   });
+  useEffect(() => {
+    fetchCarparkStatus();
+  });
 
   return (
     <>
