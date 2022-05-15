@@ -5,6 +5,7 @@ import {
 import useTitle from '../../hooks/useTitle';
 import BookingRequestList from './bookingRequests/BookingRequestList';
 import UserList from './users/UserList';
+import ZoneList from './zones/ZoneList';
 import CarparkList from './carparks/CarparkList';
 
 const UsersPage = () => {
@@ -20,6 +21,7 @@ const UsersPage = () => {
       <Tabs w="100%">
         <TabList>
           <Tab>Car Parks</Tab>
+          <Tab>Zones</Tab>
           <Tab>Booking requests</Tab>
           <Tab>Users</Tab>
         </TabList>
@@ -27,6 +29,9 @@ const UsersPage = () => {
           <TabPanel>
             <CarparkList />
           </TabPanel>
+            <TabPanel>
+                <ZoneList />
+            </TabPanel>
           <TabPanel>
             <BookingRequestList />
           </TabPanel>

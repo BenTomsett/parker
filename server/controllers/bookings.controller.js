@@ -20,7 +20,9 @@ const { checkParkedLocation } = require('../utils/checkLocation');
 const {
   sendBookingApprovedEmail,
   sendOverstayEmail,
-  sendNonArrivalEmail, sendBookingConfirmationEmail,
+  sendNonArrivalEmail,
+  sendBookingConfirmationEmail,
+  sendUserInWrongSpaceEmail
 } = require('../utils/notifications');
 const { Stripe } = require('../config/stripe');
 const { calculateParkingCharge } = require('../utils/parkingCharges');
