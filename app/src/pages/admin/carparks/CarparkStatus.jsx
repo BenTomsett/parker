@@ -20,11 +20,13 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
-  Text
+  Text,
+  HStack
 } from '@chakra-ui/react';
 
 const CarparkStatus = ({ carpark }) => {
   const [carparkStatus, setCarparkStatus] = useState(null);
+  const [availableSpaces, setAvailableSpaces] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const fetchCarparkStatus = async () => {
@@ -37,8 +39,20 @@ const CarparkStatus = ({ carpark }) => {
     });
   };
 
+  const fetchCarparkAvailableSpaces = async () => {
+    fetch(`/api/spaces/carpark/availableSpaces/${carpark.carParkId}`, {
+      method: 'GET',
+    }).then((response) => {
+      response.json().then((json) => {
+        console.log(json);
+        setAvailableSpaces(json);
+      });
+    });
+  };
+
   useEffect(() => {
     fetchCarparkStatus();
+    fetchCarparkAvailableSpaces();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -53,6 +67,7 @@ const CarparkStatus = ({ carpark }) => {
           <ModalHeader>Carpark Status: {carpark.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <HStack><p>The amount of Available Spaces: {availableSpaces.availableSpaces}</p></HStack>  
             <VStack align="start" spacing={0} height="100%">
               {carparkStatus ? (
                 carparkStatus.Zones.map((zone) => (

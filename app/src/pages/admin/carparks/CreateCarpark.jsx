@@ -25,7 +25,7 @@ import { FiPlus } from 'react-icons/fi';
 import Map, { Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const CreateCarpark = () => {
+const CreateCarpark = ({update}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [marker, setMarker] = useState({
     latitude: 52.62225136203375,
@@ -88,6 +88,7 @@ const CreateCarpark = () => {
           });
         } else {
           onClose();
+          update();
         }
       });
     }

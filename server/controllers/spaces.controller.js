@@ -13,7 +13,6 @@ It involves all database interactions and has all the CRUD functions that are ac
 the car parks routes.
 */
 
-
 const db = require('../models/index');
 
 const { ParkingSpace } = db;
@@ -72,7 +71,28 @@ const findCarParkParkingSpaces = async (req, res) => {
 
   ParkingSpace.findAll({ where: { carParkId } })
     .then((data) => {
-      res.status(200).send(data);
+      res.send(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
+};
+
+// Find parking spaces for a specific car park
+const findCarParkAvailableSpaces = async (req, res) => {
+  const { carParkId } = req.params;
+
+  ParkingSpace.count({
+    where: {
+      carParkId,
+      status: 'AVAILABLE',
+    },
+  })
+    .then((data) => {
+      res.status(200).json({
+        availableSpaces: data
+    });
     })
     .catch((err) => {
       console.error(err);
@@ -105,8 +125,8 @@ const deleteParkingSpace = async (req, res) => {
   const { parkingSpaceId } = req.params;
 
   ParkingSpace.destroy({ where: { parkingSpaceId } })
-    .then((data) => {
-      res.status(200).send(data);
+    .then(() => {
+      res.sendStatus(200)
     })
     .catch((err) => {
       console.error(err);
@@ -120,8 +140,8 @@ const deleteAllParkingSpaces = async (req, res) => {
     where: {},
     truncate: false,
   })
-    .then((data) => {
-      res.status(200).send(data);
+    .then(() => {
+      res.sendStatus(200)
     })
     .catch((err) => {
       console.error(err);
@@ -134,6 +154,7 @@ module.exports = {
   findAllParkingSpaces,
   findParkingSpace,
   findCarParkParkingSpaces,
+  findCarParkAvailableSpaces,
   updateParkingSpace,
   deleteParkingSpace,
   deleteAllParkingSpaces,

@@ -41,6 +41,13 @@ router.get(
   SpacesController.findCarParkParkingSpaces
 );
 
+// Retrieve all parking spaces for a car park
+router.get(
+    '/carpark/availableSpaces/:carParkId',
+    authenticateUser,
+    SpacesController.findCarParkAvailableSpaces
+  );
+
 // Update a parking space with the parkingSpaceId
 router.put(
   '/carpark/:carParkId/:parkingSpaceId',
