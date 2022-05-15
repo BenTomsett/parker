@@ -76,7 +76,17 @@ const PersonalDetails = () => {
       setSubmitting(true);
       fetch(`/api/users/${userId}`, {
         method: 'PUT',
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          forename,
+          surname,
+          email,
+          dob,
+          addressLine1,
+          addressLine2,
+          city,
+          postcode,
+          country,
+        }),
         headers: {
           'Content-Type': 'application/json',
         },
