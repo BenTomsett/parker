@@ -5,8 +5,7 @@ import {
   Box,
   Button,
   FormControl, FormLabel,
-  Heading,
-  HStack, Input, Select, Spinner,
+  Heading, Input, Select, Spinner,
   Stack,
   useBreakpointValue, useToast, VStack,
 } from '@chakra-ui/react';
@@ -55,7 +54,7 @@ const NewBookingRequest = () => {
     const endDate = new Date(
       Date.parse(`${formData.endDate}T${formData.endTime}`));
 
-    if (startDate > endDate || startDate.getSeconds() === endDate.getSeconds()) {
+    if (startDate > endDate || startDate.getTime() === endDate.getTime()) {
       toast({ title: 'The start date must be before the end date' });
     } else if (startDate < new Date()) {
       toast({ title: 'The start date must not be in the past' });
@@ -77,7 +76,7 @@ const NewBookingRequest = () => {
         },
       }).then((response) => {
         setSubmitting(false);
-        if (response.status === 201) {
+        if (response.status === 200) {
           navigate('/bookings');
         } else if (response.status === 409) {
           toast(
@@ -106,12 +105,11 @@ const NewBookingRequest = () => {
       </Button>
       <Heading size='lg'>Request a new booking</Heading>
       <Box
-        py={{ base: '0', sm: '8' }}
-        px={{ base: '4', sm: '10' }}
+        p={8}
         bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
         borderRadius={{ base: 'none', sm: 'xl' }}
         borderWidth={1}
-        width='50%'
+        width={{base: '100%', md: '50%'}}
       >
         {
           loading ? (
@@ -136,7 +134,7 @@ const NewBookingRequest = () => {
                   </Select>
                 </FormControl>
 
-                <HStack>
+                <Stack align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
                   <FormControl>
                     <FormLabel htmlFor='startDate'>Start date</FormLabel>
                     <Input id='startDate' type='date'
@@ -164,9 +162,9 @@ const NewBookingRequest = () => {
                       })}
                     </Select>
                   </FormControl>
-                </HStack>
+                </Stack>
 
-                <HStack>
+                <Stack align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
                   <FormControl>
                     <FormLabel htmlFor='endDate'>End date</FormLabel>
                     <Input id='endDate' type='date'
@@ -193,7 +191,7 @@ const NewBookingRequest = () => {
                       })}
                     </Select>
                   </FormControl>
-                </HStack>
+                </Stack>
 
                 <Button disabled={submitting} variant='solid' colorScheme='blue'
                         type='submit'>

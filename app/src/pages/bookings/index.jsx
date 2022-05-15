@@ -4,7 +4,7 @@ import {
   Badge,
   Button,
   Heading,
-  HStack, Tab,
+  HStack, Stack, Tab,
   TabList, TabPanel, TabPanels, Tabs,
   Text,
   VStack,
@@ -30,7 +30,7 @@ const BookingsPage = () => {
 
   return (
     <VStack align='start' spacing={4} height='100%'>
-      <HStack justifyContent='space-between' w='100%' align='center'>
+      <Stack justifyContent='space-between' w='100%' align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
         <VStack align='start' spacing={0}>
           <Heading size='lg'>Bookings</Heading>
           <Text fontSize='xl'>View and manage upcoming bookings and booking requests</Text>
@@ -43,7 +43,7 @@ const BookingsPage = () => {
           }}>
           Request booking
         </Button>
-      </HStack>
+      </Stack>
       <Tabs w="100%">
         <TabList>
           <Tab>
