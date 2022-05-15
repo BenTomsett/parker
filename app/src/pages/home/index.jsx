@@ -1,5 +1,11 @@
 import React, { useContext } from 'react';
-import { Button, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import {
+  Button,
+  Heading,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { FiPlus } from 'react-icons/fi';
 import useTitle from '../../hooks/useTitle';
@@ -18,7 +24,7 @@ const HomePage = () => {
 
   return (
     <VStack align='start' spacing={4} height='100%'>
-      <HStack justifyContent='space-between' w='100%' align='center'>
+      <Stack justifyContent='space-between' w='100%' align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
         <VStack align='start' spacing={0}>
           <Heading size='lg'>Welcome back, {user.forename}.</Heading>
           <Text fontSize='xl'>Here&apos;s your dashboard.</Text>
@@ -31,15 +37,15 @@ const HomePage = () => {
           }}>
           Request booking
         </Button>
-      </HStack>
+      </Stack>
       <CheckinCard />
-      <Flex h='100%' w='100%' gap={4}>
+      <Stack h='100%' w='100%' direction={{base: 'column-reverse', md: 'row'}}>
         <MapCard />
         <VStack flex={1}>
           <BookingCard />
           <BookingRequestCard />
         </VStack>
-      </Flex>
+      </Stack>
     </VStack>
   );
 };
