@@ -97,8 +97,8 @@ const NavBar = ({ navbarRef }) => {
           <VStack spacing={2} py={4} px={6}>
             <NavButton label="Home" to="/" onClick={() => mobileNavButtonClick('/')} fullWidth />
             <NavButton label="Bookings" to="/bookings" onClick={() => mobileNavButtonClick('/bookings')} fullWidth />
-            <NavButton label="Parking" to="/parking" onClick={() => mobileNavButtonClick('/parking')} fullWidth />
             <NavButton label="Account" to="/account" onClick={() => mobileNavButtonClick('/account')} fullWidth />
+            {user.isAdmin && <NavButton label="Admin" to="/admin" onClick={() => mobileNavButtonClick('/admin')} fullWidth />}
 
             <HStack w="full" justifyContent="space-between" pt={4}>
               <NavUser name={`${user.forename} ${user.surname}`} email={user.email} />

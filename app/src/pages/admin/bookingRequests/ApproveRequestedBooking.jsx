@@ -15,8 +15,7 @@ import {
 } from '@chakra-ui/react';
 import UserContext from '../../../context/user';
 
-const ApproveRequestedBooking = ({requestedBooking,update}) => {
-
+const Approverequest = ({request, update}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const user = useContext(UserContext);
   const toast = useToast({status: 'error', isClosable: false});
@@ -51,7 +50,7 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
   }
 
   const deleteApprovedRequest = () => {
-    fetch(`/api/bookingRequests/${requestedBooking.bookingRequestId}`, {
+    fetch(`/api/bookingRequests/${request.bookingRequestId}`, {
       method: 'DELETE',
     }).then((response) => {
   console.log(response)
@@ -64,7 +63,7 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
     setLoading2(true);
     fetch('api/bookingRequests/findAllSpaces', {
       method: 'POST',
-      body:JSON.stringify({startDate:requestedBooking.startDate,endDate:requestedBooking.endDate,carParkId:formCarParkId}),
+      body:JSON.stringify({startDate:request.startDate,endDate:request.endDate,carParkId:formCarParkId}),
       headers: {
         "Content-Type": "application/json"
       }
@@ -80,7 +79,7 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
   function getNearestAvailableSpace(carParkId){
     fetch('/api/bookingRequests/findNextSpace',{
       method: 'POST',
-      body:JSON.stringify({'startDate':requestedBooking.startDate,'endDate':requestedBooking.endDate,'carParkId':carParkId}),
+      body:JSON.stringify({'startDate':request.startDate,'endDate':request.endDate,'carParkId':carParkId}),
       headers: {
         "Content-Type": "application/json"
       }
@@ -97,7 +96,7 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
   const autoAssignParkingSpace = () =>{
     fetch('/api/carparks/findcarpark', {
       method: 'POST',
-      body:JSON.stringify({'lng':requestedBooking.Building.gpsPoint.coordinates[0],'lat':requestedBooking.Building.gpsPoint.coordinates[1]}),
+      body:JSON.stringify({'lng':request.Building.gpsPoint.coordinates[0],'lat':request.Building.gpsPoint.coordinates[1]}),
       headers:{
         "Content-Type": "application/json"
       }
@@ -114,9 +113,9 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
     fetch('/api/bookings', {
       method: 'PUT',
       body:JSON.stringify({
-        userId:requestedBooking.userId,
-        startDate:requestedBooking.startDate,
-        endDate:requestedBooking.endDate,
+        userId:request.userId,
+        startDate:request.startDate,
+        endDate:request.endDate,
         bookingType:'USER',
         'spaceId':spaceId,
         approved:true,
@@ -176,7 +175,7 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
       <Modal size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay/>
         <ModalContent>
-            <ModalHeader>Approve Booking for with ID: {requestedBooking.bookingRequestId}</ModalHeader>
+            <ModalHeader>Approve Booking for with ID: {request.bookingRequestId}</ModalHeader>
             <ModalCloseButton/>
             <ModalBody>
 
@@ -312,4 +311,4 @@ const ApproveRequestedBooking = ({requestedBooking,update}) => {
   )
 }
 
-export default ApproveRequestedBooking;
+export default Approverequest;

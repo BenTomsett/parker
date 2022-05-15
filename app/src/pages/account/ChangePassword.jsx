@@ -73,7 +73,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <Box w='60%' align='center'>
+    <Box width={{base: '100%', md: "60%"}} align='center'>
       <form onSubmit={onSubmit}>
         <Stack spacing={4}>
           <HStack>

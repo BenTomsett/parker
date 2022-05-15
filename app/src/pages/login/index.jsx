@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -8,7 +8,7 @@ import {
   Stack,
   Text, useBreakpointValue, useToast,
 } from '@chakra-ui/react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
 import logo from '../../parker.svg';
 
@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  const toast = useToast({status: 'error', isClosable: false});
+  const toast = useToast({ status: 'error', isClosable: false });
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,11 +37,11 @@ const LoginPage = () => {
         'Content-Type': 'application/json',
       },
     }).then((response) => {
-      if(response.status === 200){
+      if (response.status === 200) {
         navigate('/');
-      }else if(response.status === 401) {
+      } else if (response.status === 401) {
         toast({ title: 'Incorrect username or password' });
-      }else if (response.status === 403) {
+      } else if (response.status === 403) {
         toast({ title: 'This user has been banned from accessing Parker' });
       }
       setLoading(false);
@@ -49,63 +49,62 @@ const LoginPage = () => {
   };
 
   return (
-      <Container maxW="lg" py={{base: '12', md: '24'}}
-                 px={{base: '0', sm: '8'}}>
-        <Stack spacing="8">
-          <Stack spacing="6">
-            <Image src={logo} alt="Parker logo" h={35}/>
-            <Stack spacing={{base: '2', md: '3'}} textAlign="center">
-              <Heading size="md">
-                Log in to your account
-              </Heading>
-            </Stack>
+    <Container maxW='lg' py={{ base: '12', md: '24' }}
+               px={8}>
+      <Stack spacing='8'>
+        <Stack spacing='6'>
+          <Image src={logo} alt='Parker logo' h={35} />
+          <Stack spacing={{ base: '2', md: '3' }} textAlign='center'>
+            <Heading size='md'>
+              Log in to your account
+            </Heading>
           </Stack>
-          <Box
-              py={{base: '0', sm: '8'}}
-              px={{base: '4', sm: '10'}}
-              bg={useBreakpointValue({base: 'transparent', sm: 'bg-surface'})}
-              borderRadius={{base: 'none', sm: 'xl'}}
-              borderWidth={1}
-          >
-            <form onSubmit={onSubmit}>
-              <Stack spacing="4">
-                <FormControl>
-                  <FormLabel htmlFor="email">Email</FormLabel>
-                  <Input id="email" type="email" autoComplete="email"
-                         value={email}
-                         onChange={(event) => setEmail(event.target.value)}/>
-                </FormControl>
-                <FormControl>
-                  <FormLabel htmlFor="password">Password</FormLabel>
-                  <Input id="password" type="password"
-                         autoComplete="current-password" value={password}
-                         onChange={(event) => setPassword(event.target.value)}/>
-                </FormControl>
-
-                <Button variant="solid" colorScheme="blue"
-                        type="submit">
-                  {
-                    loading ? (
-                        <Spinner />
-                    ) : (
-                        "Sign in"
-                    )
-                  }
-                </Button>
-              </Stack>
-            </form>
-          </Box>
-          <HStack spacing="1" justify="center">
-            <Text color="muted">Don&apos;t have an account?</Text>
-            <Button
-                variant="link"
-                colorScheme="blue"
-                onClick={() => {
-                  navigate('/register');
-                }}>Sign up</Button>
-          </HStack>
         </Stack>
-      </Container>
+        <Box
+          p={8}
+          bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
+          borderRadius={{ base: 'none', sm: 'xl' }}
+          borderWidth={1}
+        >
+          <form onSubmit={onSubmit}>
+            <Stack spacing='4'>
+              <FormControl>
+                <FormLabel htmlFor='email'>Email</FormLabel>
+                <Input id='email' type='email' autoComplete='email'
+                       value={email}
+                       onChange={(event) => setEmail(event.target.value)} />
+              </FormControl>
+              <FormControl>
+                <FormLabel htmlFor='password'>Password</FormLabel>
+                <Input id='password' type='password'
+                       autoComplete='current-password' value={password}
+                       onChange={(event) => setPassword(event.target.value)} />
+              </FormControl>
+
+              <Button variant='solid' colorScheme='blue'
+                      type='submit'>
+                {
+                  loading ? (
+                    <Spinner />
+                  ) : (
+                    'Sign in'
+                  )
+                }
+              </Button>
+            </Stack>
+          </form>
+        </Box>
+        <HStack spacing='1' justify='center'>
+          <Text color='muted'>Don&apos;t have an account?</Text>
+          <Button
+            variant='link'
+            colorScheme='blue'
+            onClick={() => {
+              navigate('/register');
+            }}>Sign up</Button>
+        </HStack>
+      </Stack>
+    </Container>
   );
 };
 

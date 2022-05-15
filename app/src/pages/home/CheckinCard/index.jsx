@@ -4,7 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import {
   chakra,
   Heading,
-  VStack, Text, HStack, Button,
+  VStack, Text, Button, Stack,
 } from '@chakra-ui/react';
 import { FiMapPin } from 'react-icons/fi';
 
@@ -17,7 +17,7 @@ const CheckinCard = () => (
       p={4}
       align='start'
     >
-      <HStack justify="space-between" w="100%">
+      <Stack justify="space-between" w="100%" direction={{base: 'column', md: 'row'}}>
         <VStack align='left'>
           <Heading size='md'>Check in</Heading>
           <Text>When you&apos;ve arrived at <chakra.span fontWeight="bold">Constable Terrace Car Park</chakra.span>, click the Check In button.</Text>
@@ -25,7 +25,7 @@ const CheckinCard = () => (
         <Button colorScheme='blue' leftIcon={<FiMapPin />}>
           Check In
         </Button>
-      </HStack>
+      </Stack>
     </VStack>
   );
 

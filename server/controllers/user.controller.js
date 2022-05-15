@@ -27,7 +27,6 @@ const {
   strongPassRegex,
   getAge, generateToken,
 } = require('../utils/auth');
-const { Stripe } = require('../config/stripe');
 
 // Create and save a new user to the database
 const createUser = async (req, res) => {
@@ -67,7 +66,11 @@ const createUser = async (req, res) => {
 
 // Retrieve all users from the database
 const findAllUsers = async (req, res) => {
-  User.findAll()
+  User.findAll({
+    order: [
+      ['userId', 'ASC'],
+    ],
+  })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -169,7 +172,7 @@ const banUser = async (req, res) => {
   const { userId } = req.params;
   User.update({isBanned:true},{ where:{userId} })
     .then(() => {
-      res.status(200);
+      res.sendStatus(200);
     })
     .catch((err) => {
       if (err.name === 'SequelizeUniqueConstraintError') {
@@ -186,7 +189,7 @@ const unBanUser = async (req, res) => {
   const { userId } = req.params;
   User.update({isBanned:false},{ where:{userId} })
       .then(() => {
-        res.status(200);
+        res.sendStatus(200);
       })
       .catch((err) => {
         if (err.name === 'SequelizeUniqueConstraintError') {

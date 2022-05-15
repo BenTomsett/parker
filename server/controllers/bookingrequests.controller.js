@@ -21,7 +21,7 @@ const {
     sendBookingDeniedEmail,
 } = require('../utils/notifications');
 
-const { BookingRequest, Building } = db;
+const { BookingRequest, Building, User } = db;
 
 // Create and Save a new BookingReRequest
 const createBookingRequest = async (req, res) => {
@@ -54,7 +54,10 @@ const findAllBookingRequests = async (req, res) => {
         userId: isAdmin ? '' : req.user.userId,
       },
     }),
-    include: {model: Building}
+    include: [
+      {model: Building},
+      {model: User}
+    ]
   })
     .then((data) => {
       res.status(200).send(data);

@@ -1,6 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Table, TableContainer, Tbody, Th, Thead, Tr, VStack} from '@chakra-ui/react';
-import User from './User';
+import {
+  Box, HStack,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  VStack,
+} from '@chakra-ui/react';
+import EditUser from './EditUser';
+import DeleteUser from './DeleteUser';
+import BanUser from './BanUser';
 
 
 
@@ -12,7 +24,6 @@ const UserList = () => {
       method: 'GET',
     }).then((response) => {
       response.json().then((json) => {
-        console.log(json);
         setUsers(json);
       })
     });
@@ -32,15 +43,12 @@ const UserList = () => {
               <Table>
                 <Thead>
                   <Tr alignItems='center'>
-                    <Th>User ID</Th>
-                    <Th>First Name</Th>
-                    <Th>Last Name</Th>
+                    <Th>Name</Th>
                     <Th>Date of Birth</Th>
                     <Th>Email</Th>
                     <Th>Admin?</Th>
                     <Th>Banned?</Th>
                     <Th/>
-
                   </Tr>
                 </Thead>
 
@@ -48,7 +56,20 @@ const UserList = () => {
                 <Tbody>
                   {
                     users.map((user) => (
-                      <User key={user.userId} user={user} update={fetchUsers} />
+                      <Tr key={user.userId}>
+                        <Td>{user.forename} {user.surname}</Td>
+                        <Td>{user.dob}</Td>
+                        <Td>{user.email}</Td>
+                        <Td>{user.isAdmin ? "Yes" : "No"}</Td>
+                        <Td>{user.isBanned ? "Yes" : "No"}</Td>
+                        <Td>
+                          <HStack align="end" justify="end">
+                            <EditUser user={user} update={fetchUsers}/>
+                            <BanUser user={user} update={fetchUsers}/>
+                            <DeleteUser user={user} update={fetchUsers}/>
+                          </HStack>
+                        </Td>
+                      </Tr>
                     ))
                   }
                 </Tbody>

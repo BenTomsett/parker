@@ -13,19 +13,13 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-const Delete = async (user) => {
-  const path = 'api/users/'
-  const fullPath = path.concat((user.userId).toString()) /* This is working as expected somewhere else failing */
+const DeleteUser = ({ user, update }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  return fetch(fullPath, {
+  const deleteUser = async () => fetch(`api/users/${user.userId}`, {
     method: 'DELETE',
-    headers: {
-    }
-  })
-}
+  });
 
-const DeleteUser = ({user, update}) =>{
-  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
       <Button colorScheme='red' onClick={onOpen}>Delete User</Button>
@@ -33,27 +27,27 @@ const DeleteUser = ({user, update}) =>{
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Delete User with ID: {user.userId}</ModalHeader>
+          <ModalHeader>Delete user</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <h2> Are you sure you want to Delete this user? This can not be reversed!</h2>
+            <h2> Are you sure you want to delete this user?</h2>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              No
-            </Button>
-            <Button colorScheme='red' mr={3} onClick={async ()=> {
-              await Delete(user);
+            <Button colorScheme='red' mr={3} onClick={async () => {
+              await deleteUser();
               update();
             }}>
-              Yes! Delete the user
+              Delete user
+            </Button>
+            <Button mr={3} onClick={onClose}>
+              No
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
     </>
-  )
-}
+  );
+};
 
 export default DeleteUser;
