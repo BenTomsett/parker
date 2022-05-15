@@ -22,12 +22,12 @@ const {
   sendOverstayEmail,
   sendNonArrivalEmail,
   sendBookingConfirmationEmail,
-  sendUserInWrongSpaceEmail
+  sendUserInWrongSpaceEmail,
 } = require('../utils/notifications');
 const { Stripe } = require('../config/stripe');
 const { calculateParkingCharge } = require('../utils/parkingCharges');
 
-const { Booking, ParkingSpace, CarPark } = db;
+const { Booking, ParkingSpace, CarPark, User } = db;
 
 // Create and Save a new Booking
 const createBooking = async (req, res) => {
@@ -43,39 +43,41 @@ const createBooking = async (req, res) => {
       'endDate',
       'cost',
     ],
-  }).then(async (data) => {
-    const amount = calculateParkingCharge(data) * 100;
+  })
+    .then(async (data) => {
+      const amount = calculateParkingCharge(data) * 100;
 
-    const user = await data.getUser();
-    console.log(user);
+      const user = await data.getUser();
+      console.log(user);
 
-    try {
-      await Stripe.paymentIntents.create({
-        amount,
-        currency: 'gbp',
-        customer: user.stripeCustomerId,
-        payment_method: user.paymentMethodId,
-        off_session: true,
-        confirm: true,
-        receipt_email: user.email,
-      });
-      await sendBookingApprovedEmail(data);
-      res.status(200).send(data);
-      await sendBookingConfirmationEmail(data);
-    } catch (err) {
-      await data.destroy();
-      res.status(402).send('ERR_PAYMENT_FAILED');
-    }
-  }).catch((err) => {
-    if (err.name === 'SequelizeUniqueConstraintError') {
-      res.status(409).send('ERR_BOOKING_EXISTS');
-    } else if (err.name === 'SequelizeValidationError') {
-      res.status(400).send('ERR_DATA_MISSING');
-    } else {
-      console.error(err);
-      res.status(500).send('ERR_INTERNAL_EXCEPTION');
-    }
-  });
+      try {
+        await Stripe.paymentIntents.create({
+          amount,
+          currency: 'gbp',
+          customer: user.stripeCustomerId,
+          payment_method: user.paymentMethodId,
+          off_session: true,
+          confirm: true,
+          receipt_email: user.email,
+        });
+        await sendBookingApprovedEmail(data);
+        res.status(200).send(data);
+        await sendBookingConfirmationEmail(data);
+      } catch (err) {
+        await data.destroy();
+        res.status(402).send('ERR_PAYMENT_FAILED');
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'SequelizeUniqueConstraintError') {
+        res.status(409).send('ERR_BOOKING_EXISTS');
+      } else if (err.name === 'SequelizeValidationError') {
+        res.status(400).send('ERR_DATA_MISSING');
+      } else {
+        console.error(err);
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      }
+    });
 };
 
 // Retrieve all bookings from the database.
@@ -87,54 +89,58 @@ const findAllBookings = async (req, res) => {
         userId: isAdmin ? '' : req.user.userId,
       },
     }),
-    include: [
-      { model: ParkingSpace, include: [CarPark] },
-    ],
-    order: [
-      ['bookingId', 'ASC'],
-    ],
-  }).then((data) => {
-    res.status(200).send(data);
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('ERR_INTERNAL_EXCEPTION');
-  });
+    include: [{ model: ParkingSpace, include: [CarPark] }],
+    order: [['bookingId', 'ASC']],
+  })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
 };
 
 // Find a single booking with the booking id
 const findBooking = async (req, res) => {
   const bookingID = req.params.bookingId;
 
-  Booking.findByPk(bookingID).then((data) => {
-    res.status(200).send(data);
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('ERR_INTERNAL_EXCEPTION');
-  });
+  Booking.findByPk(bookingID)
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
 };
 
 // Find bookings for a specific user
 const findUserBookings = async (req, res) => {
   const { userId } = req.params;
 
-  Booking.findAll({ where: { userId } }).then((data) => {
-    res.status(200).send(data);
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('ERR_INTERNAL_EXCEPTION');
-  });
+  Booking.findAll({ where: { userId } })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
 };
 
 // Find bookings for a specific car park
 const findCarParkBookings = async (req, res) => {
   const { carParkId } = req.params;
 
-  Booking.findAll({ where: { carParkId } }).then((data) => {
-    res.status(200).send(data);
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('ERR_INTERNAL_EXCEPTION');
-  });
+  Booking.findAll({ where: { carParkId } })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
 };
 
 // Find bookings for a specific car park
@@ -148,12 +154,14 @@ const findCarPark24HBookings = async (req, res) => {
         [Op.lt]: new Date(Date.now() + 24 * 60 * 60 * 1000),
       },
     },
-  }).then((data) => {
-    res.status(200).send(data);
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('ERR_INTERNAL_EXCEPTION');
-  });
+  })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
 };
 
 // Find bookings for a specific car park
@@ -171,13 +179,15 @@ const findOverstayedBookings = async () => {
         [Op.eq]: false,
       },
     },
-  }).then((bookings) => {
-    bookings.forEach((booking) => {
-      sendOverstayEmail(booking);
+  })
+    .then((bookings) => {
+      bookings.forEach((booking) => {
+        sendOverstayEmail(booking);
+      });
+    })
+    .catch((err) => {
+      console.error(err);
     });
-  }).catch((err) => {
-    console.error(err);
-  });
 };
 
 // Find bookings past their arrival dates
@@ -195,117 +205,174 @@ const findNonArrivalBookings = async () => {
         [Op.eq]: false,
       },
     },
-  }).then((bookings) => {
-    bookings.forEach((booking) => {
-      sendNonArrivalEmail(booking);
+  })
+    .then((bookings) => {
+      bookings.forEach((booking) => {
+        sendNonArrivalEmail(booking);
+      });
+    })
+    .catch((err) => {
+      console.error(err);
     });
-  }).catch((err) => {
-    console.error(err);
-  });
 };
 
 // Update a booking by the id in the request
 const updateBooking = async (req, res) => {
   const { bookingId } = req.params;
 
-  Booking.update(req.body, { where: { bookingId } }).then((data) => {
-    res.status(200).send(data);
-  }).catch((err) => {
-    if (err.name === 'SequelizeUniqueConstraintError') {
-      res.status(409).send('ERR_BOOKING_EXISTS');
-    } else if (err.name === 'SequelizeValidationError') {
-      res.status(400).send('ERR_DATA_MISSING');
-    } else {
-      console.error(err);
-      res.status(500).send('ERR_INTERNAL_EXCEPTION');
-    }
-  });
-};
-
-// Checkin a booking by the id in the request
-const checkInBooking = async (req, res) => {
-  const { bookingId, userGpsLong, userGpsLat } = req.body;
-  console.log(req.body);
-
-  let booking = null;
-  let parkingSpace = null;
-  const location = { userGpsLong, userGpsLat };
-
-  await Booking.findByPk(bookingId).then((bookingData) => {
-    booking = bookingData;
-    ParkingSpace.findByPk(booking.spaceId).then((parkingData) => {
-      parkingSpace = parkingData;
-      const correctLocation = checkParkedLocation(location, parkingSpace);
-
-      if (correctLocation) {
-        Booking.update({ checkedIn: true },
-          {
-            where: { bookingId },
-            include: [
-              { model: ParkingSpace, include: [CarPark] },
-            ],
-            returning: true,
-            plain: true,
-          }).
-          then((data) => {
-            res.status(200).send(data);
-          }).
-          catch((err) => {
-            if (err.name === 'SequelizeValidationError') {
-              res.status(400).send('ERR_DATA_MISSING');
-            } else {
-              console.error(err);
-              res.status(500).send('ERR_INTERNAL_EXCEPTION');
-            }
-          });
-      } else {
-        res.status(401).send('ERR_INCORRECT_LOCATION');
-      }
-    }).catch((err) => {
-      console.error(err);
-      res.status(500).send('ERR_INTERNAL_EXCEPTION');
-    });
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('ERR_INTERNAL_EXCEPTION');
-  });
-};
-
-const checkOutBooking = (req, res) => {
-  const { bookingId } = req.body;
-
-  Booking.update({ checkedOut: true },
-    {
-      where: { bookingId },
-      include: [
-        { model: ParkingSpace, include: [CarPark] },
-      ],
-      returning: true,
-      plain: true,
-    }).
-    then((data) => {
+  Booking.update(req.body, { where: { bookingId } })
+    .then((data) => {
       res.status(200).send(data);
-    }).
-    catch((err) => {
-      if (err.name === 'SequelizeValidationError') {
+    })
+    .catch((err) => {
+      if (err.name === 'SequelizeUniqueConstraintError') {
+        res.status(409).send('ERR_BOOKING_EXISTS');
+      } else if (err.name === 'SequelizeValidationError') {
         res.status(400).send('ERR_DATA_MISSING');
       } else {
         console.error(err);
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       }
     });
-}
+};
+
+// Checkin a booking by the id in the request
+const checkInBooking = async (req, res) => {
+  const { bookingId, userGpsLong, userGpsLat } = req.body;
+
+  let booking = null;
+  let parkingSpace = null;
+  const location = { userGpsLong, userGpsLat };
+
+  await Booking.findByPk(bookingId, {
+    include: [
+      {
+        model: User,
+      },
+      {
+        model: ParkingSpace,
+        include: {
+          model: CarPark,
+        },
+      },
+    ],
+  })
+    .then((bookingData) => {
+      booking = bookingData;
+      ParkingSpace.findByPk(booking.spaceId)
+        .then((parkingData) => {
+          parkingSpace = parkingData;
+          const correctLocation = checkParkedLocation(location, parkingSpace);
+
+          if (correctLocation) {
+            Booking.update(
+              { checkedIn: true },
+              {
+                where: { bookingId },
+                include: [{ model: ParkingSpace, include: [CarPark] }],
+                returning: true,
+                plain: true,
+              }
+            )
+              .then((data) => {
+                parkingSpace.setDataValue('status', 'OCCUPIED');
+                parkingSpace.save();
+                res.status(200).send(data);
+              })
+              .catch((err) => {
+                if (err.name === 'SequelizeValidationError') {
+                  res.status(400).send('ERR_DATA_MISSING');
+                } else {
+                  console.error(err);
+                  res.status(500).send('ERR_INTERNAL_EXCEPTION');
+                }
+              });
+          } else {
+            sendUserInWrongSpaceEmail(booking);
+            res.status(401).send('ERR_INCORRECT_LOCATION');
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
+};
+
+const checkOutBooking = async (req, res) => {
+  const { bookingId } = req.body;
+
+  let booking = null;
+  let parkingSpace = null;
+
+  await Booking.findByPk(bookingId, {
+    include: [
+      {
+        model: User,
+      },
+      {
+        model: ParkingSpace,
+        include: {
+          model: CarPark,
+        },
+      },
+    ],
+  })
+    .then((bookingData) => {
+      booking = bookingData;
+      ParkingSpace.findByPk(booking.spaceId)
+        .then((parkingData) => {
+          parkingSpace = parkingData;
+          Booking.update(
+            { checkedOut: true },
+            {
+              where: { bookingId },
+              include: [{ model: ParkingSpace, include: [CarPark] }],
+              returning: true,
+              plain: true,
+            }
+          )
+            .then((data) => {
+              parkingSpace.setDataValue('status', 'AVAILABLE');
+              parkingSpace.save();
+              res.status(200).send(data);
+            })
+            .catch((err) => {
+              if (err.name === 'SequelizeValidationError') {
+                res.status(400).send('ERR_DATA_MISSING');
+              } else {
+                console.error(err);
+                res.status(500).send('ERR_INTERNAL_EXCEPTION');
+              }
+            });
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
+};
 
 // Delete a Booking with the specified id in the request
 const deleteBooking = async (req, res) => {
   const { bookingId } = req.params;
 
-  Booking.destroy({ where: { bookingId } }).then(() => {
-    res.sendStatus(200);
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('ERR_INTERNAL_EXCEPTION');
-  });
+  Booking.destroy({ where: { bookingId } })
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
 };
 
 // Delete all Bookings from the database.
@@ -313,12 +380,14 @@ const deleteAllBookings = async (req, res) => {
   Booking.destroy({
     where: {},
     truncate: false,
-  }).then(() => {
-    res.sendStatus(200);
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('ERR_INTERNAL_EXCEPTION');
-  });
+  })
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    });
 };
 
 module.exports = {

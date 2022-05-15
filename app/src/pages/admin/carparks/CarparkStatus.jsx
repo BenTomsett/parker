@@ -7,6 +7,7 @@ import {
   TableContainer,
   Tbody,
   Th,
+  Td,
   Thead,
   Tr,
   VStack,
@@ -19,9 +20,8 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
+  Text
 } from '@chakra-ui/react';
-
-import Zone from './zones/Zone';
 
 const CarparkStatus = ({ carpark }) => {
   const [carparkStatus, setCarparkStatus] = useState(null);
@@ -39,7 +39,7 @@ const CarparkStatus = ({ carpark }) => {
 
   useEffect(() => {
     fetchCarparkStatus();
-  });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -55,29 +55,33 @@ const CarparkStatus = ({ carpark }) => {
           <ModalBody>
             <VStack align="start" spacing={0} height="100%">
               {carparkStatus ? (
-                <Box w="100%" borderWidth="1px">
-                  <TableContainer>
-                    <Table>
-                      <Thead>
-                        <Tr alignItems="center">
-                          <Th>Name</Th>
-                          <Th>Number of Spaces</Th>
-                          <Th />
-                        </Tr>
-                      </Thead>
+                carparkStatus.Zones.map((zone) => (
+                    <>
+                      <Text>{zone.name}</Text>
+                      <Box w="100%" borderWidth="1px">
+                        <TableContainer>
+                          <Table>
+                            <Thead>
+                              <Tr alignItems="center">
+                                <Th>Space Number</Th>
+                                <Th>Status</Th>
+                                <Th />
+                              </Tr>
+                            </Thead>
 
-                      <Tbody>
-                        {carparkStatus.Zones.map((zone) => (
-                          <Zone
-                            key={zone.zoneId}
-                            zone={zone}
-                            update={fetchCarparkStatus}
-                          />
-                        ))}
-                      </Tbody>
-                    </Table>
-                  </TableContainer>
-                </Box>
+                            <Tbody>
+                              {zone.ParkingSpaces.map((space) => (
+                                <Tr>
+                                  <Td>{space.spaceNo}</Td>
+                                  <Td>{space.status}</Td>
+                                </Tr>
+                              ))}
+                            </Tbody>
+                          </Table>
+                        </TableContainer>
+                      </Box>
+                    </>
+                  ))
               ) : (
                 <p>Retrieving carpark information</p>
               )}
