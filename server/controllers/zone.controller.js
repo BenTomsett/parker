@@ -22,14 +22,7 @@ const { Zone,CarPark } = db;
 const createZone = async (req, res) => {
     const zone = req.body;
 
-    zone.create(zone, {
-        fields: [
-            'zoneId',
-            'carParkId',
-            'name',
-            'spaces',
-        ],
-    })
+    Zone.create(zone)
         .then((data) => {
             res.status(200).send(data);
         })

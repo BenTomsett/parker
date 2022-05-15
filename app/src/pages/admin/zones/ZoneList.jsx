@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Table, TableContainer, Tbody, Th, Thead, Tr, VStack} from '@chakra-ui/react';
 import Zone from './Zone';
+import CreateZone from "./CreateZone";
 
 
 
@@ -24,6 +25,7 @@ const ZoneList = () => {
 
   return (
     <VStack align="start" spacing={0}>
+      <CreateZone update={fetchZones}/>
       {
         zones ?
           (
@@ -53,7 +55,7 @@ const ZoneList = () => {
             </TableContainer>
             </Box>
           ) : (
-            <p>No Zones Fetched</p>
+            <p>No Zones Created</p>
           )
       }
     </VStack>

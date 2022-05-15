@@ -17,17 +17,14 @@ import {
     useDisclosure,
     useToast, Select, Spinner,
 } from '@chakra-ui/react';
+import {FiPlus} from "react-icons/fi";
 
 
-const EditZone = ({zone,update}) => {
+const CreateZone = ({update}) => {
     const {isOpen, onOpen, onClose} = useDisclosure()
     const toast = useToast({status: 'error', isClosable: false});
 
-    const [formData, setFormData] = useState({
-        name:zone.name,
-        carParkId: zone.CarPark.carParkId,
-        spaces: zone.spaces,
-    });
+    const [formData, setFormData] = useState({});
     const [carparks, setCarParks] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -54,13 +51,13 @@ const EditZone = ({zone,update}) => {
 
     const onSubmit = (event) => {
         event.preventDefault();
+        console.log(formData)
 
         const {
             name,
             carParkId,
             spaces,
         } = formData;
-        console.log(formData);
 
         if (!name) {
             toast({
@@ -72,12 +69,13 @@ const EditZone = ({zone,update}) => {
             })
         } else if (!spaces){
             toast({
-                title: "Please enter a number of spaces"
+                title: "Please enter number of spaces"
             })
         }
+
         else {
 
-            fetch(`/api/zones/${zone.zoneId}`, {
+            fetch(`/api/zones/`, {
                 method: "PUT",
                 body: JSON.stringify(formData),
                 headers: {
@@ -86,17 +84,15 @@ const EditZone = ({zone,update}) => {
             }).then((response) => {
                 onClose();
                 update();
-
             })
-        };
+        }
     }
     useEffect(() => {
         fetchCarParks();
     }, [])
     return (
         <>
-            <Button onClick={onOpen}>Edit</Button>
-
+            <Button onClick={onOpen} colorScheme="blue" leftIcon={<FiPlus />}>Add Zone</Button>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay/>
                 <ModalContent>
@@ -105,7 +101,7 @@ const EditZone = ({zone,update}) => {
                             <Spinner />
                         ) : (
                             <form onSubmit={onSubmit}>
-                                <ModalHeader>Edit Zone: {`${zone.zoneId}`}</ModalHeader>
+                                <ModalHeader>Create new zone</ModalHeader>
                                 <ModalCloseButton/>
                                 <ModalBody>
                                     <VStack>
@@ -118,9 +114,10 @@ const EditZone = ({zone,update}) => {
                                         </FormControl>
                                         <FormControl>
                                             <FormLabel htmlFor='carPark'>Car Park</FormLabel>
-                                            <Select name="carPark" id="carPark" value={formData.carParkId} onChange={(event)=>{
+                                            <Select name="carPark" id="carPark" value={formData.carParkId} defaultValue={-1} onChange={(event)=>{
                                                 updateFormData("carParkId",event.target.value)
                                             }}>
+                                                <option disabled value={-1}>Choose a car park</option>
                                                 {carparks.map((carpark) => (
                                                     <option key={carpark.carParkId} value={carpark.carParkId} label={carpark.name} />
                                                 ))}
@@ -139,7 +136,7 @@ const EditZone = ({zone,update}) => {
 
                                 <ModalFooter>
                                     <Button colorScheme='blue' mr={3} type="submit">
-                                        Update
+                                        Add Zone
                                     </Button>
                                 </ModalFooter>
 
@@ -152,4 +149,4 @@ const EditZone = ({zone,update}) => {
     )
 }
 
-export default EditZone;
+export default CreateZone;

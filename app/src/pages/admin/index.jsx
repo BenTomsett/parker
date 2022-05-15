@@ -30,7 +30,6 @@ const UsersPage = () => {
             <CarparkList />
           </TabPanel>
             <TabPanel>
-                <Button colorScheme='blue' mr={3}>Add Zone</Button>
                 <ZoneList />
             </TabPanel>
           <TabPanel>
