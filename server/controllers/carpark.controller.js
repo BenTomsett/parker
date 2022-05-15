@@ -22,14 +22,7 @@ const { CarPark, Zone, ParkingSpace } = db;
 const createCarPark = async (req, res) => {
     const carPark = req.body;
 
-    CarPark.create(carPark, {
-        fields: [
-            'carParkId',
-            'name',
-            'numOfSpaces',
-            'zones',
-        ],
-    })
+    CarPark.create(carPark)
         .then((data) => {
             res.status(200).send(data);
         })
@@ -39,7 +32,7 @@ const createCarPark = async (req, res) => {
             } else if (err.name === 'SequelizeValidationError') {
                 res.status(400).send('ERR_DATA_MISSING');
             } else {
-                console.err(err);
+                console.error(err);
                 res.status(500).send('ERR_INTERNAL_EXCEPTION');
             }
         });
@@ -47,9 +40,9 @@ const createCarPark = async (req, res) => {
 
 // Update a parking by the id in the request
 const updateCarPark = async (req, res) => {
-    const { carParkID } = req.params;
+    const { carParkId } = req.params;
 
-    CarPark.update(req.body, { where: { carParkID } })
+    CarPark.update(req.body, { where: { carParkId } })
         .then((data) => {
             res.status(200).send(data);
         })
