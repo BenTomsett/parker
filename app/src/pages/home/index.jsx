@@ -39,7 +39,7 @@ const HomePage = () => {
         </Button>
       </Stack>
       <CheckinCard />
-      <Stack h='100%' w='100%' direction={{base: 'column-reverse', md: 'row'}}>
+      <Stack height={{base: 'unset', md: '100%'}} w='100%' direction={{base: 'column-reverse', md: 'row'}}>
         <MapCard />
         <VStack flex={1}>
           <BookingCard />
