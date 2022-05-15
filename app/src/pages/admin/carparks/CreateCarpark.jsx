@@ -69,7 +69,7 @@ const CreateCarpark = () => {
             coordinates: [longitude, latitude],
           },
           name,
-          numOfSpaces,
+          numOfSpaces
         }),
         headers: {
           'Content-Type': 'application/json',
