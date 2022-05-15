@@ -16,15 +16,19 @@ structures for our postgres database through sequelize.
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class ParkingSpace extends Model {
+class ParkingSpace extends Model {
     static associate(models) {
       ParkingSpace.belongsTo(models.Zone, {
         foreignKey: 'zoneId',
       });
-
       ParkingSpace.belongsTo(models.CarPark, {
         foreignKey: 'carParkId',
       });
+      ParkingSpace.hasMany(models.Booking, {
+        foreignKey: 'spaceId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      })
     }
   }
 
@@ -48,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM({
           values: ['OCCUPIED', 'AVAILABLE', 'RESERVED'],
         }),
+        defaultValue: 'AVAILABLE'
       },
       gpsPoint: {
         allowNull: false,
@@ -58,9 +63,6 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       tableName: 'ParkingSpaces',
       modelName: 'ParkingSpace',
-      indexes: [
-        { unique: 'parking_space_idx', fields: ['status', 'gpsPoint', 'spaceNo'] },
-      ],
       // timestamps: false
     }
   );

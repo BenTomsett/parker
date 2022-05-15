@@ -16,26 +16,26 @@ the car parks routes.
 
 const db = require('../models/index');
 
-const { ParkingSpace,CarPark,Zone } = db;
+const { ParkingSpace, CarPark, Zone } = db;
 
 // Create and Save a new ParkingSpace
 const createParkingSpace = async (req, res) => {
-  const parkingSpace = req.body;
-  console.log(parkingSpace)
+    const parkingSpace = req.body;
 
-  ParkingSpace.create(parkingSpace)
-    .then((data) => {
-      res.status(200).send(data);
-    })
-    .catch((err) => {
-      if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_SPACE_EXISTS');
-      } else if (err.name === 'SequelizeValidationError') {
-        res.status(400).send('ERR_DATA_MISSING');
-      } else {
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      }
-    });
+    ParkingSpace.create(parkingSpace)
+        .then((data) => {
+            res.status(200).send(data);
+        })
+        .catch((err) => {
+            if (err.name === 'SequelizeUniqueConstraintError') {
+                res.status(409).send('ERR_SPACE_EXISTS');
+            } else if (err.name === 'SequelizeValidationError') {
+                res.status(400).send('ERR_DATA_MISSING');
+            } else {
+                console.error(err);
+                res.status(500).send('ERR_INTERNAL_EXCEPTION');
+            }
+        });
 };
 
 // Retrieve all parking spaces from the database.

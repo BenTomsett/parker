@@ -8,7 +8,7 @@
 
  -------DESCRIPTION-------
 
-These are our booking routes which handle all of our http requests.
+These are our spaces routes which handle all of our http requests.
 
 */
 
