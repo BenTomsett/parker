@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
-  Badge,
-  Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack,
+  Badge, Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack,HStack
 } from '@chakra-ui/react';
 import useTitle from '../../hooks/useTitle';
 import BookingRequestList from './bookingRequests/BookingRequestList';
 import UserList from './users/UserList';
 import ZoneList from './zones/ZoneList';
 import CarparkList from './carparks/CarparkList';
+import ParkingSpaceList from "./spaces/ParkingSpaceList";
 
 const UsersPage = () => {
   useTitle('Admin');
@@ -32,6 +32,7 @@ const UsersPage = () => {
         <TabList>
           <Tab>Car Parks</Tab>
           <Tab>Zones</Tab>
+          <Tab>Spaces</Tab>
           <Tab>
             <HStack>
               <Text>Booking requests</Text>
@@ -44,9 +45,12 @@ const UsersPage = () => {
           <TabPanel>
             <CarparkList />
           </TabPanel>
-            <TabPanel>
-                <ZoneList />
-            </TabPanel>
+           <TabPanel>
+             <ZoneList />
+          </TabPanel>
+          <TabPanel>
+            <ParkingSpaceList/>
+          </TabPanel>
           <TabPanel>
             <BookingRequestList updateCount={updateCount} />
           </TabPanel>

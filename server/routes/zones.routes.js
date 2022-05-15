@@ -32,7 +32,7 @@ router.delete('/', authenticateUser, ZoneController.deleteAllZones);
 router.get('/:zoneId', authenticateUser, ZoneController.findZoneById);
 
 // Retrieve a car parks zones
-router.get('/:carparkId/carpark', authenticateUser, ZoneController.findAllCarParkZones);
+router.get('/carpark/:carParkId', authenticateUser, ZoneController.findAllCarParkZones);
 
 // Update a zone with the zone ID
 router.put('/:zoneId', authenticateUser, ZoneController.updateZone);

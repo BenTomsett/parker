@@ -15,33 +15,31 @@ the car parks routes.
 
 const db = require('../models/index');
 
-const { ParkingSpace } = db;
+const { ParkingSpace, CarPark, Zone } = db;
 
 // Create and Save a new ParkingSpace
 const createParkingSpace = async (req, res) => {
-  const booking = req.body;
+    const parkingSpace = req.body;
 
-  ParkingSpace.create(booking, {
-    fields: ['zoneId', 'status', 'gpsPolygon'],
-  })
-    .then((data) => {
-      res.status(200).send(data);
-    })
-    .catch((err) => {
-      if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_SPACE_EXISTS');
-      } else if (err.name === 'SequelizeValidationError') {
-        res.status(400).send('ERR_DATA_MISSING');
-      } else {
-        console.err(err);
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      }
-    });
+    ParkingSpace.create(parkingSpace)
+        .then((data) => {
+            res.status(200).send(data);
+        })
+        .catch((err) => {
+            if (err.name === 'SequelizeUniqueConstraintError') {
+                res.status(409).send('ERR_SPACE_EXISTS');
+            } else if (err.name === 'SequelizeValidationError') {
+                res.status(400).send('ERR_DATA_MISSING');
+            } else {
+                console.error(err);
+                res.status(500).send('ERR_INTERNAL_EXCEPTION');
+            }
+        });
 };
 
 // Retrieve all parking spaces from the database.
 const findAllParkingSpaces = async (req, res) => {
-  ParkingSpace.findAll()
+  ParkingSpace.findAll({include:[{model:CarPark},{model:Zone}]})
     .then((data) => {
       res.status(200).send(data);
     })
@@ -53,9 +51,9 @@ const findAllParkingSpaces = async (req, res) => {
 
 // Find a single parking space with the parking space id
 const findParkingSpace = async (req, res) => {
-  const { parkingSpaceId } = req.params;
+  const { spaceId } = req.params;
 
-  ParkingSpace.findByPk(parkingSpaceId)
+  ParkingSpace.findByPk(spaceId)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -102,9 +100,9 @@ const findCarParkAvailableSpaces = async (req, res) => {
 
 // Update a parking by the id in the request
 const updateParkingSpace = async (req, res) => {
-  const { parkingSpaceId } = req.params;
+  const { spaceId } = req.params;
 
-  ParkingSpace.update(req.body, { where: { parkingSpaceId } })
+  ParkingSpace.update(req.body, { where: { spaceId } })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -122,9 +120,9 @@ const updateParkingSpace = async (req, res) => {
 
 // Delete a parking space with the specified id in the request
 const deleteParkingSpace = async (req, res) => {
-  const { parkingSpaceId } = req.params;
+  const { spaceId } = req.params;
 
-  ParkingSpace.destroy({ where: { parkingSpaceId } })
+  ParkingSpace.destroy({ where: { spaceId } })
     .then(() => {
       res.sendStatus(200)
     })
