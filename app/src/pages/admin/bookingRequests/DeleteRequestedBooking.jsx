@@ -14,14 +14,16 @@ import {
 } from '@chakra-ui/react';
 
 const Delete = async (requestedBooking) => {
-  const path = 'api/bookingRequests/'
+  const path = 'api/bookingRequests/deny/'
   const fullPath = path.concat((requestedBooking.bookingRequestId).toString()) /* This is working as expected somewhere else failing */
 
   return fetch(fullPath, {
     method: 'DELETE',
-    headers: {
-    }
-  })
+  }).then((response) => {
+    console.log(response)
+  }).catch((err) => {
+    console.log(err)
+  });
 }
 
 const DeleteRequestedBooking = ({request, update}) =>{

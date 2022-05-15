@@ -40,6 +40,7 @@ const createBooking = async (req, res) => {
       'userId',
       'startDate',
       'endDate',
+      'approved',
     ],
   }).then(async (data) => {
     const amount = calculateParkingCharge(data) * 100;
@@ -57,6 +58,7 @@ const createBooking = async (req, res) => {
         confirm: true,
         receipt_email: user.email,
       });
+      await sendBookingApprovedEmail(data);
       res.status(200).send(data);
       await sendBookingConfirmationEmail(data);
     } catch (err) {
@@ -259,44 +261,6 @@ const checkInBooking = async (req, res) => {
   }
 };
 
-// Checkin a booking by the id in the request
-const approveBooking = async (req, res) => {
-  const { bookingId } = req.params;
-
-  Booking.update({ isApproved: true }, { where: { bookingId } }).
-    then((data) => {
-      sendBookingApprovedEmail(data);
-      res.status(200).send(data);
-    }).
-    catch((err) => {
-      if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_BOOKING_EXISTS');
-      } else if (err.name === 'SequelizeValidationError') {
-        res.status(400).send('ERR_DATA_MISSING');
-      } else {
-        console.error(err);
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      }
-    });
-};
-
-// Delete a Booking with the specified id in the request
-const denyBooking = async (req, res) => {
-  const { bookingId } = req.params;
-
-  await Booking.findByPk(bookingId).then((data) => {
-    sendBookingDeniedEmail(data);
-    data.destroy().then(() => {
-      res.sendStatus(200);
-    }).catch((err) => {
-      console.error(err);
-      res.status(500).send('ERR_INTERNAL_EXCEPTION');
-    });
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('ERR_INTERNAL_EXCEPTION');
-  });
-};
 
 // Delete a Booking with the specified id in the request
 const deleteBooking = async (req, res) => {
@@ -334,8 +298,6 @@ module.exports = {
   findNonArrivalBookings,
   updateBooking,
   checkInBooking,
-  approveBooking,
-  denyBooking,
   deleteBooking,
   deleteAllBookings,
 };
