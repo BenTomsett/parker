@@ -17,8 +17,14 @@ const checkParkedLocation = (location, parkingSpace) => {
   // degrees to radians.
   const lon1 = (location.userGpsLong * Math.PI) / 180;
   const lon2 = (parkingSpace.gpsPoint.coordinates[0] * Math.PI) / 180;
+
   const lat1 = (location.userGpsLat * Math.PI) / 180;
   const lat2 = (parkingSpace.gpsPoint.coordinates[1] * Math.PI) / 180;
+
+  console.log(location.userGpsLat);
+  console.log(parkingSpace.gpsPoint.coordinates[1]);
+
+
 
   // Haversine formula
   const dlon = lon2 - lon1;
@@ -36,7 +42,9 @@ const checkParkedLocation = (location, parkingSpace) => {
   // calculate the result
   const result = c * r;
 
-  return result < 0.001;
+  console.log(result);
+
+  return result < 0.005;
 };
 
 module.exports = {

@@ -39,7 +39,7 @@ const createBooking = async (req, res) => {
       'userId',
       'startDate',
       'endDate',
-      'cost'
+      'cost',
     ],
   }).then(async (data) => {
     const amount = calculateParkingCharge(data) * 100;
@@ -86,9 +86,11 @@ const findAllBookings = async (req, res) => {
       },
     }),
     include: [
-      {model: ParkingSpace, include: [CarPark] }
-    ]
-
+      { model: ParkingSpace, include: [CarPark] },
+    ],
+    order: [
+      ['bookingId', 'ASC'],
+    ],
   }).then((data) => {
     res.status(200).send(data);
   }).catch((err) => {
@@ -220,17 +222,43 @@ const updateBooking = async (req, res) => {
 
 // Checkin a booking by the id in the request
 const checkInBooking = async (req, res) => {
-  const { bookingId } = req.params;
-  const { userGpsLong, userGpsLat } = req.body;
+  const { bookingId, userGpsLong, userGpsLat } = req.body;
+  console.log(req.body);
 
   let booking = null;
   let parkingSpace = null;
   const location = { userGpsLong, userGpsLat };
 
-  await Booking.findByPk(bookingId).then((data) => {
-    booking = data;
+  await Booking.findByPk(bookingId).then((bookingData) => {
+    booking = bookingData;
     ParkingSpace.findByPk(booking.spaceId).then((parkingData) => {
       parkingSpace = parkingData;
+      const correctLocation = checkParkedLocation(location, parkingSpace);
+
+      if (correctLocation) {
+        Booking.update({ checkedIn: true },
+          {
+            where: { bookingId },
+            include: [
+              { model: ParkingSpace, include: [CarPark] },
+            ],
+            returning: true,
+            plain: true,
+          }).
+          then((data) => {
+            res.status(200).send(data);
+          }).
+          catch((err) => {
+            if (err.name === 'SequelizeValidationError') {
+              res.status(400).send('ERR_DATA_MISSING');
+            } else {
+              console.error(err);
+              res.status(500).send('ERR_INTERNAL_EXCEPTION');
+            }
+          });
+      } else {
+        res.status(401).send('ERR_INCORRECT_LOCATION');
+      }
     }).catch((err) => {
       console.error(err);
       res.status(500).send('ERR_INTERNAL_EXCEPTION');
@@ -239,27 +267,32 @@ const checkInBooking = async (req, res) => {
     console.error(err);
     res.status(500).send('ERR_INTERNAL_EXCEPTION');
   });
-
-  const correctLocation = checkParkedLocation(location, parkingSpace);
-
-  if (correctLocation) {
-    Booking.update({ checkedIn: true }, { where: { bookingId } }).
-      then((data) => {
-        res.status(200).send(data);
-      }).
-      catch((err) => {
-        if (err.name === 'SequelizeValidationError') {
-          res.status(400).send('ERR_DATA_MISSING');
-        } else {
-          console.error(err);
-          res.status(500).send('ERR_INTERNAL_EXCEPTION');
-        }
-      });
-  } else {
-    res.status(401).send('ERR_INCORRECT_LOCATION');
-  }
 };
 
+const checkOutBooking = (req, res) => {
+  const { bookingId } = req.body;
+
+  Booking.update({ checkedOut: true },
+    {
+      where: { bookingId },
+      include: [
+        { model: ParkingSpace, include: [CarPark] },
+      ],
+      returning: true,
+      plain: true,
+    }).
+    then((data) => {
+      res.status(200).send(data);
+    }).
+    catch((err) => {
+      if (err.name === 'SequelizeValidationError') {
+        res.status(400).send('ERR_DATA_MISSING');
+      } else {
+        console.error(err);
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      }
+    });
+}
 
 // Delete a Booking with the specified id in the request
 const deleteBooking = async (req, res) => {
@@ -297,6 +330,7 @@ module.exports = {
   findNonArrivalBookings,
   updateBooking,
   checkInBooking,
+  checkOutBooking,
   deleteBooking,
   deleteAllBookings,
 };

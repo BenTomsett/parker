@@ -28,32 +28,18 @@ router.put('/', authenticateUser, BookingController.createBooking);
 // Delete all bookings
 router.delete('/', authenticateUser, BookingController.deleteAllBookings);
 
-// Retrieve a single booking
-router.get(
-  '/:bookingId',
-  authenticateUser,
-  BookingController.findBooking
-);
-
-// Update a booking with the bookingId
-router.put(
-  '/:bookingId',
-  authenticateUser,
-  BookingController.updateBooking
-);
-
-// Delete a booking with the bookingId
-router.delete(
-  '/:bookingId',
-  authenticateUser,
-  BookingController.deleteBooking
-);
-
 // Check in user to their booking
 router.put(
-  '/:bookingId/checkin',
+  '/checkin',
   authenticateUser,
-  BookingController.updateBooking
+  BookingController.checkInBooking
+);
+
+// Check out user from their booking
+router.put(
+  '/checkout',
+  authenticateUser,
+  BookingController.checkOutBooking
 );
 
 // Retrieve all bookings for a car park
@@ -76,6 +62,27 @@ router.get(
   authenticateUser,
   verifyAdmin,
   BookingController.findUserBookings
+);
+
+// Retrieve a single booking
+router.get(
+  '/:bookingId',
+  authenticateUser,
+  BookingController.findBooking
+);
+
+// Update a booking with the bookingId
+router.put(
+  '/:bookingId',
+  authenticateUser,
+  BookingController.updateBooking
+);
+
+// Delete a booking with the bookingId
+router.delete(
+  '/:bookingId',
+  authenticateUser,
+  BookingController.deleteBooking
 );
 
 
