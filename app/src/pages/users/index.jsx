@@ -1,6 +1,6 @@
 import React from 'react';
 import {Heading} from '@chakra-ui/react';
-import UserList from '../../components/users/UserList';
+import UserList from '../../components/users/Zonelist';
 import useTitle from '../../hooks/useTitle';
 
 const UsersPage = () => {

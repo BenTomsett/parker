@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text,
+    Button,Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text,
 } from '@chakra-ui/react';
 import useTitle from '../../hooks/useTitle';
 import RequestBookingList from './bookingRequests/RequestBookingList';
 import UserList from './users/UserList';
+import ZoneList from './zones/ZoneList';
 
 const UsersPage = () => {
   useTitle('Admin Dashboard');
@@ -19,6 +20,7 @@ const UsersPage = () => {
       <Tabs>
         <TabList>
           <Tab>Car Parks</Tab>
+          <Tab>Zones</Tab>
           <Tab>Booking requests</Tab>
           <Tab>Users</Tab>
         </TabList>
@@ -26,6 +28,10 @@ const UsersPage = () => {
           <TabPanel>
             <Heading>PLACEHOLDER ADD INFORMATION HERE:</Heading>
           </TabPanel>
+            <TabPanel>
+                <Button colorScheme='blue' mr={3}>Add Zone</Button>
+                <ZoneList />
+            </TabPanel>
           <TabPanel>
             <RequestBookingList />
           </TabPanel>

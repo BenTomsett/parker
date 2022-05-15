@@ -16,7 +16,7 @@ functionality.
 
 const db = require('../models/index');
 
-const { Zone } = db;
+const { Zone,CarPark } = db;
 
 // Create and Save a new ParkingSpace
 const createZone = async (req, res) => {
@@ -66,7 +66,7 @@ const updateZone = async (req, res) => {
 };
 
 const findAllZones = async (req, res) => {
-    Zone.findAll()
+    Zone.findAll({include: {model:CarPark}})
         .then((data) => {
             res.status(200).send(data);
         })
@@ -103,8 +103,6 @@ const findAllCarParkZones = async (req, res) => {
         res.status(500).send('ERR_INTERNAL_EXCEPTION');
       });
   };
-
-
 
 // Delete a parking space with the specified id in the request
 const deleteZone = async (req, res) => {
