@@ -16,9 +16,9 @@ const checkParkedLocation = (location, parkingSpace) => {
   // named toRadians which converts from
   // degrees to radians.
   const lon1 = (location.userGpsLong * Math.PI) / 180;
-  const lon2 = (parkingSpace.gpsLong * Math.PI) / 180;
+  const lon2 = (parkingSpace.gpsPoint.coordinates[0] * Math.PI) / 180;
   const lat1 = (location.userGpsLat * Math.PI) / 180;
-  const lat2 = (parkingSpace.gpsLat * Math.PI) / 180;
+  const lat2 = (parkingSpace.gpsPoint.coordinates[1] * Math.PI) / 180;
 
   // Haversine formula
   const dlon = lon2 - lon1;

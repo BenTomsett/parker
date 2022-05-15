@@ -19,7 +19,6 @@ const { checkParkedLocation } = require('../utils/checkLocation');
 
 const {
   sendBookingApprovedEmail,
-  sendBookingDeniedEmail,
   sendOverstayEmail,
   sendNonArrivalEmail, sendBookingConfirmationEmail,
 } = require('../utils/notifications');
@@ -40,7 +39,7 @@ const createBooking = async (req, res) => {
       'userId',
       'startDate',
       'endDate',
-      'approved',
+      'cost'
     ],
   }).then(async (data) => {
     const amount = calculateParkingCharge(data) * 100;
