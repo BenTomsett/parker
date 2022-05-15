@@ -63,7 +63,7 @@ const UserList = () => {
                         <Td>{user.isAdmin ? "Yes" : "No"}</Td>
                         <Td>{user.isBanned ? "Yes" : "No"}</Td>
                         <Td>
-                          <HStack>
+                          <HStack align="end" justify="end">
                             <EditUser user={user} update={fetchUsers}/>
                             <BanUser user={user} update={fetchUsers}/>
                             <DeleteUser user={user} update={fetchUsers}/>
