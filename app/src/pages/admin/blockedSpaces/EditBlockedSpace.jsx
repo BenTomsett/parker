@@ -41,13 +41,11 @@ const EditBlockedSpace = ({ booking, update }) => {
     startTime: new Date(booking.startDate).toLocaleTimeString('en', {
       timeStyle: 'short',
       hour12: false,
-      timeZone: 'UTC',
     }),
     endDate: formatDate(new Date(booking.endDate)),
     endTime: new Date(booking.endDate).toLocaleTimeString('en', {
       timeStyle: 'short',
       hour12: false,
-      timeZone: 'UTC',
     }),
     carParkId: booking.carParkId,
     spaceId: booking.spaceId,
@@ -128,7 +126,7 @@ const EditBlockedSpace = ({ booking, update }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-      }).then(async (response) => {
+      }).then(async () => {
         update();
         onClose();
         setSubmitting(false);

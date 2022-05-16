@@ -7,11 +7,14 @@ import {
   Heading,
   Spinner,
   Text,
-  VStack, HStack, Badge, Divider,
+  VStack, HStack, Badge, Divider, Button,
 } from '@chakra-ui/react';
 import { formatDuration, intervalToDuration } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 const BookingRequestCard = () => {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(true);
   const [bookingRequests, setBookingRequests] = useState([]);
 
@@ -70,7 +73,10 @@ const BookingRequestCard = () => {
       p={4}
       align='start'
     >
-      <Heading size='md'>Pending booking requests</Heading>
+      <HStack align='center' justifyContent='space-between' w="100%">
+        <Heading size='md'>Pending booking requests</Heading>
+        <Button variant='link' onClick={() => {navigate('/bookings')}}>View all</Button>
+      </HStack>
       <Divider />
       {loading ? (
         <Center w='100%' h='100%'>

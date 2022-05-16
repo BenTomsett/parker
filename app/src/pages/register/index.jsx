@@ -15,7 +15,7 @@ import useTitle from '../../hooks/useTitle';
 import { ProgressSteps } from '../../components';
 
 import logo from '../../parker.svg';
-import { emailRegex, getAge, strongPassRegex } from '../../utils/auth';
+import { emailRegex, checkAge, strongPassRegex } from '../../utils/auth';
 
 const steps = [
   { key: 'account', label: '1. Create account' },
@@ -65,7 +65,7 @@ const RegisterPage = () => {
       toast({ title: 'Please enter a valid password with 8 characters, and at least one capital letter, one symbol, and one number.' })
     }else if(!dob){
       toast({ title: "Please enter your date of birth." })
-    }else if(getAge(dobParsed) <= 16){
+    }else if(dobParsed > new Date() || !checkAge(dobParsed)){
       toast({ title: "You must be at least 16 year of age to use Parker." })
     }else if(!addressLine1 || !addressLine2 || !city || !postcode || !country){
       toast({ title: "Please fill in all fields." })

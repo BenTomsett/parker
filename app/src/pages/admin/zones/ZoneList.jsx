@@ -13,7 +13,6 @@ const ZoneList = () => {
       method: 'GET',
     }).then((response) => {
       response.json().then((json) => {
-        console.log(json);
         setZones(json);
       })
     });
@@ -24,7 +23,7 @@ const ZoneList = () => {
   }, []);
 
   return (
-    <VStack align="start" spacing={0}>
+    <VStack align="end" height="100%">
       <CreateZone update={fetchZones}/>
       {
         zones ?

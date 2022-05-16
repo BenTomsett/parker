@@ -10,8 +10,11 @@ import {
   VStack, HStack, Badge, Button, Divider,
 } from '@chakra-ui/react';
 import { formatDuration, intervalToDuration } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 const BookingCard = () => {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(true);
   const [bookings, setBookings] = useState([]);
 
@@ -78,7 +81,7 @@ const BookingCard = () => {
     >
       <HStack align='center' justifyContent='space-between' w="100%">
         <Heading size='md'>Upcoming bookings</Heading>
-        <Button variant='link'>View all</Button>
+        <Button variant='link' onClick={() => {navigate('/bookings')}}>View all</Button>
       </HStack>
       <Divider />
       {loading ? (

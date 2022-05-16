@@ -32,7 +32,6 @@ const BlockedSpaceList = ({ updateRestrictedCount }) => {
       response.json().then((json) => {
         setBookings(json);
         updateRestrictedCount('bookings', json.length);
-        console.log(json);
         setLoading(false);
       });
     });
@@ -44,7 +43,7 @@ const BlockedSpaceList = ({ updateRestrictedCount }) => {
   }, []);
 
   return (
-    <VStack align="start" spacing={0} w="100%">
+    <VStack align="end" height="100%">
       <CreateBlockedSpace update={fetchBookings} />
       {bookings ? (
         <Box borderWidth="1px" w="100%">

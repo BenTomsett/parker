@@ -4,20 +4,23 @@
     "password": "UPVT4RbgQ#",
     "database": "parker-dev-1",
     "host": "parker-dev-1.c3b0deayn6ei.eu-west-2.rds.amazonaws.com",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "test": {
     "username": "postgres",
     "password": "UPVT4RbgQ#",
     "database": "parker-dev-1",
     "host": "parker-dev-1.c3b0deayn6ei.eu-west-2.rds.amazonaws.com",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "production": {
     "username": "postgres",
     "password": "UPVT4RbgQ#",
     "database": "parker-dev-1",
     "host": "parker-dev-1.c3b0deayn6ei.eu-west-2.rds.amazonaws.com",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   }
 }

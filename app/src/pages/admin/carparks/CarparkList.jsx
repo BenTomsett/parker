@@ -30,7 +30,7 @@ const CarparkList = () => {
   }, []);
 
   return (
-    <VStack align="start" spacing={0} height="100%">
+    <VStack align="end" height="100%">
       <CreateCarpark />
       {carparks ? (
         <Box w="100%" borderWidth="1px">

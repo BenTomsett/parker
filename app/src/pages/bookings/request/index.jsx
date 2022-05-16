@@ -6,7 +6,7 @@ import {
   Button,
   FormControl, FormLabel,
   Heading, Input, Select, Spinner,
-  Stack,
+  Stack, Text,
   useBreakpointValue, useToast, VStack,
 } from '@chakra-ui/react';
 import { FiArrowLeft } from 'react-icons/fi';
@@ -23,6 +23,9 @@ const NewBookingRequest = () => {
 
   const [formData, setFormData] = useState({});
   const [buildings, setBuildings] = useState(null);
+  const [bookingCost, setBookingCost] = useState();
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const updateFormData = (property, value) => {
     setFormData((prevState => ({
@@ -30,8 +33,6 @@ const NewBookingRequest = () => {
       [property]: value,
     })));
   };
-
-  const [loading, setLoading] = useState(true);
 
   const fetchBuildings = () => {
     setLoading(true);
@@ -45,7 +46,6 @@ const NewBookingRequest = () => {
     });
   };
 
-  const [submitting, setSubmitting] = useState(false);
   const processData = (event) => {
     event.preventDefault();
 
@@ -58,7 +58,8 @@ const NewBookingRequest = () => {
       toast({ title: 'The start date must be before the end date' });
     } else if (startDate < new Date()) {
       toast({ title: 'The start date must not be in the past' });
-    } else if (!formData.startTime || !formData.startDate || !formData.endTime ||
+    } else if (!formData.startTime || !formData.startDate ||
+      !formData.endTime ||
       !formData.endTime || !formData.buildingId) {
       toast({ title: 'Please fill out all fields' });
     } else {
@@ -93,6 +94,32 @@ const NewBookingRequest = () => {
     fetchBuildings();
   }, []);
 
+  useEffect(() => {
+    if (formData.startDate
+      && formData.startTime
+      && formData.endDate
+      && formData.endTime) {
+      const startDate = new Date(
+        Date.parse(`${formData.startDate}T${formData.startTime}`));
+      const endDate = new Date(
+        Date.parse(`${formData.endDate}T${formData.endTime}`));
+      fetch('/api/bookings/cost', {
+        method: 'POST',
+        body: JSON.stringify({
+          startDate,
+          endDate,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+        response.json().then((json) => {
+          setBookingCost(json.cost)
+        });
+      });
+    }
+  }, [formData]);
+
   return (
     <VStack align='start' spacing={4} height='100%'>
       <Button
@@ -109,7 +136,7 @@ const NewBookingRequest = () => {
         bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
         borderRadius={{ base: 'none', sm: 'xl' }}
         borderWidth={1}
-        width={{base: '100%', md: '50%'}}
+        width={{ base: '100%', md: '50%' }}
       >
         {
           loading ? (
@@ -134,7 +161,8 @@ const NewBookingRequest = () => {
                   </Select>
                 </FormControl>
 
-                <Stack align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
+                <Stack align={{ base: 'left', md: 'center' }}
+                       direction={{ base: 'column', md: 'row' }}>
                   <FormControl>
                     <FormLabel htmlFor='startDate'>Start date</FormLabel>
                     <Input id='startDate' type='date'
@@ -164,7 +192,8 @@ const NewBookingRequest = () => {
                   </FormControl>
                 </Stack>
 
-                <Stack align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
+                <Stack align={{ base: 'left', md: 'center' }}
+                       direction={{ base: 'column', md: 'row' }}>
                   <FormControl>
                     <FormLabel htmlFor='endDate'>End date</FormLabel>
                     <Input id='endDate' type='date'
@@ -192,6 +221,12 @@ const NewBookingRequest = () => {
                     </Select>
                   </FormControl>
                 </Stack>
+
+                <Text>Estimated cost: £{
+                  bookingCost || (
+                    "--"
+                  )
+                }</Text>
 
                 <Button disabled={submitting} variant='solid' colorScheme='blue'
                         type='submit'>

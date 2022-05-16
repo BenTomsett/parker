@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../../context/user';
-import { emailRegex, getAge } from '../../utils/auth';
+import { emailRegex, checkAge } from '../../utils/auth';
 import useTitle from '../../hooks/useTitle';
 import DeleteUser from "./DeleteUser";
 
@@ -68,7 +68,7 @@ const PersonalDetails = () => {
       errorToast({ title: 'Please enter a valid email address.' });
     } else if (!dob) {
       errorToast({ title: 'Please enter your date of birth.' });
-    } else if (getAge(dobParsed) <= 16) {
+    } else if (dobParsed > new Date() || !checkAge(dobParsed)) {
       errorToast({ title: 'You must be at least 16 year of age to use Parker.' });
     } else if (!addressLine1 || !addressLine2 || !city || !postcode ||
       !country) {
