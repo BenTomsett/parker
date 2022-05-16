@@ -89,12 +89,12 @@ const CreateBlockedSpace = ({update}) => {
             toast({title: 'Please fill out all fields'});
         } else {
             setSubmitting(true);
-            fetch('/api/bookings', {
+            fetch('/api/bookings/restrict', {
                 method: 'PUT',
                 body: JSON.stringify({
-                    'userId': userId,
-                    startDate: formData.startDate,
-                    endDate: formData.endDate,
+                    userId,
+                    startDate,
+                    endDate,
                     bookingType: 'RESTRICTION',
                     spaceId: selectedSpace,
                     approved: true,

@@ -22,9 +22,9 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-import UserContext from '../../../context/user';
+import UserContext from '../../context/user';
 
-const EditBlockedSpace = ({ booking, update }) => {
+const EditBookingModal = ({ booking, update }) => {
   function formatDate(date) {
     const day = date.getDate();
     const month = `0${date.getMonth() + 1}`.slice(-2);
@@ -321,4 +321,4 @@ const EditBlockedSpace = ({ booking, update }) => {
   );
 };
 
-export default EditBlockedSpace;
+export default EditBookingModal;
