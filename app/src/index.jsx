@@ -8,6 +8,7 @@ import HomePage from './pages/home';
 import BookingsPage from './pages/bookings';
 import AdminPage from './pages/admin';
 import AccountPage from './pages/account';
+import HelpPage from './pages/help';
 import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
 import BillingSetupPage from './pages/register/billing';
@@ -26,6 +27,7 @@ ReactDOM.render(
             <Route path="/bookings" element={<BookingsPage />} />
             <Route path="/bookings/request" element={<NewBookingRequest />} />
             <Route path="/account" element={<AccountPage />} />
+            <Route path="/help" element={<HelpPage />} />
             <Route path="/admin" element={<AdminPage />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />

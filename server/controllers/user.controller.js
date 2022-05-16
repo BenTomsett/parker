@@ -18,6 +18,7 @@ const db = require('../models/index');
 
 const {
   sendUserRegistrationEmail,
+    sendAdminEmail,
 } = require('../utils/notifications');
 
 const { User } = db;
@@ -202,6 +203,18 @@ const unBanUser = async (req, res) => {
         }
       });
 };
+const sendAdminEmailFromUser= async (req,res) => {
+  const { userId, text } = req.body;
+  User.findByPk(userId)
+      .then((data) => {
+        sendAdminEmail(data, text);
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('ERR_INTERNAL_EXCEPTION');
+      });
+};
 
 module.exports = {
   createUser,
@@ -213,4 +226,5 @@ module.exports = {
   deleteAllUsers,
   banUser,
   unBanUser,
+  sendAdminEmailFromUser,
 };
