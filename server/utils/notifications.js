@@ -253,7 +253,7 @@ const sendUserInWrongSpaceEmail = async (Booking) => {
         subject: 'Parker - User in Wrong Space Warning: - ' + Booking.bookingId,
         text: 'Hi, \n' +
             user.forename + ' ' + user.surname + ' has not parked in the correct location for the booking: ' + Booking.bookingId + '.' +
-            'They should be parked in the following location, ' + parkingSpace.CarPark.name + ', space number: ' + parkingSpace.spaceNo + '.'
+            'They should be parked in the following location, ' + carPark.name + ', space number: ' + parkingSpace.spaceNo + '.'
     };
     await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
