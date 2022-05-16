@@ -25,6 +25,9 @@ router.get('/', authenticateUser, BookingController.findAllBookings);
 // Create a new booking
 router.put('/', authenticateUser, BookingController.createBooking);
 
+// Create a restriction booking
+router.put('/restrict', authenticateUser, BookingController.createRestrictedBooking);
+
 // Delete all bookings
 router.delete('/', authenticateUser, BookingController.deleteAllBookings);
 
@@ -64,6 +67,14 @@ router.get(
   BookingController.findUserBookings
 );
 
+// Retrieve all restricted bookings
+router.get(
+    '/restricted',
+    authenticateUser,
+    verifyAdmin,
+    BookingController.findRestrictedBookings
+);
+
 // Retrieve a single booking
 router.get(
   '/:bookingId',
@@ -84,6 +95,5 @@ router.delete(
   authenticateUser,
   BookingController.deleteBooking
 );
-
 
 module.exports = router;

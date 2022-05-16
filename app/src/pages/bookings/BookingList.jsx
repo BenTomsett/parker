@@ -1,6 +1,6 @@
 /* eslint react/prop-types: 0 */
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Box, Spinner,
   Table,
@@ -14,10 +14,13 @@ import {
 
 import { formatDuration, intervalToDuration } from 'date-fns';
 import CancelBookingModal from './CancelBookingModal';
+import EditBookingModal from './EditBookingModal';
+import UserContext from '../../context/user';
 
 const BookingList = ({updateCount}) => {
   const [bookings, setBookings] = useState(null);
   const [loading, setLoading] = useState(true);
+  const user = useContext(UserContext);
 
   const fetchBookings = () => {
     setLoading(true);
@@ -80,6 +83,7 @@ const BookingList = ({updateCount}) => {
                             })}</Td>
                             <Td>
                               <CancelBookingModal booking={booking} update={fetchBookings} />
+                              {user.isAdmin && <EditBookingModal booking={booking} update={fetchBookings} />}
                             </Td>
                           </Tr>
                         )
