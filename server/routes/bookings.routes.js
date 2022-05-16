@@ -75,6 +75,11 @@ router.get(
     BookingController.findRestrictedBookings
 );
 
+router.post('/cost',
+  authenticateUser,
+  BookingController.calculateCost
+);
+
 // Retrieve a single booking
 router.get(
   '/:bookingId',
