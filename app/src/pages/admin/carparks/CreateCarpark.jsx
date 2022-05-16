@@ -25,7 +25,7 @@ import { FiPlus } from 'react-icons/fi';
 import Map, { Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const CreateCarpark = ({update}) => {
+const CreateCarpark = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [marker, setMarker] = useState({
     latitude: 52.62225136203375,
@@ -48,7 +48,7 @@ const CreateCarpark = ({update}) => {
 
     if (!name) {
       toast({ title: 'Please enter a name for the carpark.' });
-    } else if (!numOfSpaces || numOfSpaces < 1) {
+    } else if (!numOfSpaces) {
       toast({ title: 'Please enter the amount of spaces the car park has.' });
     } else if (!longitude) {
       toast({
@@ -88,7 +88,6 @@ const CreateCarpark = ({update}) => {
           });
         } else {
           onClose();
-          update();
         }
       });
     }

@@ -11,13 +11,12 @@
 
 const cron = require('node-cron');
 const BookingController = require('../controllers/bookings.controller');
-const ParkingSpacesController = require('../controllers/spaces.controller');
 
 
-const task = cron.schedule('*/60 * * * *', () => {
+
+const task = cron.schedule('*/15 * * * *', () => {
   BookingController.findOverstayedBookings();
   BookingController.findNonArrivalBookings();
-  ParkingSpacesController.setReservedSpaces();
 });
 
 task.start();

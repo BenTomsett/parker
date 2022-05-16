@@ -30,12 +30,7 @@ const EditCarpark = ({ carpark, update }) => {
     latitude: carpark.gpsPoint.coordinates[1],
     longitude: carpark.gpsPoint.coordinates[0],
   });
-  const [formData, setFormData] = useState({
-    name: carpark.name,
-    numOfSpaces: carpark.numOfSpaces,
-    latitude: carpark.gpsPoint.coordinates[1],
-    longitude: carpark.gpsPoint.coordinates[0],
-  });
+  const [formData, setFormData] = useState(carpark);
 
   const toast = useToast({ status: 'error', isClosable: false });
 

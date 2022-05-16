@@ -34,8 +34,8 @@ const EditParkingSpace = ({ parkingSpace, update }) => {
     spaceNo:parkingSpace.spaceNo,
     carParkId:parkingSpace.CarPark.carParkId,
     zoneId:parkingSpace.Zone.zoneId,
-    latitude:parkingSpace.gpsPoint.coordinates[1],
-    longitude:parkingSpace.gpsPoint.coordinates[0],
+    latitude:parkingSpace.gpsPoint.coordinates[0],
+    longitude:parkingSpace.gpsPoint.coordinates[1],
 
   });
   const [carparks, setCarParks] = useState(null);
