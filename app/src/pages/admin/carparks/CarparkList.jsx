@@ -31,9 +31,9 @@ const CarparkList = () => {
 
   return (
     <VStack align="start" spacing={0} height="100%">
+      <CreateCarpark />
       {carparks ? (
         <Box w="100%" borderWidth="1px">
-          <CreateCarpark />
           <TableContainer>
             <Table>
               <Thead>
