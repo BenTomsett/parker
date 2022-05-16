@@ -25,6 +25,7 @@ import {
 } from '@chakra-ui/react';
 import Map, { Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import {FiPlus} from "react-icons/fi";
 
 const CreateParkingSpace = ({ update }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -145,7 +146,13 @@ const CreateParkingSpace = ({ update }) => {
 
   return (
     <>
-      <Button onClick={onOpen}>Add space</Button>
+      <Button
+          colorScheme="blue"
+          leftIcon={<FiPlus />}
+          onClick={onOpen}
+      >
+        Add Parking Space
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
