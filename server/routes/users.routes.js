@@ -43,8 +43,10 @@ router.put('/:userId/ban', authenticateUser, UserController.banUser);
 // Update a User with the UserId
 router.put('/:userId/unban', authenticateUser, UserController.unBanUser);
 
-
 // Delete a user with the UserId
 router.delete('/:userId', authenticateUser, UserController.deleteUser);
+
+// Delete a user with the UserId
+router.post('/email', authenticateUser, UserController.sendAdminEmailFromUser);
 
 module.exports = router;

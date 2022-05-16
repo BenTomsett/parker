@@ -265,6 +265,21 @@ const sendUserInWrongSpaceEmail = async (Booking) => {
     });
 }
 
+const sendAdminEmail = async (user,text) => {
+    let mailOptionsConfirmation = {
+        from: 'NoReply from Parker <parkeruea@gmail.com>',
+        to: 'parkeruea@gmail.com', //users email address
+        subject: 'Message from user ' + user.forename + ' ' + user.surname,
+        text: text
+    };
+    await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
+        if (err) {
+            console.log(err);// If an error is found it will be displayed to console
+        } else {
+            console.log('Admin Email sent: ' + info.response); //If email is successfully sent the console will show a confirmation message
+        }
+    });
+}
 
 module.exports = {
     sendBookingConfirmationEmail,
@@ -275,5 +290,6 @@ module.exports = {
     sendBookingApprovedEmail,
     sendBookingDeniedEmail,
     sendUserRegistrationEmail,
-    sendUserInWrongSpaceEmail
+    sendUserInWrongSpaceEmail,
+    sendAdminEmail,
 };

@@ -70,6 +70,7 @@ const NavBar = ({ navbarRef }) => {
           <NavButton label="Home" to="/" />
           <NavButton label="Bookings" to="/bookings" />
           <NavButton label="Account" to="/account" />
+          <NavButton label="Help" to="/help" />
           {user.isAdmin && <NavButton label="Admin" to="/admin" />}
         </HStack>
       </Flex>
@@ -98,6 +99,7 @@ const NavBar = ({ navbarRef }) => {
             <NavButton label="Home" to="/" onClick={() => mobileNavButtonClick('/')} fullWidth />
             <NavButton label="Bookings" to="/bookings" onClick={() => mobileNavButtonClick('/bookings')} fullWidth />
             <NavButton label="Account" to="/account" onClick={() => mobileNavButtonClick('/account')} fullWidth />
+            <NavButton label="Help" to="/help" onClick={() => mobileNavButtonClick('/help')} fullWidth />
             {user.isAdmin && <NavButton label="Admin" to="/admin" onClick={() => mobileNavButtonClick('/admin')} fullWidth />}
 
             <HStack w="full" justifyContent="space-between" pt={4}>
