@@ -251,8 +251,8 @@ const sendUserInWrongSpaceEmail = async (Booking) => {
         from: 'NoReply from Parker <parkeruea@gmail.com>',
         to: 'parkeruea@gmail.com', //users email address
         subject: 'Parker - User in Wrong Space Warning: - ' + Booking.bookingId,
-        text: 'Hi, \n\n' +
-            user.forename + ' ' + user.surname + ' has not parked int the correct location for the booking: ' + Booking.bookingId + '.' +
+        text: 'Hi, \n' +
+            user.forename + ' ' + user.surname + ' has not parked in the correct location for the booking: ' + Booking.bookingId + '.' +
             'They should be parked in the following location, ' + parkingSpace.CarPark.name + ', space number: ' + parkingSpace.spaceNo + '.'
     };
     await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
