@@ -43,41 +43,38 @@ const createBooking = async (req, res) => {
       'endDate',
       'cost',
     ],
-  })
-    .then(async (data) => {
-      const amount = calculateParkingCharge(data) * 100;
+  }).then(async (data) => {
+    const amount = calculateParkingCharge(data) * 100;
 
-      const user = await data.getUser();
-      console.log(user);
+    const user = await data.getUser();
+    console.log(user);
 
-      try {
-        await Stripe.paymentIntents.create({
-          amount,
-          currency: 'gbp',
-          customer: user.stripeCustomerId,
-          payment_method: user.paymentMethodId,
-          off_session: true,
-          confirm: true,
-          receipt_email: user.email,
-        });
-        await sendBookingApprovedEmail(data);
-        res.status(200).send(data);
-        await sendBookingConfirmationEmail(data);
-      } catch (err) {
-        await data.destroy();
-        res.status(402).send('ERR_PAYMENT_FAILED');
-      }
-    })
-    .catch((err) => {
-      if (err.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).send('ERR_BOOKING_EXISTS');
-      } else if (err.name === 'SequelizeValidationError') {
-        res.status(400).send('ERR_DATA_MISSING');
-      } else {
-        console.error(err);
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      }
-    });
+    try {
+      await Stripe.paymentIntents.create({
+        amount,
+        currency: 'gbp',
+        customer: user.stripeCustomerId,
+        payment_method: user.paymentMethodId,
+        off_session: true,
+        confirm: true,
+        receipt_email: user.email,
+      });
+      await sendBookingApprovedEmail(data);
+      res.status(200).send(data);
+    } catch (err) {
+      await data.destroy();
+      res.status(402).send('ERR_PAYMENT_FAILED');
+    }
+  }).catch((err) => {
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      res.status(409).send('ERR_BOOKING_EXISTS');
+    } else if (err.name === 'SequelizeValidationError') {
+      res.status(400).send('ERR_DATA_MISSING');
+    } else {
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
+    }
+  });
 };
 
 // Retrieve all bookings from the database.
