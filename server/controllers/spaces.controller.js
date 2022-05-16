@@ -162,7 +162,7 @@ const updateParkingSpace = async (req, res) => {
 };
 
 // Checkin a booking by the id in the request
-const setReservedSpaces = async (req, res) => {
+const setReservedSpaces = async () => {
   const spaceIds = [];
 
   await Booking.findAll({
@@ -196,8 +196,7 @@ const setReservedSpaces = async (req, res) => {
           },
         }
       )
-        .then((data) => {
-        })
+        .then(() => true)
         .catch((err) => {
           if (err.name === 'SequelizeUniqueConstraintError') {
             console.error(err);
