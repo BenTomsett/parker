@@ -246,6 +246,7 @@ const sendUserInWrongSpaceEmail = async (Booking) => {
 
     const user = await Booking.getUser();
     const parkingSpace = await Booking.getParkingSpace();
+    const carPark = await parkingSpace.getCarPark();
 
     const mailOptionsConfirmation = {
         from: 'NoReply from Parker <parkeruea@gmail.com>',

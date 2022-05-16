@@ -74,9 +74,9 @@ const findAllCarParks = async (req, res) => {
 };
 
 const findCarParkByID = async (req, res) => {
-    const { carparkId } = req.params;
+    const { carParkId } = req.params;
 
-    CarPark.findByPk(carparkId, {
+    CarPark.findByPk(carParkId, {
         include: {
           model: Zone,
           include: {
@@ -140,9 +140,9 @@ const findNearestCarParks = async (req, res) => {
 
 // Delete a parking space with the specified id in the request
 const deleteCarPark = async (req, res) => {
-    const { carParkID } = req.params;
+    const { carParkId } = req.params;
 
-    CarPark.destroy({ where: { carParkID } })
+    CarPark.destroy({ where: { carParkId } })
         .then((data) => {
             res.status(200).send(data);
         })
