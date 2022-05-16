@@ -95,7 +95,7 @@ const sendBookingApprovedEmail = async (Booking) => {
         to: 'parkeruea@gmail.com', //users email address
         subject: 'Parker Booking ' + Booking.bookingId,
         text: 'Hi, \n\n' +
-            user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + ' at Car park: ' + Booking.ParkingSpace.carParkId
+            user.forename + ' ' + user.surname + ' has booked Space: ' + Booking.spaceId + '.'
     };
     await transporter.sendMail(mailOptionsConfirmation, function (err, info) {
         if (err) {
