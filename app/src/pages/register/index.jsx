@@ -68,7 +68,7 @@ const RegisterPage = () => {
     }else if(getAge(dobParsed) <= 16){
       toast({ title: "You must be at least 16 year of age to use Parker." })
     }else if(!addressLine1 || !addressLine2 || !city || !postcode || !country){
-      toast({ title: "You must be at least 16 year of age to use Parker." })
+      toast({ title: "Please fill in all fields." })
     }else{
       setLoading(true);
       fetch('/api/users', {
