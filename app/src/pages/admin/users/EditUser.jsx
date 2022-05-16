@@ -17,7 +17,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { emailRegex, getAge } from '../../../utils/auth';
+import { emailRegex, checkAge } from '../../../utils/auth';
 
 const EditUser = ({ user, update }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -56,7 +56,7 @@ const EditUser = ({ user, update }) => {
       toast({ title: 'Please enter a valid email address.' });
     } else if (!dob) {
       toast({ title: 'Please enter your date of birth.' });
-    } else if (getAge(dobParsed) <= 16) {
+    } else if (dobParsed > new Date() || !checkAge(dobParsed)) {
       toast({ title: 'You must be at least 16 year of age to use Parker.' });
     } else if (!addressLine1 || !addressLine2 || !city || !postcode ||
       !country) {
