@@ -26,7 +26,7 @@ router.get('/', authenticateUser, CarParkController.findAllCarParks);
 router.post('/findcarpark', authenticateUser, CarParkController.findNearestCarParks);
 
 // Retrieve a single carpark via the ID
-router.get('/:carparkId', authenticateUser, CarParkController.findCarParkByID);
+router.get('/:carParkId', authenticateUser, CarParkController.findCarParkByID);
 
 // Create a new carpark
 router.put('/', authenticateUser, CarParkController.createCarPark);
@@ -41,6 +41,6 @@ router.get('/find/:name', authenticateUser, CarParkController.findCarParkID);
 router.put('/:carParkId', authenticateUser, CarParkController.updateCarPark);
 
 // Delete a carpark with the carparkId
-router.delete('/:carparkId', authenticateUser, CarParkController.deleteCarPark);
+router.delete('/:carParkId', authenticateUser, CarParkController.deleteCarPark);
 
 module.exports = router;

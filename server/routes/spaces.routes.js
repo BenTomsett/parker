@@ -48,6 +48,19 @@ router.get(
     SpacesController.findCarParkAvailableSpaces
   );
 
+// Retrieve all parking spaces for a car park
+router.get(
+    '/carpark/occupiedSpaces/:carParkId',
+    authenticateUser,
+    SpacesController.findCarParkOccupiedSpaces
+  );
+
+router.get(
+    '/carpark/reservedSpaces/:carParkId',
+    authenticateUser,
+    SpacesController.findCarParkReservedSpaces
+  );
+
 // Update a parking space with the parkingSpaceId
 router.put(
   '/:spaceId',

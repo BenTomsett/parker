@@ -169,7 +169,7 @@ const findOverstayedBookings = async () => {
   Booking.findAll({
     where: {
       endDate: {
-        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 15 * 60 * 1000),
+        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 70 * 60 * 1000),
         [Op.lte]: new Date(Date.now() + 1 * 60 * 60 * 1000),
       },
       checkedIn: {
@@ -195,7 +195,7 @@ const findNonArrivalBookings = async () => {
   Booking.findAll({
     where: {
       startDate: {
-        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 15 * 60 * 1000),
+        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 70 * 60 * 1000),
         [Op.lte]: new Date(Date.now() + 1 * 60 * 60 * 1000),
       },
       checkedIn: {

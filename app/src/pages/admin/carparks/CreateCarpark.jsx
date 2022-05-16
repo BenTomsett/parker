@@ -48,7 +48,7 @@ const CreateCarpark = ({update}) => {
 
     if (!name) {
       toast({ title: 'Please enter a name for the carpark.' });
-    } else if (!numOfSpaces) {
+    } else if (!numOfSpaces || numOfSpaces < 1) {
       toast({ title: 'Please enter the amount of spaces the car park has.' });
     } else if (!longitude) {
       toast({
