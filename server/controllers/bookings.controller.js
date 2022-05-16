@@ -61,7 +61,6 @@ const createBooking = async (req, res) => {
       });
       await sendBookingApprovedEmail(data);
       res.status(200).send(data);
-      await sendBookingConfirmationEmail(data);
     } catch (err) {
       await data.destroy();
       res.status(402).send('ERR_PAYMENT_FAILED');
