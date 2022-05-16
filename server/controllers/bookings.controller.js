@@ -15,17 +15,18 @@ the bookings routes.
 */
 const { Op } = require('sequelize');
 const db = require('../models/index');
+const {sendUserInWrongSpaceEmail} = require("../utils/notifications");
+const {sendNonArrivalEmail} = require("../utils/notifications");
 const { checkParkedLocation } = require('../utils/checkLocation');
 
 const {
   sendBookingApprovedEmail,
   sendOverstayEmail,
-  sendNonArrivalEmail
 } = require('../utils/notifications');
 const { Stripe } = require('../config/stripe');
 const { calculateParkingCharge } = require('../utils/parkingCharges');
 
-const { Booking, ParkingSpace, CarPark } = db;
+const { Booking, ParkingSpace, CarPark, User } = db;
 
 // Create and Save a new Booking
 const createBooking = async (req, res) => {
@@ -137,6 +138,7 @@ const findBooking = async (req, res) => {
 // Find bookings for a specific user
 const findUserBookings = async (req, res) => {
   const { userId } = req.params;
+
   Booking.findAll({ where: { userId } })
     .then((data) => {
       res.status(200).send(data);
@@ -202,7 +204,7 @@ const findOverstayedBookings = async () => {
   Booking.findAll({
     where: {
       endDate: {
-        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 15 * 60 * 1000),
+        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 70 * 60 * 1000),
         [Op.lte]: new Date(Date.now() + 1 * 60 * 60 * 1000),
       },
       checkedIn: {
@@ -228,7 +230,7 @@ const findNonArrivalBookings = async () => {
   Booking.findAll({
     where: {
       startDate: {
-        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 15 * 60 * 1000),
+        [Op.gte]: new Date(Date.now() + 1 * 60 * 60 * 1000 - 70 * 60 * 1000),
         [Op.lte]: new Date(Date.now() + 1 * 60 * 60 * 1000),
       },
       checkedIn: {
@@ -269,16 +271,28 @@ const updateBooking = async (req, res) => {
     });
 };
 
+
 // Checkin a booking by the id in the request
 const checkInBooking = async (req, res) => {
   const { bookingId, userGpsLong, userGpsLat } = req.body;
-  console.log(req.body);
 
   let booking = null;
   let parkingSpace = null;
   const location = { userGpsLong, userGpsLat };
 
-  await Booking.findByPk(bookingId)
+  await Booking.findByPk(bookingId, {
+    include: [
+      {
+        model: User,
+      },
+      {
+        model: ParkingSpace,
+        include: {
+          model: CarPark,
+        },
+      },
+    ],
+  })
     .then((bookingData) => {
       booking = bookingData;
       ParkingSpace.findByPk(booking.spaceId)
@@ -297,6 +311,8 @@ const checkInBooking = async (req, res) => {
               }
             )
               .then((data) => {
+                parkingSpace.setDataValue('status', 'OCCUPIED');
+                parkingSpace.save();
                 res.status(200).send(data);
               })
               .catch((err) => {
@@ -308,6 +324,7 @@ const checkInBooking = async (req, res) => {
                 }
               });
           } else {
+            sendUserInWrongSpaceEmail(booking);
             res.status(401).send('ERR_INCORRECT_LOCATION');
           }
         })
@@ -322,28 +339,61 @@ const checkInBooking = async (req, res) => {
     });
 };
 
-const checkOutBooking = (req, res) => {
+const checkOutBooking = async (req, res) => {
   const { bookingId } = req.body;
 
-  Booking.update(
-    { checkedOut: true },
-    {
-      where: { bookingId },
-      include: [{ model: ParkingSpace, include: [CarPark] }],
-      returning: true,
-      plain: true,
-    }
-  )
-    .then((data) => {
-      res.status(200).send(data);
+  let booking = null;
+  let parkingSpace = null;
+
+  await Booking.findByPk(bookingId, {
+    include: [
+      {
+        model: User,
+      },
+      {
+        model: ParkingSpace,
+        include: {
+          model: CarPark,
+        },
+      },
+    ],
+  })
+    .then((bookingData) => {
+      booking = bookingData;
+      ParkingSpace.findByPk(booking.spaceId)
+        .then((parkingData) => {
+          parkingSpace = parkingData;
+          Booking.update(
+            { checkedOut: true },
+            {
+              where: { bookingId },
+              include: [{ model: ParkingSpace, include: [CarPark] }],
+              returning: true,
+              plain: true,
+            }
+          )
+            .then((data) => {
+              parkingSpace.setDataValue('status', 'AVAILABLE');
+              parkingSpace.save();
+              res.status(200).send(data);
+            })
+            .catch((err) => {
+              if (err.name === 'SequelizeValidationError') {
+                res.status(400).send('ERR_DATA_MISSING');
+              } else {
+                console.error(err);
+                res.status(500).send('ERR_INTERNAL_EXCEPTION');
+              }
+            });
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send('ERR_INTERNAL_EXCEPTION');
+        });
     })
     .catch((err) => {
-      if (err.name === 'SequelizeValidationError') {
-        res.status(400).send('ERR_DATA_MISSING');
-      } else {
-        console.error(err);
-        res.status(500).send('ERR_INTERNAL_EXCEPTION');
-      }
+      console.error(err);
+      res.status(500).send('ERR_INTERNAL_EXCEPTION');
     });
 };
 
@@ -390,6 +440,7 @@ module.exports = {
   checkOutBooking,
   deleteBooking,
   deleteAllBookings,
-  findRestrictedBookings,
   createRestrictedBooking,
+  findRestrictedBookings,
+
 };
