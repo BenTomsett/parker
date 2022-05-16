@@ -102,7 +102,7 @@ const CreateBlockedSpace = ({update}) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            }).then(async (response) => {
+            }).then(async () => {
                 update();
                 onClose();
                 setSubmitting(false);
@@ -131,101 +131,103 @@ const CreateBlockedSpace = ({update}) => {
                     <ModalHeader>Restrict A Space</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody>
-                        <Stack align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
-                            <FormControl>
-                                <FormLabel htmlFor='startDate'>Start date</FormLabel>
-                                <Input id='startDate' type='date'
-                                       autoComplete='startDate'
-                                       value={formData.startDate || ''}
-                                       onChange={(event) => updateFormData('startDate',
-                                           event.target.value)}
-                                />
-                            </FormControl>
-                            <FormControl>
-                                <FormLabel htmlFor='startTime'>Start time</FormLabel>
-                                <Select name='startTime' id='startTime'
-                                        value={formData.startTime}
-                                        defaultValue={-1}
-                                        onChange={(event) => updateFormData('startTime',
-                                            event.target.value)}>
-                                    <option disabled value={-1}>Choose start time</option>
-                                    {[...Array(24)].map((value, index) => {
-                                        const hour = index.toLocaleString('en-GB',
-                                            {minimumIntegerDigits: 2, useGrouping: false});
-                                        return (
-                                            <option key={hour}
-                                                    value={`${hour}:00`}>{`${hour}:00`}</option>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
-                        </Stack>
-
-                        <Stack align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
-                            <FormControl>
-                                <FormLabel htmlFor='endDate'>End date</FormLabel>
-                                <Input id='endDate' type='date'
-                                       autoComplete='endDate'
-                                       value={formData.endDate || ''}
-                                       onChange={(event) => updateFormData('endDate',
-                                           event.target.value)}/>
-                            </FormControl>
-                            <FormControl>
-                                <FormLabel htmlFor='endTime'>End time</FormLabel>
-                                <Select name='endTime' id='endTime'
-                                        value={formData.endTime}
-                                        defaultValue={-1}
-                                        onChange={(event) => updateFormData('endTime',
-                                            event.target.value)}>
-                                    <option disabled value={-1}>Choose end time</option>
-                                    {[...Array(24)].map((value, index) => {
-                                        const hour = index.toLocaleString('en-GB',
-                                            {minimumIntegerDigits: 2, useGrouping: false});
-                                        return (
-                                            <option key={hour}
-                                                    value={`${hour}:00`}>{`${hour}:00`}</option>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
-                        </Stack>
-
                         <Stack>
-                            <FormControl>
-                                <FormLabel htmlFor='carpark'>Car park</FormLabel>
-                                <Select
-                                    disabled={!carParks || !formData.startDate || !formData.endDate || !formData.startTime || !formData.endTime}
-                                    name='carpark' id='carpark'
-                                    value={selectedCarPark}
-                                    defaultValue={-1} onChange={(event) => {
-                                    setSelectedCarPark(event.target.value);
-                                }}>
-                                    <option disabled value={-1}>Choose a car park</option>
+                            <Stack align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
+                                <FormControl>
+                                    <FormLabel htmlFor='startDate'>Start date</FormLabel>
+                                    <Input id='startDate' type='date'
+                                           autoComplete='startDate'
+                                           value={formData.startDate || ''}
+                                           onChange={(event) => updateFormData('startDate',
+                                             event.target.value)}
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <FormLabel htmlFor='startTime'>Start time</FormLabel>
+                                    <Select name='startTime' id='startTime'
+                                            value={formData.startTime}
+                                            defaultValue={-1}
+                                            onChange={(event) => updateFormData('startTime',
+                                              event.target.value)}>
+                                        <option disabled value={-1}>Choose start time</option>
+                                        {[...Array(24)].map((value, index) => {
+                                            const hour = index.toLocaleString('en-GB',
+                                              {minimumIntegerDigits: 2, useGrouping: false});
+                                            return (
+                                              <option key={hour}
+                                                      value={`${hour}:00`}>{`${hour}:00`}</option>
+                                            );
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </Stack>
 
-                                    {carParks && carParks.map((carPark) => (
-                                        <option key={carPark.carParkId} value={carPark.carParkId}
-                                                label={carPark.name}/>
-                                    ))}
+                            <Stack align={{base: 'left', md: 'center'}} direction={{base: 'column', md: 'row'}}>
+                                <FormControl>
+                                    <FormLabel htmlFor='endDate'>End date</FormLabel>
+                                    <Input id='endDate' type='date'
+                                           autoComplete='endDate'
+                                           value={formData.endDate || ''}
+                                           onChange={(event) => updateFormData('endDate',
+                                             event.target.value)}/>
+                                </FormControl>
+                                <FormControl>
+                                    <FormLabel htmlFor='endTime'>End time</FormLabel>
+                                    <Select name='endTime' id='endTime'
+                                            value={formData.endTime}
+                                            defaultValue={-1}
+                                            onChange={(event) => updateFormData('endTime',
+                                              event.target.value)}>
+                                        <option disabled value={-1}>Choose end time</option>
+                                        {[...Array(24)].map((value, index) => {
+                                            const hour = index.toLocaleString('en-GB',
+                                              {minimumIntegerDigits: 2, useGrouping: false});
+                                            return (
+                                              <option key={hour}
+                                                      value={`${hour}:00`}>{`${hour}:00`}</option>
+                                            );
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </Stack>
 
-                                </Select>
-                            </FormControl>
+                            <Stack>
+                                <FormControl>
+                                    <FormLabel htmlFor='carpark'>Car park</FormLabel>
+                                    <Select
+                                      disabled={!carParks || !formData.startDate || !formData.endDate || !formData.startTime || !formData.endTime}
+                                      name='carpark' id='carpark'
+                                      value={selectedCarPark}
+                                      defaultValue={-1} onChange={(event) => {
+                                        setSelectedCarPark(event.target.value);
+                                    }}>
+                                        <option disabled value={-1}>Choose a car park</option>
 
-                            <FormControl>
-                                <FormLabel htmlFor='space'>Parking space</FormLabel>
-                                <Select disabled={!selectedCarPark || !spaces} name='space'
-                                        id='space' value={selectedSpace}
-                                        defaultValue={-1} onChange={(event) => {
-                                    setSelectedSpace(event.target.value);
-                                }}>
-                                    <option disabled value={-1}>Choose a parking space</option>
+                                        {carParks && carParks.map((carPark) => (
+                                          <option key={carPark.carParkId} value={carPark.carParkId}
+                                                  label={carPark.name}/>
+                                        ))}
 
-                                    {spaces && spaces.map((space) => (
-                                        <option key={space.spaceId} value={space.spaceId}
-                                                label={space.spaceNo}/>
-                                    ))}
+                                    </Select>
+                                </FormControl>
 
-                                </Select>
-                            </FormControl>
+                                <FormControl>
+                                    <FormLabel htmlFor='space'>Parking space</FormLabel>
+                                    <Select disabled={!selectedCarPark || !spaces} name='space'
+                                            id='space' value={selectedSpace}
+                                            defaultValue={-1} onChange={(event) => {
+                                        setSelectedSpace(event.target.value);
+                                    }}>
+                                        <option disabled value={-1}>Choose a parking space</option>
+
+                                        {spaces && spaces.map((space) => (
+                                          <option key={space.spaceId} value={space.spaceId}
+                                                  label={space.spaceNo}/>
+                                        ))}
+
+                                    </Select>
+                                </FormControl>
+                            </Stack>
                         </Stack>
                     </ModalBody>
 

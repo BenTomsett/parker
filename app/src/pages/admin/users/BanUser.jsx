@@ -31,7 +31,7 @@ const BanUser = ({ user, update }) => {
 
   return (
     <>
-      <Button colorScheme='orange' onClick={onOpen}>{user.isBanned ?
+      <Button disabled={user.isAdmin} colorScheme='orange' onClick={onOpen}>{user.isBanned ?
         'Unban' :
         'Ban'} user</Button>
 

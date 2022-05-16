@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  Box, Spinner,
+  Box, HStack, Spinner,
   Table,
   TableContainer,
   Tbody, Td, Text,
@@ -82,8 +82,10 @@ const BookingList = ({updateCount}) => {
                                 'minutes'],
                             })}</Td>
                             <Td>
-                              <CancelBookingModal booking={booking} update={fetchBookings} />
-                              {user.isAdmin && <EditBookingModal booking={booking} update={fetchBookings} />}
+                              <HStack>
+                                {user.isAdmin && <EditBookingModal booking={booking} update={fetchBookings} />}
+                                <CancelBookingModal booking={booking} update={fetchBookings} />
+                              </HStack>
                             </Td>
                           </Tr>
                         )

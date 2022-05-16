@@ -20,7 +20,6 @@ const ParkingSpaceList = () => {
       method: 'GET',
     }).then((response) => {
       response.json().then((json) => {
-        console.log(json)
         setSpaces(json);
       });
     });
@@ -31,7 +30,7 @@ const ParkingSpaceList = () => {
   }, []);
 
   return (
-    <VStack align="start" spacing={0} height="100%">
+    <VStack align="end" height="100%">
       <CreateParkingSpace update={fetchSpaces}/>
       {spaces ? (
         <Box w="100%" borderWidth="1px">
