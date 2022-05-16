@@ -7,9 +7,9 @@ module.exports = {
   
       await queryInterface.bulkInsert('Buildings', 
       [
-        {buildingId: 1, name: "Sportspark", gpsPoint: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(b1Point)), createdAt: new Date(), updatedAt: new Date()},
-        {buildingId: 2, name: "School of Computing Science", gpsPoint: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(b2Point)), createdAt: new Date(), updatedAt: new Date()},
-        {buildingId: 3, name: "Elizabeth Fry Building", gpsPoint: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(b3Point)), createdAt: new Date(), updatedAt: new Date()},
+        {name: "Sportspark", gpsPoint: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(b1Point)), createdAt: new Date(), updatedAt: new Date()},
+        {name: "School of Computing Science", gpsPoint: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(b2Point)), createdAt: new Date(), updatedAt: new Date()},
+        {name: "Elizabeth Fry Building", gpsPoint: Sequelize.fn('ST_GeomFromGeoJSON', JSON.stringify(b3Point)), createdAt: new Date(), updatedAt: new Date()},
       ])
     },
   
